@@ -1,0 +1,27 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.lock
+
+# Office backups
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# Word temp files
+*.wbk
+
+# VS Code settings (only if you use it)
+.vs/
+bin/
+obj/
+
+# Ignore build/compiled output
+dist/
+build/

@@ -1,0 +1,40 @@
+name: MAUI Unit Tests
+ 
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+    branches:
+      - main
+      - develop
+      - feature-*
+      - feature_*
+
+jobs:
+  testbuild:
+    runs-on: windows-latest  # Or windows-latest/macOS-latest when a specific platform is needed.
+    if: ${{ hashFiles('**/*.sln') != '' }} # Only run test when there is a solution.
+    steps:
+      
+      - name: Repository ophalen
+        uses: actions/checkout@v4
+
+      - name: .NET installeren
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: MAUI Workload installeren
+        run: dotnet workload install maui
+
+      - name: NuGet packages herstellen
+        run: dotnet restore
+
+      - name: Solution build
+        run: dotnet build --configuration Release
+
+      - name: Unit tests uitvoeren
+        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal

@@ -16,7 +16,6 @@ on:
 jobs:
   testbuild:
     runs-on: windows-latest  # Or windows-latest/macOS-latest when a specific platform is needed.
-    if: ${{ hashFiles('**/*.sln') != '' }} # Only run test when there is a solution.
     steps:
       
       - name: Repository ophalen

@@ -6,8 +6,8 @@
              Title="MainPage">
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="Pages">
-            <MenuFlyoutItem Text="Page1"
-                 Clicked="OnPage1Clicked"/>
+            <MenuFlyoutItem Text="DeclaratiePage"
+                 Clicked="OnDeclaratiePageClicked"/>
         </MenuBarItem>
     </ContentPage.MenuBarItems>
     <VerticalStackLayout>

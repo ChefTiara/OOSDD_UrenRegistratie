@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Hourregistration.Core.Data\Hourregistration.Core.Data.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -15,10 +15,13 @@ namespace Hourregistration.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
+            #if DEBUG
     		builder.Logging.AddDebug();
 #endif
 
+            ///  builder.Services.AddSingleton<ITemplateService, TemplateService>();
+            ///  builder.Services.AddTransient<TemplateView>().AddTransient<TemplateViewModel>();
+            
             return builder.Build();
         }
     }

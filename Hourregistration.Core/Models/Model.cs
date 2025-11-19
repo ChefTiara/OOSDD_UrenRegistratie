@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Grocery.Core.Models
+namespace Hourregistration.Core.Models
 {
     public abstract partial class Model(int id, string name) : ObservableObject
     {

@@ -1,4 +1,3 @@
-using Hourregistration.App.ViewModels;
 using Hourregistration.Core.Models;
 using Hourregistration.Core.Services;
 
@@ -18,10 +17,10 @@ public partial class DeclaratiePage : ContentView
 
     private void OnIndienenClicked(object sender, EventArgs e)
     {
-        // Validatie van invoer (uren)
+        // Validatie van invoer uren
         if (!double.TryParse(UrenEntry.Text, out double uren))
         {
-            FeedbackLabel.Text = "Voer een geldig uren-getal in.";
+            FeedbackLabel.Text = "Voer een geldig aantal in.";
             FeedbackLabel.TextColor = Colors.Red;
             return;
         }

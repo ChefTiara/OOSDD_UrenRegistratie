@@ -4,15 +4,25 @@
              x:Class="Hourregistration.App.Views.MainPage"
              xmlns:ContentView="clr-namespace:Hourregistration.App.Views"
              Title="MainPage">
+    
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="Pages">
             <MenuFlyoutItem Text="DeclaratiePage"
                  Clicked="OnDeclaratiePageClicked"/>
         </MenuBarItem>
     </ContentPage.MenuBarItems>
-    <VerticalStackLayout>
-        <ContentView:Header/>
-        <ContentView x:Name="Subpage"/>
-        <ContentView:Footer/>
-    </VerticalStackLayout>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ContentView:Header Grid.Row="0" Style="{StaticResource Header}"/>
+        <ContentView Grid.Row="1" x:Name="Subpage" Style="{StaticResource Content}"/>
+        <ContentView:Footer Grid.Row="2" Style="{StaticResource Footer}"/>
+    </Grid>
 </ContentPage>

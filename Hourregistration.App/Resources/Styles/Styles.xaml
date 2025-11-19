@@ -424,4 +424,18 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
+    <Style TargetType="ContentView" x:Key="Header">
+        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="Padding" Value="10" />
+    </Style>
+
+    <Style TargetType="ContentView" x:Key="Content">
+        <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+    </Style>
+
+    <Style TargetType="ContentView" x:Key="Footer">
+        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="Padding" Value="10" />
+    </Style>
+
 </ResourceDictionary>

@@ -7,7 +7,6 @@ namespace Hourregistration.Core.Interfaces.Services
         public DeclaredHours? Get(int id);
         public List<DeclaredHours> GetAll();
         public List<DeclaredHours> GetByState(DeclaredState state);
-        public double GetTotalWorkedHours();
         public DeclaredHours Add(DeclaredHours declaredHour);
         public DeclaredHours Update(DeclaredHours declaredHour);
         public DeclaredHours Delete(int id);

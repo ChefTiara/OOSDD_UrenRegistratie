@@ -5,7 +5,6 @@ using Hourregistration.Core.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 
 namespace Hourregistration.App.ViewModels
 {
@@ -14,7 +13,7 @@ namespace Hourregistration.App.ViewModels
         private readonly IDeclaredHoursService _declaredHoursService;
 
         // show only the currently visible week's items
-        public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = new ObservableCollection<DeclaredHours>();
+        public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = [];
 
         // current week's Monday
         private DateTime _currentWeekStart = GetStartOfWeek(DateTime.Today);

@@ -25,11 +25,6 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.GetByState(state);
         }
-        public double GetTotalWorkedHours()
-        {
-            var allDeclaredHours = _declaredHoursRepository.GetAll();
-            return allDeclaredHours.Sum(dh => dh.WorkedHours);
-        }
         public DeclaredHours Add(DeclaredHours declaredHour)
         {
             return _declaredHoursRepository.Add(declaredHour);

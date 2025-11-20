@@ -29,7 +29,7 @@ namespace Hourregistration.App
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
 
-            builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverview>();
+            builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
 
             ///  builder.Services.AddSingleton<ITemplateService, TemplateService>();
             ///  builder.Services.AddTransient<TemplateView>().AddTransient<TemplateViewModel>();

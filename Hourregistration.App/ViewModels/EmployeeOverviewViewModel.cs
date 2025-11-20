@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace Hourregistration.App.ViewModels
 {
-    public partial class EmployeeOverview : BaseViewModel
+    public partial class EmployeeOverviewViewModel : BaseViewModel
     {
         private readonly IDeclaredHoursService _declaredHoursService;
         public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = [];

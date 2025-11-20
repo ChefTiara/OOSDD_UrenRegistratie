@@ -15,7 +15,7 @@
             HorizontalOptions="Center" />
 
         <!-- Header row matching the item Grid columns -->
-        <Grid ColumnSpacing="8" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80" Margin="4,0">
+        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80" Margin="4,0">
             <Label Grid.Column="0" Text="Dag" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="1" Text="Datum" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="2" Text="Ingepland" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
@@ -31,15 +31,16 @@
             
             <CollectionView.EmptyView>
                 <Label Text="Geen gewerkte uren gevonden." 
-                       HorizontalOptions="Center" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
                        Opacity="0.7"/>
             </CollectionView.EmptyView>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHours">
                     <Frame Margin="4" Padding="8" HasShadow="True" CornerRadius="6">
-                        <!-- fixed widths for small columns, project name gets remaining space -->
-                        <Grid ColumnSpacing="8" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80">
+                        <!-- increased ColumnSpacing and small right margin on labels -->
+                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80">
                             <!-- Day -->
                             <Label Grid.Column="0" 
                                    Text="{Binding Day}" 
@@ -69,7 +70,7 @@
 
                             <!-- Worked hours -->
                             <Label Grid.Column="3" 
-                                   Text="{Binding WorkedHours, StringFormat='{}{0}h'}" 
+                                   Text="{Binding WorkedHours, StringFormat='{}{0}u'}" 
                                    VerticalOptions="Center"
                                    FontAttributes="Bold"
                                    FontSize="14"
@@ -100,5 +101,14 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <Label 
+            Text="{Binding TotalWorkedHours}"
+            FontAttributes="Bold"
+            FontSize="16"
+            Opacity="0.8"
+            VerticalOptions="Center" 
+            HorizontalOptions="Start" />
+
     </VerticalStackLayout>
 </ContentPage>

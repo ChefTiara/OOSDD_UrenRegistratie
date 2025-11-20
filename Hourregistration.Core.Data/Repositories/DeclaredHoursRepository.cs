@@ -10,10 +10,10 @@ namespace Hourregistration.Core.Data.Repositories
         {
             declaredHoursList = [
                 new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp"),
-                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp"),
-                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 30), new TimeOnly(16, 30), "Boodschappenapp"),
-                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 30), new TimeOnly(16, 30), "Boodschappenapp"),
-                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(8, 30), new TimeOnly(16, 30), "Boodschappenapp"),
+                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp"),
+                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp"),
+                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp"),
+                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp"),
             ];
         }
 

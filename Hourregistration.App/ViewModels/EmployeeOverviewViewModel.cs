@@ -9,7 +9,7 @@ namespace Hourregistration.App.ViewModels
     {
         private readonly IDeclaredHoursService _declaredHoursService;
         public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = [];
-        public EmployeeOverview(IDeclaredHoursService declaredHoursService)
+        public EmployeeOverviewViewModel(IDeclaredHoursService declaredHoursService)
         {
             _declaredHoursService = declaredHoursService;
             DeclaredHoursList = [];

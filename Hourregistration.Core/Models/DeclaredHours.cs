@@ -1,4 +1,5 @@
 ﻿using Hourregistration.Core.Models;
+using System.Globalization;
 
 namespace Hourregistration.Core.Models
 {
@@ -10,6 +11,20 @@ namespace Hourregistration.Core.Models
         public double WorkedHours { get; set; }
         public string ProjectName { get; set; }
         public DeclaredState State { get; set; } = DeclaredState.Pending;
+
+        public string PlannedHours => $"{StartTime.ToString("HH:mm")}-{EndTime.ToString("HH:mm")}";
+
+        // Expose day name and a pre-formatted planned hours string for XAML binding
+        public string Day
+        {
+            get
+            {
+                var dayName = Date.ToString("dddd", CultureInfo.CurrentCulture);
+                if (string.IsNullOrEmpty(dayName))
+                    return dayName;
+                return char.ToUpper(dayName[0], CultureInfo.CurrentCulture) + dayName.Substring(1);
+            }
+        }
 
         public DeclaredHours(int id, DateOnly date, TimeOnly startTime, TimeOnly endTime, string projectName) : base(id)
         {

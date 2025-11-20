@@ -16,6 +16,7 @@ namespace Hourregistration.App.ViewModels
             Load();
         }
 
+
         public override void Load()
         {
             DeclaredHoursList.Clear();

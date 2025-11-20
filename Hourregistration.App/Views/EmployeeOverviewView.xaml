@@ -6,16 +6,34 @@
              x:Class="Hourregistration.App.Views.EmployeeOverviewView"
              x:DataType="vm:EmployeeOverviewViewModel"
              Title="EmployeeOverviewView">
-    <VerticalStackLayout Padding="12" Spacing="8">
-        <Label 
-            Text="Urenoverzicht"
-            FontAttributes="Bold"
-            FontSize="18"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
 
-        <!-- Header row matching the item Grid columns -->
-        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80" Margin="4,0">
+    <!-- Grid with an extra Auto row for the button row -->
+    <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*,Auto" ColumnDefinitions="*" RowSpacing="8">
+        <!-- Title -->
+        <Label Grid.Row="0"
+               Text="Urenoverzicht"
+               FontAttributes="Bold"
+               FontSize="18"
+               VerticalOptions="Center"
+               HorizontalOptions="Center" />
+
+        <!-- Horizontal button list: put all small action buttons here (now in Row 1,
+             directly under the title and above the header indicators) -->
+        <HorizontalStackLayout Grid.Row="1" Spacing="8" HorizontalOptions="Start" VerticalOptions="Center">
+            <!-- Button with an inline font icon (no image file required).
+                 ContentLayout places the icon left of the text. -->
+            <Button Text="Reload"
+                    Command="{Binding RefreshCommand}"
+                    Padding="8,6"
+                    ContentLayout="Left,8">
+                <Button.ImageSource>
+                    <FontImageSource Glyph="&#xE117;" FontFamily="Segoe MDL2 Assets" Size="16" Color="Black" />
+                </Button.ImageSource>
+            </Button>
+        </HorizontalStackLayout>
+
+        <!-- Header row matching the item Grid columns (moved to Row 2 so it sits below buttons) -->
+        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80" Margin="4,0">
             <Label Grid.Column="0" Text="Dag" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="1" Text="Datum" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="2" Text="Ingepland" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
@@ -24,10 +42,14 @@
             <Label Grid.Column="5" Text="Status" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="End" />
         </Grid>
 
+        <!-- CollectionView occupies the star row so its height is stable -->
         <CollectionView
+            Grid.Row="3"
             x:Name="DeclaredHoursCollection"
             ItemsSource="{Binding DeclaredHoursList}"
-            SelectionMode="None">
+            SelectionMode="None"
+            VerticalOptions="Fill"
+            HorizontalOptions="Fill">
             
             <CollectionView.EmptyView>
                 <Label Text="Geen gewerkte uren gevonden." 
@@ -39,76 +61,26 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHours">
                     <Frame Margin="4" Padding="8" HasShadow="True" CornerRadius="6">
-                        <!-- increased ColumnSpacing and small right margin on labels -->
                         <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80">
-                            <!-- Day -->
-                            <Label Grid.Column="0" 
-                                   Text="{Binding Day}" 
-                                   VerticalOptions="Center"
-                                   FontSize="12"
-                                   LineBreakMode="NoWrap"
-                                   MaxLines="1"
-                                   HorizontalOptions="Start" />
-
-                            <!-- Date -->
-                            <Label Grid.Column="1" 
-                                   Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" 
-                                   VerticalOptions="Center"
-                                   FontSize="12"
-                                   LineBreakMode="NoWrap"
-                                   MaxLines="1"
-                                   HorizontalOptions="Start"/>
-
-                            <!-- Planned hours -->
-                            <Label Grid.Column="2" 
-                                   Text="{Binding PlannedHours}" 
-                                   VerticalOptions="Center"
-                                   FontSize="12"
-                                   LineBreakMode="NoWrap"
-                                   MaxLines="1"
-                                   HorizontalOptions="Start"/>
-
-                            <!-- Worked hours -->
-                            <Label Grid.Column="3" 
-                                   Text="{Binding WorkedHours, StringFormat='{}{0}u'}" 
-                                   VerticalOptions="Center"
-                                   FontAttributes="Bold"
-                                   FontSize="14"
-                                   LineBreakMode="NoWrap"
-                                   MaxLines="1"
-                                   HorizontalOptions="Start"/>
-
-                            <!-- Project name: flexible, will truncate if too long -->
-                            <Label Grid.Column="4" 
-                                   Text="{Binding ProjectName}" 
-                                   VerticalOptions="Center"
-                                   FontSize="14"
-                                   LineBreakMode="TailTruncation"
-                                   MaxLines="1"
-                                   HorizontalOptions="Start" />
-
-                            <!-- State -->
-                            <Label Grid.Column="5" 
-                                   Text="{Binding State}" 
-                                   VerticalOptions="Center"
-                                   FontSize="12"
-                                   Opacity="0.8"
-                                   LineBreakMode="NoWrap"
-                                   MaxLines="1"
-                                   HorizontalOptions="End"/>
+                            <Label Grid.Column="0" Text="{Binding Day}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="1" Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
+                            <Label Grid.Column="2" Text="{Binding PlannedHours}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
+                            <Label Grid.Column="3" Text="{Binding WorkedHours, StringFormat='{}{0}u'}" VerticalOptions="Center" FontAttributes="Bold" FontSize="14" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
+                            <Label Grid.Column="4" Text="{Binding ProjectName}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="5" Text="{Binding State}" VerticalOptions="Center" FontSize="12" Opacity="0.8" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="End"/>
                         </Grid>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Label 
-            Text="{Binding TotalWorkedHours}"
-            FontAttributes="Bold"
-            FontSize="16"
-            Opacity="0.8"
-            VerticalOptions="Center" 
-            HorizontalOptions="Start" />
-
-    </VerticalStackLayout>
+        <!-- Footer: total worked hours pinned to bottom -->
+        <Label Grid.Row="4"
+               Text="{Binding TotalWorkedHours}"
+               FontAttributes="Bold"
+               FontSize="16"
+               Opacity="0.8"
+               VerticalOptions="Center"
+               HorizontalOptions="Start" />
+    </Grid>
 </ContentPage>

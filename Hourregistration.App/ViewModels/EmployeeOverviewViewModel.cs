@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Hourregistration.App.ViewModels;
+using CommunityToolkit.Mvvm.Input;
 using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
 using System.Collections.ObjectModel;
@@ -15,27 +15,27 @@ namespace Hourregistration.App.ViewModels
         {
             get
             {
-                // Example: return the total as a formatted string, e.g. "Totaal: 40u"
                 var total = DeclaredHoursList?.Sum(x => x.WorkedHours) ?? 0;
-                return $"Totaal aantal gewerkte uren: {total}u";
+                return $"Totaal aantal uren: {total}u";
             }
         }
 
         public EmployeeOverviewViewModel(IDeclaredHoursService declaredHoursService)
         {
             _declaredHoursService = declaredHoursService;
-            DeclaredHoursList = [];
             Load();
         }
-
 
         public override void Load()
         {
             DeclaredHoursList.Clear();
-            foreach (var item in _declaredHoursService.GetAll())
+            foreach (var item in _declaredHoursService.GetAll() ?? Enumerable.Empty<DeclaredHours>())
             {
                 DeclaredHoursList.Add(item);
             }
+
+            // notify footer text update
+            OnPropertyChanged(nameof(TotalWorkedHours));
         }
 
         public override void OnAppearing()
@@ -46,6 +46,13 @@ namespace Hourregistration.App.ViewModels
         public override void OnDisappearing()
         {
             DeclaredHoursList.Clear();
+        }
+
+        // Command exposed to the view to reload the list manually
+        [RelayCommand]
+        private void Refresh()
+        {
+            Load();
         }
     }
 }

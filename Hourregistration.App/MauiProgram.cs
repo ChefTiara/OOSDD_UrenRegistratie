@@ -1,4 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Hourregistration.Core.Interfaces;
+using Hourregistration.Core.Interfaces.Repositories;
+using Hourregistration.Core.Interfaces.Services;
+using Hourregistration.Core.Data.Repositories;
+using Hourregistration.Core.Services;
+using Microsoft.Extensions.Logging;
+using Hourregistration.App.ViewModels;
+using Hourregistration.App.Views;
 
 namespace Hourregistration.App
 {
@@ -19,9 +26,14 @@ namespace Hourregistration.App
     		builder.Logging.AddDebug();
 #endif
 
+            builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
+            builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
+
+            builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
+
             ///  builder.Services.AddSingleton<ITemplateService, TemplateService>();
             ///  builder.Services.AddTransient<TemplateView>().AddTransient<TemplateViewModel>();
-            
+
             return builder.Build();
         }
     }

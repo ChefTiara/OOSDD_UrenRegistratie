@@ -1,4 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Hourregistration.Core.Interfaces.Repositories;
+using Hourregistration.Core.Data.Repositories;
+using Hourregistration.Core.Interfaces.Services;
+using Hourregistration.Core.Services;
+using Hourregistration.App.ViewModels;
+using Hourregistration.App.Views;
 
 namespace Hourregistration.App
 {
@@ -16,12 +23,15 @@ namespace Hourregistration.App
                 });
 
             #if DEBUG
-    		builder.Logging.AddDebug();
-#endif
+            builder.Logging.AddDebug();
+            #endif
 
-            ///  builder.Services.AddSingleton<ITemplateService, TemplateService>();
-            ///  builder.Services.AddTransient<TemplateView>().AddTransient<TemplateViewModel>();
-            
+            // Register repository / service / viewmodel / view so DI can resolve the page and its VM
+            builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
+            builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
+            builder.Services.AddTransient<MedewerkerUrenoverzichtViewModel>();
+            builder.Services.AddTransient<MedewerkerUrenoverzichtView>();
+
             return builder.Build();
         }
     }

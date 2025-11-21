@@ -8,6 +8,8 @@
         <MenuBarItem Text="Pages">
             <MenuFlyoutItem Text="Page1"
                  Clicked="OnPage1Clicked"/>
+            <MenuFlyoutItem Text="Page2"
+     Clicked="OnPage4Clicked"/>
         </MenuBarItem>
     </ContentPage.MenuBarItems>
     <VerticalStackLayout>

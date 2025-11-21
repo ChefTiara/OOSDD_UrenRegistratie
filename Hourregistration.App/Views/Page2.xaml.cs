@@ -1,10 +1,10 @@
-using Hourregistration.App.Services;
+﻿using Hourregistration.App.Services;
 
 namespace Hourregistration.App.Views;
 
-public partial class Page1 : ContentPage
+public partial class Page2 : ContentPage
 {
-    public Page1()
+    public Page2()
     {
         InitializeComponent();
     }
@@ -12,9 +12,7 @@ public partial class Page1 : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-
-        // Rol mag deze pagina niet zien? Blokkeer.
-        if (!SessionManager.CanAccessPage(1))
+        if (!SessionManager.CanAccessPage(2))
         {
             DenyAccess();
         }
@@ -22,44 +20,32 @@ public partial class Page1 : ContentPage
 
     private async void DenyAccess()
     {
-        await DisplayAlert("Geen toegang", "Je hebt geen toegang tot Pagina 1.", "OK");
+        await DisplayAlert("Geen toegang", "Je hebt geen toegang tot Pagina 2.", "OK");
         await Navigation.PopAsync();
     }
 
-    private async void OnGoToPage2(object sender, EventArgs e)
+    private async void OnGoToPage1(object sender, EventArgs e)
     {
-        if (SessionManager.CanAccessPage(2))
-        {
-            await Navigation.PushAsync(new Page2());
-        }
+        if (SessionManager.CanAccessPage(1))
+            await Navigation.PushAsync(new Page1());
         else
-        {
-            await DisplayAlert("Geen toegang", "Je hebt geen toegang tot Pagina 2.", "OK");
-        }
+            await DisplayAlert("Geen toegang", "Je hebt geen toegang tot Pagina 1.", "OK");
     }
 
     private async void OnGoToPage3(object sender, EventArgs e)
     {
         if (SessionManager.CanAccessPage(3))
-        {
             await Navigation.PushAsync(new Page3());
-        }
         else
-        {
             await DisplayAlert("Geen toegang", "Je hebt geen toegang tot Pagina 3.", "OK");
-        }
     }
 
     private async void OnGoToPage4(object sender, EventArgs e)
     {
         if (SessionManager.CanAccessPage(4))
-        {
             await Navigation.PushAsync(new Page4());
-        }
         else
-        {
             await DisplayAlert("Geen toegang", "Je hebt geen toegang tot Pagina 4.", "OK");
-        }
     }
 
     private void OnLogout(object sender, EventArgs e)

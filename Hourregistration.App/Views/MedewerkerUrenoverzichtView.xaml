@@ -31,6 +31,28 @@
                   Placeholder="Zoek medewerker"
                   WidthRequest="200"
                 />
+
+
+                <Button Grid.Column="1"
+                       Text="Filter"
+                       Command="{Binding FilterCommand}"
+                       Margin="8,0,0,0"
+                        Padding="8"/>
+                        
+                
+                <!-- Filterpaneel onder de zoekrij; zichtbaar maken via binding -->
+                <StackLayout Grid.Row="1" Grid.ColumnSpan="2" IsVisible="{Binding IsFilterVisible}" Padding="0,8,0,0" Spacing="8">
+                    <!-- Pas deze controls aan naar jouw filtercriteria -->
+                    <Picker Title="Functie"
+                ItemsSource="{Binding FunctieOptions}"
+                SelectedItem="{Binding SelectedFunctie}" />
+                    <DatePicker Date="{Binding SelectedDate}" />
+                    <HorizontalStackLayout>
+                        <Button Text="Toepassen" Command="{Binding ApplyFiltersCommand}" />
+                        <Button Text="Reset" Command="{Binding ResetFiltersCommand}" />
+                    </HorizontalStackLayout>
+                </StackLayout>
+                
                 <Button Text="Opnieuw laden"
                         Command="{Binding RefreshCommand}"
                         Padding="8,6"
@@ -113,3 +135,4 @@
                HorizontalOptions="Start" />
     </Grid>
 </ContentPage>
+    

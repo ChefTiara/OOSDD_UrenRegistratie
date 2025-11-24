@@ -5,6 +5,9 @@ using Hourregistration.Core.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
+using System.Windows.Input;
+using Microsoft.Maui.Controls;
 
 namespace Hourregistration.App.ViewModels
 {
@@ -13,21 +16,21 @@ namespace Hourregistration.App.ViewModels
         private readonly IDeclaredHoursService _declaredHoursService;
 
         // show only the currently visible week's items
-        public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = [];
+        public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = new ObservableCollection<DeclaredHours>();
 
         // current week's Monday
         private DateTime _currentWeekStart = GetStartOfWeek(DateTime.Today);
 
         public string WeekLabel => FormatWeekLabel(_currentWeekStart);
 
-        private string textSearch;
+        private string textSearch = string.Empty;
         public string TextSearch
         {
             get => textSearch;
             set
             {
                 textSearch = value;
-                if (textSearch.Length >= 2)
+                if (!string.IsNullOrEmpty(textSearch) && textSearch.Length >= 2)
                 {
                     var filtered = DeclaredHoursList
                         .Where(x => x.Voornaam.Contains(textSearch, StringComparison.OrdinalIgnoreCase) ||
@@ -53,10 +56,32 @@ namespace Hourregistration.App.ViewModels
             }
         }
 
+        private bool isFilterVisible;
+        public bool IsFilterVisible { get => isFilterVisible; set => SetProperty(ref isFilterVisible, value); }
+
+        public ObservableCollection<string> FunctieOptions { get; } = new() { "Medewerker", "Teamleider" };
+
+        private string selectedFunctie = string.Empty;
+        public string SelectedFunctie { get => selectedFunctie; set => SetProperty(ref selectedFunctie, value); }
+
+        private DateOnly selectedDate = DateOnly.FromDateTime(DateTime.Today);
+        public DateOnly SelectedDate { get => selectedDate; set => SetProperty(ref selectedDate, value); }
+
+        public ICommand FilterCommand { get; }
+        public ICommand ApplyFiltersCommand { get; }
+        public ICommand ResetFiltersCommand { get; }
+
         public MedewerkerUrenoverzichtViewModel(IDeclaredHoursService declaredHoursService)
         {
             _declaredHoursService = declaredHoursService;
             ApplyWeek(); // load initial week items
+
+            FilterCommand = new Command(ToggleFilter);
+            ApplyFiltersCommand = new Command(ApplyFilters);
+            ResetFiltersCommand = new Command(ResetFilters);
+
+            // defaultwaarden
+            SelectedDate = DateOnly.FromDateTime(System.DateTime.Today);
         }
 
         public override void Load() => ApplyWeek();
@@ -130,6 +155,20 @@ namespace Hourregistration.App.ViewModels
             var startStr = start.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
             var endStr = end.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
             return $"Week {weekNumber} ({startStr} / {endStr})";
+        }
+
+        private void ToggleFilter() => IsFilterVisible = !IsFilterVisible;
+
+        private void ApplyFilters()
+        {
+            // Pas hier je filtering toe op je collectie (bv. oproep service of filter lokale lijst)
+        }
+
+        private void ResetFilters()
+        {
+            SelectedFunctie = string.Empty;
+            SelectedDate = DateOnly.FromDateTime(System.DateTime.Today);
+            // reset overige filters en herlaad data
         }
     }
 }

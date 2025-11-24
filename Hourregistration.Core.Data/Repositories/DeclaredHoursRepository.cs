@@ -23,8 +23,6 @@ namespace Hourregistration.Core.Data.Repositories
                 new DeclaredHours(12, "Milan", "de Wit", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20), "Teamleider"),
                 new DeclaredHours(13, "Jesse", "van den Berg", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20), "Medewerker"),
                 new DeclaredHours(14, "Finn", "Smits", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
-
-
             ];
         }
 

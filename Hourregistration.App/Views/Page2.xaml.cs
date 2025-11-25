@@ -27,7 +27,7 @@ public partial class Page2 : ContentPage
     private async void OnGoToDeclarationPage(object sender, EventArgs e)
     {
         if (SessionManager.CanAccessPage(1))
-            await Navigation.PushAsync(new Page1());
+            await Navigation.PushAsync(new DeclarationPage());
         else
             await DisplayAlert("Geen toegang", "Je hebt geen toegang tot Pagina 1.", "OK");
     }

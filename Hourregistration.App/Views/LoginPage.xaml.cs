@@ -19,7 +19,7 @@ public partial class LoginPage : ContentPage
     private async void OnOpdrachtgeverClicked(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = Role.Opdrachtgever;
-        await NavigateToStartPage();
+        await Navigation.PushAsync(new UrenbeoordelingPage());
     }
 
     private async void OnAdministratieClicked(object sender, EventArgs e)

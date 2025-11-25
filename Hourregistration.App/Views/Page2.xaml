@@ -7,7 +7,7 @@
     <VerticalStackLayout Padding="20" Spacing="10">
         <Label Text="Dit is Pagina 2" FontSize="24" />
 
-        <Button Text="Ga naar Pagina 1" Clicked="OnGoToPage1" />
+        <Button Text="Ga naar Pagina 1" Clicked="OnGoToDeclarationPage" />
         <Button Text="Ga naar Pagina 3" Clicked="OnGoToPage3" />
         <Button Text="Ga naar Pagina 4" Clicked="OnGoToPage4" />
 

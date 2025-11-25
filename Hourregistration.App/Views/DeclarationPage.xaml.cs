@@ -4,11 +4,11 @@ using Hourregistration.Core.Services;
 
 namespace Hourregistration.App.Views;
 
-public partial class Page1 : ContentPage
+public partial class DeclarationPage : ContentPage
 {
     private readonly DeclarationService _service;
 
-    public Page1()
+    public DeclarationPage()
     {
         InitializeComponent();
     }

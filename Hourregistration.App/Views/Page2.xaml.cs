@@ -24,7 +24,7 @@ public partial class Page2 : ContentPage
         await Navigation.PopAsync();
     }
 
-    private async void OnGoToPage1(object sender, EventArgs e)
+    private async void OnGoToDeclarationPage(object sender, EventArgs e)
     {
         if (SessionManager.CanAccessPage(1))
             await Navigation.PushAsync(new Page1());

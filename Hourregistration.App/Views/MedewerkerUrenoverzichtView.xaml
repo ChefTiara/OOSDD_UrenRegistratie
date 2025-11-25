@@ -7,9 +7,7 @@
              x:DataType="vm:MedewerkerUrenoverzichtViewModel"
              Title="MedewerkerUrenoverzichtView">
 
-    <!-- Grid with an extra Auto row for the button row -->
     <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*,Auto" ColumnDefinitions="*" RowSpacing="8">
-        <!-- Title -->
         <Label Grid.Row="0"
                Text="Urenoverzicht"
                FontAttributes="Bold"
@@ -17,14 +15,9 @@
                VerticalOptions="Center"
                HorizontalOptions="Center" />
 
-        <!-- Button bar replaced with a 3-column Grid:
-             Column 0: left buttons (Auto)
-             Column 1: flexible spacer (*)
-             Column 2: week selector (Auto, pinned to right) -->
+        <!-- Button row: keep Search and Reload, remove filter pane/button -->
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" VerticalOptions="Center">
-            <!-- Left-side buttons -->
             <HorizontalStackLayout Grid.Column="0" Spacing="8" HorizontalOptions="Start" VerticalOptions="Center">
-
                 <SearchBar 
                   Background="{AppThemeBinding Light= White, Dark= Black}"
                   Text="{Binding TextSearch}"
@@ -32,27 +25,6 @@
                   WidthRequest="200"
                 />
 
-
-                <Button Grid.Column="1"
-                       Text="Filter"
-                       Command="{Binding FilterCommand}"
-                       Margin="8,0,0,0"
-                        Padding="8"/>
-                        
-                
-                <!-- Filterpaneel onder de zoekrij; zichtbaar maken via binding -->
-                <StackLayout Grid.Row="1" Grid.ColumnSpan="2" IsVisible="{Binding IsFilterVisible}" Padding="0,8,0,0" Spacing="8">
-                    <!-- Pas deze controls aan naar jouw filtercriteria -->
-                    <Picker Title="Functie"
-                ItemsSource="{Binding FunctieOptions}"
-                SelectedItem="{Binding SelectedFunctie}" />
-                    <DatePicker Date="{Binding SelectedDate}" />
-                    <HorizontalStackLayout>
-                        <Button Text="Toepassen" Command="{Binding ApplyFiltersCommand}" />
-                        <Button Text="Reset" Command="{Binding ResetFiltersCommand}" />
-                    </HorizontalStackLayout>
-                </StackLayout>
-                
                 <Button Text="Opnieuw laden"
                         Command="{Binding RefreshCommand}"
                         Padding="8,6"
@@ -61,13 +33,10 @@
                         <FontImageSource Glyph="&#xE117;" FontFamily="Segoe MDL2 Assets" Size="16" Color="Black" />
                     </Button.ImageSource>
                 </Button>
-                <!-- additional left-side buttons can go here -->
             </HorizontalStackLayout>
 
-            <!-- Middle column is flexible and will expand to push the week selector to the right -->
             <BoxView Grid.Column="1" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" />
 
-            <!-- Week selector pinned to the right -->
             <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center" HorizontalOptions="End">
                 <Button Command="{Binding PreviousWeekCommand}" Padding="6" AutomationId="PrevWeekButton">
                     <Button.ImageSource>
@@ -87,7 +56,7 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <!-- Header row matching the item Grid columns (moved to Row 2 so it sits below buttons) -->
+        <!-- Header -->
         <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="10,90,120,*,80" Margin="4,0">
             <Label Grid.Column="1" Text="Voornaam" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
             <Label Grid.Column="2" Text="Achternaam" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
@@ -95,7 +64,6 @@
             <Label Grid.Column="4" Text="" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="End" />
         </Grid>
 
-        <!-- CollectionView occupies the star row so its height is stable -->
         <CollectionView
             Grid.Row="3"
             x:Name="DeclaredHoursCollection"
@@ -125,7 +93,6 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <!-- Footer: total worked hours pinned to bottom -->
         <Label Grid.Row="4"
                Text="{Binding TotalWorkedHours}"
                FontAttributes="Bold"
@@ -135,4 +102,3 @@
                HorizontalOptions="Start" />
     </Grid>
 </ContentPage>
-    

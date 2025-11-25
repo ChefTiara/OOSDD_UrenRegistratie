@@ -25,20 +25,7 @@
             <!-- Left-side buttons -->
             <HorizontalStackLayout Grid.Column="0" Spacing="8" HorizontalOptions="Start" VerticalOptions="Center">
 
-                <SearchBar 
-                  Background="{AppThemeBinding Light= White, Dark= Black}"
-                  Text="{Binding TextSearch}"
-                  Placeholder="Zoek medewerker"
-                  WidthRequest="200"
-                />
-
-
-                <Button Grid.Column="1"
-                       Text="Filter"
-                       Command="{Binding FilterCommand}"
-                       Margin="8,0,0,0"
-                        Padding="8"/>
-                        
+  
                 
                 <!-- Filterpaneel onder de zoekrij; zichtbaar maken via binding -->
                 <StackLayout Grid.Row="1" Grid.ColumnSpan="2" IsVisible="{Binding IsFilterVisible}" Padding="0,8,0,0" Spacing="8">

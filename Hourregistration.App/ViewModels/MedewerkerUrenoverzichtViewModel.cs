@@ -28,18 +28,7 @@ namespace Hourregistration.App.ViewModels
         // ===================================
         // ZOEKEN
         // ===================================
-        private string textSearch = string.Empty;
-        public string TextSearch
-        {
-            get => textSearch;
-            set
-            {
-                textSearch = value;
-                ApplyFilters();
-                OnPropertyChanged();
-            }
-        }
-
+     
         // totaal gewerkte uren
         public string TotalWorkedHours
         {
@@ -92,7 +81,6 @@ namespace Hourregistration.App.ViewModels
 
             FilterCommand = new Command(ToggleFilter);
             ApplyFiltersCommand = new Command(ApplyFilters);
-            ResetFiltersCommand = new Command(ResetFilters);
         }
 
         public override void Load() => ApplyWeek();
@@ -163,28 +151,12 @@ namespace Hourregistration.App.ViewModels
             if (SelectedDate.HasValue)
                 filtered = filtered.Where(x => x.Date == SelectedDate.Value);
 
-            // zoekfilter
-            if (!string.IsNullOrWhiteSpace(TextSearch) && TextSearch.Length >= 2)
-            {
-                filtered = filtered.Where(x =>
-                    x.Voornaam.Contains(TextSearch, StringComparison.OrdinalIgnoreCase) ||
-                    x.Achternaam.Contains(TextSearch, StringComparison.OrdinalIgnoreCase) ||
-                    x.FunctieName.Contains(TextSearch, StringComparison.OrdinalIgnoreCase));
-            }
 
             DeclaredHoursList.Clear();
             foreach (var item in filtered)
                 DeclaredHoursList.Add(item);
 
             OnPropertyChanged(nameof(TotalWorkedHours));
-        }
-
-        private void ResetFilters()
-        {
-            SelectedFunctie = string.Empty;
-            SelectedDate = null;
-            TextSearch = string.Empty;
-            ApplyFilters();
         }
 
         private void ToggleFilter() => IsFilterVisible = !IsFilterVisible;

@@ -6,10 +6,6 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 	}
-    void OnUrenbeoordelingPageClicked(object sender, EventArgs e)
-    {
-        Subpage.Content = new UrenbeoordelingPage();
-    }
 
     void OnPage2Clicked(object sender, EventArgs e)
     {

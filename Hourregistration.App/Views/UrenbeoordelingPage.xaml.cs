@@ -1,6 +1,6 @@
 namespace Hourregistration.App.Views;
 
-public partial class UrenbeoordelingPage : ContentView
+public partial class UrenbeoordelingPage : ContentPage
 {
 	public UrenbeoordelingPage()
 	{

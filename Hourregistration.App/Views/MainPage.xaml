@@ -12,12 +12,6 @@
         </MenuBarItem>
     </ContentPage.MenuBarItems>
     
-    <ContentPage.MenuBarItems>
-        <MenuBarItem Text="Pages">
-            <MenuFlyoutItem Text="Page1"
-                 Clicked="OnPage1Clicked"/>
-        </MenuBarItem>
-    </ContentPage.MenuBarItems>
     <VerticalStackLayout>
         <ContentView:Header/>
         <ContentView x:Name="Subpage"/>

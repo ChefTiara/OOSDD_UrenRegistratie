@@ -4,6 +4,20 @@
              x:Class="Hourregistration.App.Views.MainPage"
              xmlns:ContentView="clr-namespace:Hourregistration.App.Views"
              Title="MainPage">
+ 
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="Pages">
+            <MenuFlyoutItem Text="UrenbeoordelingPage"
+                 Clicked="OnUrenbeoordelingPageClicked"/>
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+    
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="Pages">
+            <MenuFlyoutItem Text="Page1"
+                 Clicked="OnPage1Clicked"/>
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
     <VerticalStackLayout>
         <ContentView:Header/>
         <ContentView x:Name="Subpage"/>

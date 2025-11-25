@@ -68,11 +68,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Update="Views\UrenbeoordelingPage.xaml.cs">
+			<DependentUpon>UrenbeoordelingPage.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
 	  <Compile Update="Views\DeclarationPage.xaml.cs">
 	    <DependentUpon>DeclarationPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
-
+	
 	<ItemGroup>
 	  <MauiXaml Update="Views\EmployeeOverviewView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
@@ -86,9 +91,11 @@
 	  <MauiXaml Update="Views\MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\DeclarationPage.xaml">
+	  <MauiXaml Update="Views\UrenbeoordelingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	<MauiXaml Update="Views\DeclarationPage.xaml">
+		<Generator>MSBuild:Compile</Generator>
 	</ItemGroup>
 
 </Project>

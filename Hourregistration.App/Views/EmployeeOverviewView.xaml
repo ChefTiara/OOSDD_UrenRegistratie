@@ -7,7 +7,7 @@
              x:DataType="vm:EmployeeOverviewViewModel"
              Title="EmployeeOverviewView">
 
-    <!-- Grid with an extra Auto row for the button row -->
+    <!-- Grid with an extra Auto row for the sort button -->
     <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*,Auto" ColumnDefinitions="*" RowSpacing="8">
         <!-- Title -->
         <Label Grid.Row="0"
@@ -33,11 +33,19 @@
                     </Button.ImageSource>
                 </Button>
 
+                <!-- Sort button above the list (cycles through sort options) -->
+                <Button Text="{Binding SortButtonText}"
+                    Command="{Binding CycleSortCommand}"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    Padding="8,6" >
+                </Button>
+
                 <!-- additional left-side buttons can go here -->
             </HorizontalStackLayout>
 
             <!-- Middle column is flexible and will expand to push the week selector to the right -->
-            <BoxView Grid.Column="1" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" />
+            <BoxView Grid.Column="1" BackgroundColor="Transparent" HorizontalOptions="Fill" />
 
             <!-- Week selector pinned to the right -->
             <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center" HorizontalOptions="End">

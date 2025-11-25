@@ -31,9 +31,6 @@ namespace Hourregistration.App
 
             builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
 
-            ///  builder.Services.AddSingleton<ITemplateService, TemplateService>();
-            ///  builder.Services.AddTransient<TemplateView>().AddTransient<TemplateViewModel>();
-
             return builder.Build();
         }
     }

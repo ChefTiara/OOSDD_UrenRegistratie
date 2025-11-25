@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
-using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 
@@ -14,6 +13,45 @@ namespace Hourregistration.App.ViewModels
 
         // show only the currently visible week's items
         public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = [];
+
+        // Sorting options exposed to the UI (picker)
+        public List<string> SortOptions { get; } = [
+            "Date ↑",
+            "Date ↓",
+            "Project A→Z",
+            "Project Z→A",
+            "Hours ↑",
+            "Hours ↓",
+        ];
+
+        private int _sortIndex = 0;
+        private string? _selectedSortOption;
+        public string SelectedSortOption
+        {
+            get => _selectedSortOption ?? SortOptions[0];
+            set
+            {
+                if (_selectedSortOption == value) return;
+                _selectedSortOption = value;
+                _sortIndex = SortOptions.IndexOf(value);
+                OnPropertyChanged(nameof(SelectedSortOption));
+                OnPropertyChanged(nameof(SortButtonText));
+                ApplyWeek(); // re-apply filter + sort when selection changes
+            }
+        }
+
+        // helper to support the existing cycle-sort button in the view
+        public string SortButtonText => SortOptions.ElementAtOrDefault(_sortIndex) ?? SortOptions[0];
+
+        [RelayCommand]
+        private void CycleSort()
+        {
+            _sortIndex = (_sortIndex + 1) % SortOptions.Count;
+            _selectedSortOption = SortOptions[_sortIndex];
+            OnPropertyChanged(nameof(SelectedSortOption));
+            OnPropertyChanged(nameof(SortButtonText));
+            ApplyWeek();
+        }
 
         // current week's Monday
         private DateTime _currentWeekStart = GetStartOfWeek(DateTime.Today);
@@ -32,6 +70,8 @@ namespace Hourregistration.App.ViewModels
         public EmployeeOverviewViewModel(IDeclaredHoursService declaredHoursService)
         {
             _declaredHoursService = declaredHoursService;
+            _selectedSortOption = SortOptions[0];
+            _sortIndex = 0;
             ApplyWeek(); // load initial week items
         }
 
@@ -50,6 +90,7 @@ namespace Hourregistration.App.ViewModels
         private void PreviousWeek()
         {
             _currentWeekStart = _currentWeekStart.AddDays(-7);
+            OnPropertyChanged(nameof(WeekLabel));
             ApplyWeek();
         }
 
@@ -58,6 +99,7 @@ namespace Hourregistration.App.ViewModels
         private void NextWeek()
         {
             _currentWeekStart = _currentWeekStart.AddDays(7);
+            OnPropertyChanged(nameof(WeekLabel));
             ApplyWeek();
         }
 
@@ -72,19 +114,33 @@ namespace Hourregistration.App.ViewModels
             var weekStartDateOnly = DateOnly.FromDateTime(weekStart);
             var weekEndDateOnly = DateOnly.FromDateTime(weekEnd);
 
-            // ORDER BY ascending so the first day (Monday) appears at the top.
-            // ThenBy StartTime ensures items on the same day are ordered by start time.
             var items = all
-                .Where(i => i.Date >= weekStartDateOnly && i.Date <= weekEndDateOnly)
-                .OrderBy(i => i.Date)
-                .ThenBy(i => i.StartTime);
+                .Where(i => i.Date >= weekStartDateOnly && i.Date <= weekEndDateOnly);
+
+            // apply sorting chosen by the picker / cycle button
+            var ordered = ApplySort(items);
 
             DeclaredHoursList.Clear();
-            foreach (var item in items)
+            foreach (var item in ordered)
                 DeclaredHoursList.Add(item);
 
-            OnPropertyChanged(nameof(WeekLabel));
             OnPropertyChanged(nameof(TotalWorkedHours));
+        }
+
+        private IEnumerable<DeclaredHours> ApplySort(IEnumerable<DeclaredHours> items)
+        {
+            var selected = _selectedSortOption ?? SortOptions.ElementAtOrDefault(_sortIndex) ?? SortOptions[0];
+
+            return selected switch
+            {
+                "Date ↑" => items.OrderBy(i => i.Date).ThenBy(i => i.StartTime),
+                "Date ↓" => items.OrderByDescending(i => i.Date).ThenBy(i => i.StartTime),
+                "Project A→Z" => items.OrderBy(i => i.ProjectName ?? string.Empty).ThenBy(i => i.Date),
+                "Project Z→A" => items.OrderByDescending(i => i.ProjectName ?? string.Empty).ThenBy(i => i.Date),
+                "Hours ↑" => items.OrderBy(i => i.WorkedHours).ThenBy(i => i.Date),
+                "Hours ↓" => items.OrderByDescending(i => i.WorkedHours).ThenBy(i => i.Date),
+                _ => items.OrderBy(i => i.Date).ThenBy(i => i.StartTime),
+            };
         }
 
         private static DateTime GetStartOfWeek(DateTime date)

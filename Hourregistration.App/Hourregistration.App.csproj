@@ -94,8 +94,9 @@
 	  <MauiXaml Update="Views\UrenbeoordelingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	<MauiXaml Update="Views\DeclarationPage.xaml">
+	  <MauiXaml Update="Views\DeclarationPage.xaml">
 		<Generator>MSBuild:Compile</Generator>
+	</MauiXaml>
 	</ItemGroup>
 
 </Project>

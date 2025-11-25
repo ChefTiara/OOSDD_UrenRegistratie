@@ -15,14 +15,19 @@ namespace Hourregistration.App.ViewModels
     {
         private readonly IDeclaredHoursService _declaredHoursService;
 
-        // show only the currently visible week's items
-        public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = new ObservableCollection<DeclaredHours>();
+        // Items die in de UI getoond worden
+        public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = new();
 
-        // current week's Monday
+        // Ongefilterde items van de huidige week
+        private List<DeclaredHours> _allWeekItems = new();
+
+        // huidige weekstart (maandag)
         private DateTime _currentWeekStart = GetStartOfWeek(DateTime.Today);
-
         public string WeekLabel => FormatWeekLabel(_currentWeekStart);
 
+        // ===================================
+        // ZOEKEN
+        // ===================================
         private string textSearch = string.Empty;
         public string TextSearch
         {
@@ -30,23 +35,12 @@ namespace Hourregistration.App.ViewModels
             set
             {
                 textSearch = value;
-                if (!string.IsNullOrEmpty(textSearch) && textSearch.Length >= 2)
-                {
-                    var filtered = DeclaredHoursList
-                        .Where(x => x.Voornaam.Contains(textSearch, StringComparison.OrdinalIgnoreCase) ||
-                                    x.Achternaam.Contains(textSearch, StringComparison.OrdinalIgnoreCase) ||
-                                    x.FunctieName.Contains(textSearch, StringComparison.OrdinalIgnoreCase))
-                        .ToList();
-                    DeclaredHoursList.Clear();
-                    foreach (var item in filtered)
-                        DeclaredHoursList.Add(item);
-                }
-                else
-                {
-                    ApplyWeek(); // reload the week if search text is less than 2 characters
-                }
+                ApplyFilters();
+                OnPropertyChanged();
             }
         }
+
+        // totaal gewerkte uren
         public string TotalWorkedHours
         {
             get
@@ -56,17 +50,36 @@ namespace Hourregistration.App.ViewModels
             }
         }
 
-        private bool isFilterVisible;
-        public bool IsFilterVisible { get => isFilterVisible; set => SetProperty(ref isFilterVisible, value); }
+        // ===================================
+        // FILTERS
+        // ===================================
 
-        public ObservableCollection<string> FunctieOptions { get; } = new() { "Medewerker", "Teamleider" };
+        private bool isFilterVisible;
+        public bool IsFilterVisible
+        {
+            get => isFilterVisible;
+            set => SetProperty(ref isFilterVisible, value);
+        }
+
+        public ObservableCollection<string> FunctieOptions { get; } =
+            new() { "Medewerker", "Teamleider" };
 
         private string selectedFunctie = string.Empty;
-        public string SelectedFunctie { get => selectedFunctie; set => SetProperty(ref selectedFunctie, value); }
+        public string SelectedFunctie
+        {
+            get => selectedFunctie;
+            set => SetProperty(ref selectedFunctie, value);
+        }
 
-        private DateOnly selectedDate = DateOnly.FromDateTime(DateTime.Today);
-        public DateOnly SelectedDate { get => selectedDate; set => SetProperty(ref selectedDate, value); }
+        // belangrijke fix → nullable
+        private DateOnly? selectedDate = null;
+        public DateOnly? SelectedDate
+        {
+            get => selectedDate;
+            set => SetProperty(ref selectedDate, value);
+        }
 
+        // commands
         public ICommand FilterCommand { get; }
         public ICommand ApplyFiltersCommand { get; }
         public ICommand ResetFiltersCommand { get; }
@@ -74,27 +87,23 @@ namespace Hourregistration.App.ViewModels
         public MedewerkerUrenoverzichtViewModel(IDeclaredHoursService declaredHoursService)
         {
             _declaredHoursService = declaredHoursService;
-            ApplyWeek(); // load initial week items
+
+            ApplyWeek();
 
             FilterCommand = new Command(ToggleFilter);
             ApplyFiltersCommand = new Command(ApplyFilters);
             ResetFiltersCommand = new Command(ResetFilters);
-
-            // defaultwaarden
-            SelectedDate = DateOnly.FromDateTime(System.DateTime.Today);
         }
 
         public override void Load() => ApplyWeek();
-
         public override void OnAppearing() => Load();
-
         public override void OnDisappearing() => DeclaredHoursList.Clear();
 
-        // refresh / reload the current week
+        // refresh
         [RelayCommand]
         private void Refresh() => ApplyWeek();
 
-        // previous week
+        // vorige week
         [RelayCommand]
         private void PreviousWeek()
         {
@@ -102,7 +111,7 @@ namespace Hourregistration.App.ViewModels
             ApplyWeek();
         }
 
-        // next week
+        // volgende week
         [RelayCommand]
         private void NextWeek()
         {
@@ -110,7 +119,9 @@ namespace Hourregistration.App.ViewModels
             ApplyWeek();
         }
 
-        // Load items for the current week and notify UI
+        // ===================================
+        // WEEK LADEN
+        // ===================================
         private void ApplyWeek()
         {
             var all = _declaredHoursService.GetAll() ?? Enumerable.Empty<DeclaredHours>();
@@ -118,57 +129,81 @@ namespace Hourregistration.App.ViewModels
             var weekStart = _currentWeekStart.Date;
             var weekEnd = weekStart.AddDays(6).Date;
 
-            var weekStartDateOnly = DateOnly.FromDateTime(weekStart);
-            var weekEndDateOnly = DateOnly.FromDateTime(weekEnd);
+            var start = DateOnly.FromDateTime(weekStart);
+            var end = DateOnly.FromDateTime(weekEnd);
 
-            // ORDER BY ascending so the first day (Monday) appears at the top.
-            // ThenBy StartTime ensures items on the same day are ordered by start time.
-            var items = all
-                .Where(i => i.Date >= weekStartDateOnly && i.Date <= weekEndDateOnly)
+            // bronitems van de week
+            _allWeekItems = all
+                .Where(i => i.Date >= start && i.Date <= end)
                 .OrderBy(i => i.Date)
-                .ThenBy(i => i.StartTime);
+                .ThenBy(i => i.StartTime)
+                .ToList();
 
+            // eerst alles opnieuw tonen
             DeclaredHoursList.Clear();
-            foreach (var item in items)
+            foreach (var item in _allWeekItems)
                 DeclaredHoursList.Add(item);
 
             OnPropertyChanged(nameof(WeekLabel));
             OnPropertyChanged(nameof(TotalWorkedHours));
         }
 
-        private static DateTime GetStartOfWeek(DateTime date)
-        {
-            // ISO week: Monday is first day
-            var day = date.DayOfWeek;
-            int diff = day == DayOfWeek.Sunday ? -6 : DayOfWeek.Monday - day;
-            return date.Date.AddDays(diff);
-        }
-
-        private static string FormatWeekLabel(DateTime weekStart)
-        {
-            var weekNumber = ISOWeek.GetWeekOfYear(weekStart);
-            var start = weekStart;
-            var end = weekStart.AddDays(6);
-
-            // show full day-month-year for both start and end, e.g.:
-            // "Week 46 (10-11-2025 / 17-11-2025)"
-            var startStr = start.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
-            var endStr = end.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
-            return $"Week {weekNumber} ({startStr} / {endStr})";
-        }
-
-        private void ToggleFilter() => IsFilterVisible = !IsFilterVisible;
-
+        // ===================================
+        // FILTER-LOGICA
+        // ===================================
         private void ApplyFilters()
         {
-            // Pas hier je filtering toe op je collectie (bv. oproep service of filter lokale lijst)
+            IEnumerable<DeclaredHours> filtered = _allWeekItems;
+
+            // functiefilter
+            if (!string.IsNullOrEmpty(SelectedFunctie))
+                filtered = filtered.Where(x => x.FunctieName == SelectedFunctie);
+
+            // datumfilter → alleen als gebruiker datum kiest
+            if (SelectedDate.HasValue)
+                filtered = filtered.Where(x => x.Date == SelectedDate.Value);
+
+            // zoekfilter
+            if (!string.IsNullOrWhiteSpace(TextSearch) && TextSearch.Length >= 2)
+            {
+                filtered = filtered.Where(x =>
+                    x.Voornaam.Contains(TextSearch, StringComparison.OrdinalIgnoreCase) ||
+                    x.Achternaam.Contains(TextSearch, StringComparison.OrdinalIgnoreCase) ||
+                    x.FunctieName.Contains(TextSearch, StringComparison.OrdinalIgnoreCase));
+            }
+
+            DeclaredHoursList.Clear();
+            foreach (var item in filtered)
+                DeclaredHoursList.Add(item);
+
+            OnPropertyChanged(nameof(TotalWorkedHours));
         }
 
         private void ResetFilters()
         {
             SelectedFunctie = string.Empty;
-            SelectedDate = DateOnly.FromDateTime(System.DateTime.Today);
-            // reset overige filters en herlaad data
+            SelectedDate = null;
+            TextSearch = string.Empty;
+            ApplyFilters();
+        }
+
+        private void ToggleFilter() => IsFilterVisible = !IsFilterVisible;
+
+        // ===================================
+        // HELPERS
+        // ===================================
+        private static DateTime GetStartOfWeek(DateTime date)
+        {
+            var diff = date.DayOfWeek == DayOfWeek.Sunday ? -6 : DayOfWeek.Monday - date.DayOfWeek;
+            return date.Date.AddDays(diff);
+        }
+
+        private static string FormatWeekLabel(DateTime weekStart)
+        {
+            var week = ISOWeek.GetWeekOfYear(weekStart);
+            var end = weekStart.AddDays(6);
+
+            return $"Week {week} ({weekStart:dd-MM-yyyy} / {end:dd-MM-yyyy})";
         }
     }
 }

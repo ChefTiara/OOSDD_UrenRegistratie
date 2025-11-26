@@ -6,6 +6,7 @@ using Hourregistration.Core.Services;
 using Microsoft.Extensions.Logging;
 using Hourregistration.App.ViewModels;
 using Hourregistration.App.Views;
+using Hourregistration.App.Services;
 
 namespace Hourregistration.App
 {
@@ -22,19 +23,20 @@ namespace Hourregistration.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            #if DEBUG
-    		builder.Logging.AddDebug();
-#endif
-
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
 
             builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
 
-            ///  builder.Services.AddSingleton<ITemplateService, TemplateService>();
-            ///  builder.Services.AddTransient<TemplateView>().AddTransient<TemplateViewModel>();
+            #if DEBUG
+            builder.Logging.AddDebug();
+            #endif
 
-            return builder.Build();
+            var app = builder.Build();            
+
+            ServiceHelper.Initialize(app.Services);
+
+            return app;
         }
     }
 }

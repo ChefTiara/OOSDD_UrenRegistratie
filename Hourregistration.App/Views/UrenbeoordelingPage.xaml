@@ -4,10 +4,248 @@
              x:Class="Hourregistration.App.Views.UrenbeoordelingPage"
              Title="Urenbeoordeling Page">
 
-    <VerticalStackLayout>
-        <Label 
-            Text="This is UrenbeoordelingPage!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ContentPage.Content>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <!-- Header bar -->
+            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Start">
+                <Label Text="MijnUren"
+                       FontAttributes="Bold"
+                       FontSize="20" />
+
+                <HorizontalStackLayout Grid.Column="1"
+                                       Spacing="8"
+                                       VerticalOptions="Center">
+                    <Label Text="Jannet M." />
+                    <!-- Placeholder for arrow icon -->
+                    <Label Text="➝" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Tabs row -->
+            <Grid ColumnDefinitions="*,*,*,*"
+                  HeightRequest="40">
+                <Button Text="Urenregistratie"
+                        Grid.Column="0"
+                        Padding="4"
+                        FontSize="12" />
+                <Button Text="Urenoverzicht"
+                        Grid.Column="1"
+                        Padding="4"
+                        FontSize="12" />
+                <Button Text="Urenbeoordeling"
+                        Grid.Column="2"
+                        Padding="4"
+                        FontSize="12"
+                        BackgroundColor="#DDDDDD"
+                        FontAttributes="Bold" />
+                <!-- Empty tab placeholder -->
+                <BoxView Grid.Column="3" />
+            </Grid>
+
+            <!-- Section title + periode filter -->
+            <Grid ColumnDefinitions="*,Auto"
+                  VerticalOptions="Center">
+                <Label Text="Te beoordelen uren"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center" />
+
+                <HorizontalStackLayout Grid.Column="1"
+                                       Spacing="4"
+                                       VerticalOptions="Center">
+                    <Label Text="Periode" />
+                    <Picker WidthRequest="130"
+                            HorizontalOptions="End" />
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Pending registrations table -->
+            <Border Stroke="Black"
+                    StrokeThickness="1">
+                <Grid Padding="8"
+                      ColumnSpacing="8"
+                      RowSpacing="4"
+                      ColumnDefinitions="2*,2*,2*,2*,2*,Auto"
+                      RowDefinitions="Auto,Auto,Auto,Auto">
+
+                    <!-- Header row -->
+                    <Label Text="Medewerker"
+                           FontAttributes="Bold" />
+                    <Label Text="Periode"
+                           FontAttributes="Bold"
+                           Grid.Column="1" />
+                    <Label Text="Project"
+                           FontAttributes="Bold"
+                           Grid.Column="2" />
+                    <Label Text="Totaal uren"
+                           FontAttributes="Bold"
+                           Grid.Column="3" />
+                    <Label Text="Ingediend op"
+                           FontAttributes="Bold"
+                           Grid.Column="4" />
+                    <Label Text="Actie"
+                           FontAttributes="Bold"
+                           Grid.Column="5" />
+
+                    <!-- Row 1 -->
+                    <Label Text="Angela de Wit"
+                           Grid.Row="1" />
+                    <Label Text="28/4 – 12/5"
+                           Grid.Row="1"
+                           Grid.Column="1" />
+                    <Label Text="Wegen"
+                           Grid.Row="1"
+                           Grid.Column="2" />
+                    <Label Text="25 uur"
+                           Grid.Row="1"
+                           Grid.Column="3" />
+                    <Label Text="15/06/24"
+                           Grid.Row="1"
+                           Grid.Column="4" />
+                    <HorizontalStackLayout Grid.Row="1"
+                                           Grid.Column="5"
+                                           Spacing="4">
+                        <Button Text="✕"
+                                WidthRequest="32"
+                                HeightRequest="32" />
+                        <Button Text="✓"
+                                WidthRequest="32"
+                                HeightRequest="32" />
+                    </HorizontalStackLayout>
+
+                    <!-- Row 2 -->
+                    <Label Text="Boris Hout"
+                           Grid.Row="2" />
+                    <Label Text="6/5 – 19/5"
+                           Grid.Row="2"
+                           Grid.Column="1" />
+                    <Label Text="Constructie"
+                           Grid.Row="2"
+                           Grid.Column="2" />
+                    <Label Text="14 uur"
+                           Grid.Row="2"
+                           Grid.Column="3" />
+                    <Label Text="14/06/24"
+                           Grid.Row="2"
+                           Grid.Column="4" />
+                    <HorizontalStackLayout Grid.Row="2"
+                                           Grid.Column="5"
+                                           Spacing="4">
+                        <Button Text="✕"
+                                WidthRequest="32"
+                                HeightRequest="32" />
+                        <Button Text="✓"
+                                WidthRequest="32"
+                                HeightRequest="32" />
+                    </HorizontalStackLayout>
+
+                    <!-- Row 3 -->
+                    <Label Text="Abel van Rutje"
+                           Grid.Row="3" />
+                    <Label Text="28/4 – 12/5"
+                           Grid.Row="3"
+                           Grid.Column="1" />
+                    <Label Text="Ziekenhuis"
+                           Grid.Row="3"
+                           Grid.Column="2" />
+                    <Label Text="25 uur"
+                           Grid.Row="3"
+                           Grid.Column="3" />
+                    <Label Text="14/06/24"
+                           Grid.Row="3"
+                           Grid.Column="4" />
+                    <HorizontalStackLayout Grid.Row="3"
+                                           Grid.Column="5"
+                                           Spacing="4">
+                        <Button Text="✕"
+                                WidthRequest="32"
+                                HeightRequest="32" />
+                        <Button Text="✓"
+                                WidthRequest="32"
+                                HeightRequest="32" />
+                    </HorizontalStackLayout>
+
+                </Grid>
+            </Border>
+
+            <!-- Reviewed section title -->
+            <Label Text="Reeds beoordeelde registraties"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,16,0,0" />
+
+            <!-- Reviewed registrations table -->
+            <Border Stroke="Black"
+                    StrokeThickness="1">
+                <Grid Padding="8"
+                      ColumnSpacing="8"
+                      RowSpacing="4"
+                      ColumnDefinitions="2*,2*,2*,2*,2*,2*"
+                      RowDefinitions="Auto,Auto,Auto">
+
+                    <!-- Header row -->
+                    <Label Text="Medewerker"
+                           FontAttributes="Bold" />
+                    <Label Text="Periode"
+                           FontAttributes="Bold"
+                           Grid.Column="1" />
+                    <Label Text="Project"
+                           FontAttributes="Bold"
+                           Grid.Column="2" />
+                    <Label Text="Ingediend op"
+                           FontAttributes="Bold"
+                           Grid.Column="3" />
+                    <Label Text="Gekeurd op"
+                           FontAttributes="Bold"
+                           Grid.Column="4" />
+                    <Label Text="Status"
+                           FontAttributes="Bold"
+                           Grid.Column="5" />
+
+                    <!-- Row 1 -->
+                    <Label Text="Angela de Wit"
+                           Grid.Row="1" />
+                    <Label Text="28/4 – 12/5"
+                           Grid.Row="1"
+                           Grid.Column="1" />
+                    <Label Text="Ziekenhuis"
+                           Grid.Row="1"
+                           Grid.Column="2" />
+                    <Label Text="14/06/24"
+                           Grid.Row="1"
+                           Grid.Column="3" />
+                    <Label Text="15/06/24"
+                           Grid.Row="1"
+                           Grid.Column="4" />
+                    <Label Text="Goedgekeurd"
+                           Grid.Row="1"
+                           Grid.Column="5" />
+
+                    <!-- Row 2 -->
+                    <Label Text="Boris Hout"
+                           Grid.Row="2" />
+                    <Label Text="6/5 – 19/5"
+                           Grid.Row="2"
+                           Grid.Column="1" />
+                    <Label Text="Constructie"
+                           Grid.Row="2"
+                           Grid.Column="2" />
+                    <Label Text="14/06/24"
+                           Grid.Row="2"
+                           Grid.Column="3" />
+                    <Label Text="15/06/24"
+                           Grid.Row="2"
+                           Grid.Column="4" />
+                    <Label Text="Afgewezen"
+                           Grid.Row="2"
+                           Grid.Column="5" />
+
+                </Grid>
+            </Border>
+
+        </VerticalStackLayout>
+    </ContentPage.Content>
+
+
 </ContentPage>

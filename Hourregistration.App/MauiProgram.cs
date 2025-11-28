@@ -6,6 +6,7 @@ using Hourregistration.Core.Services;
 using Microsoft.Extensions.Logging;
 using Hourregistration.App.ViewModels;
 using Hourregistration.App.Views;
+using Hourregistration.App.Services;
 
 namespace Hourregistration.App
 {
@@ -31,7 +32,10 @@ namespace Hourregistration.App
 
             builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
 
-            return builder.Build();
+            var app = builder.Build();
+            ServiceHelper.Initialize(app.Services);
+
+            return app;
         }
     }
 }

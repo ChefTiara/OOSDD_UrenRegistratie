@@ -7,7 +7,7 @@ namespace Hourregistration.Core.Services
     public class DeclaredHoursService : IDeclaredHoursService
     {
         private readonly IDeclaredHoursRepository _declaredHoursRepository;
-
+        
         public DeclaredHoursService(IDeclaredHoursRepository declaredHoursRepository)
         {
             _declaredHoursRepository = declaredHoursRepository;

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Hourregistration.App.Views.DeclarationPage"
+             Title="Declaratie pagina">
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Label Text="Aantal gewerkte uren" Margin="0,20,0,0"/>
+        <Entry x:Name="UrenEntry" Keyboard="Numeric" />
+
+        <Label Text="Datum" />
+        <DatePicker x:Name="DatumPicker" />
+
+        <Button 
+            Text="Indienen"
+            Margin="0,30,0,0"
+            Clicked="OnIndienenClicked" />
+
+        <Label 
+            x:Name="FeedbackLabel"
+            TextColor="Red"
+            Margin="0,20,0,0" />
+
+        <Button Text="Terug naar Login (uitloggen)" Clicked="OnLogout" />
+    </VerticalStackLayout>
+</ContentPage>

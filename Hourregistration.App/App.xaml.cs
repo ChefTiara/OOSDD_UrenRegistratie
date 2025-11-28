@@ -1,12 +1,14 @@
-﻿namespace Hourregistration.App
-{
-    public partial class App : Application
-    {
-        public App()
-        {
-            InitializeComponent();
+﻿using Hourregistration.App.Views;
 
-            MainPage = new AppShell();
-        }
+namespace Hourregistration.App;
+
+public partial class App : Application
+{
+    public App()
+    {
+        InitializeComponent();
+
+        // Start met de loginpagina
+        MainPage = new NavigationPage(new LoginPage());
     }
 }

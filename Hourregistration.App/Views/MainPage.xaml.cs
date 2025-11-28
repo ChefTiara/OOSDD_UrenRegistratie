@@ -13,12 +13,7 @@ public partial class MainPage : ContentPage
         InitializeComponent();
     }
 
-    private void OnPage1Clicked(object sender, EventArgs e)
-    {
-        Subpage.Content = new Page1();
-    }
-
-    private void OnPage2Clicked(object sender, EventArgs e)
+    void OnPage2Clicked(object sender, EventArgs e)
     {
         Subpage.Content = new Header();
     }

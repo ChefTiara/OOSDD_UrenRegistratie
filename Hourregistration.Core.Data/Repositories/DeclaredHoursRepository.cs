@@ -9,20 +9,35 @@ namespace Hourregistration.Core.Data.Repositories
         public DeclaredHoursRepository()
         {
             declaredHoursList = [
-                new DeclaredHours(1,"Kees", "Janssen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
-                new DeclaredHours(2, "Jeroen", "de Boom", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(18, 20), "Medewerker"),
-                new DeclaredHours(3, "Teun", "van Kampen", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20), "Teamleider"),
-                new DeclaredHours(4, "Bilal", "Hout", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
-                new DeclaredHours(5, "Karsten", "de Lange", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20), "Medewerker"),
-                new DeclaredHours(6, "Bas", "de Graaf", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20), "Medewerker"),
-                new DeclaredHours(7, "Rodi", "Verschoor", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20), "Teamleider"),
-                new DeclaredHours(8, "Tyrone", "van Blokken", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20), "Medewerker"),
-                new DeclaredHours(9, "Daan", "de Vries", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
-                new DeclaredHours(10, "Luuk", "Jansen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(15, 20), "Medewerker"),
-                new DeclaredHours(11, "Sven", "Klaassen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
-                new DeclaredHours(12, "Milan", "de Wit", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20), "Teamleider"),
-                new DeclaredHours(13, "Jesse", "van den Berg", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20), "Medewerker"),
-                new DeclaredHours(14, "Finn", "Smits", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
+            
+                new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp"),
+                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp"),
+                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp"),
+                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp"),
+                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp"),
+
+                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie"),
+                new DeclaredHours(7, new DateOnly(2025, 11, 11), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp"),
+                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie"),
+                
+                //UC4
+                new DeclaredHours(9,"Kees", "Janssen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
+                new DeclaredHours(10, "Jeroen", "de Boom", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(18, 20), "Medewerker"),
+                new DeclaredHours(11, "Teun", "van Kampen", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20), "Teamleider"),
+                new DeclaredHours(12, "Bilal", "Hout", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
+                new DeclaredHours(13, "Karsten", "de Lange", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20), "Medewerker"),
+                new DeclaredHours(14, "Bas", "de Graaf", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20), "Medewerker"),
+                new DeclaredHours(15, "Rodi", "Verschoor", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20), "Teamleider"),
+                new DeclaredHours(16, "Tyrone", "van Blokken", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20), "Medewerker"),
+                new DeclaredHours(17, "Daan", "de Vries", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
+                new DeclaredHours(18, "Luuk", "Jansen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(15, 20), "Medewerker"),
+                new DeclaredHours(19, "Sven", "Klaassen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
+                new DeclaredHours(20, "Milan", "de Wit", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20), "Teamleider"),
+                new DeclaredHours(21, "Jesse", "van den Berg", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20), "Medewerker"),
+                new DeclaredHours(22, "Finn", "Smits", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20), "Medewerker"),
+                
+                
+                
             ];
         }
 

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Hourregistration.App.ViewModels"
+             xmlns:m="clr-namespace:Hourregistration.Core.Models;assembly=Hourregistration.Core"
+             x:Class="Hourregistration.App.Views.EmployeeOverviewView"
+             x:DataType="vm:EmployeeOverviewViewModel"
+             Title="EmployeeOverviewView">
+
+    <!-- Grid with an extra Auto row for the button row -->
+    <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*,Auto" ColumnDefinitions="*" RowSpacing="8">
+        <!-- Title -->
+        <Label Grid.Row="0"
+               Text="Urenoverzicht"
+               FontAttributes="Bold"
+               FontSize="18"
+               VerticalOptions="Center"
+               HorizontalOptions="Center" />
+
+        <!-- Button bar replaced with a 3-column Grid:
+             Column 0: left buttons (Auto)
+             Column 1: flexible spacer (*)
+             Column 2: week selector (Auto, pinned to right) -->
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" VerticalOptions="Center">
+            <!-- Left-side buttons -->
+            <HorizontalStackLayout Grid.Column="0" Spacing="8" HorizontalOptions="Start" VerticalOptions="Center">
+                <Button Text="Opnieuw laden"
+                        Command="{Binding RefreshCommand}"
+                        Padding="8,6"
+                        ContentLayout="Left,8">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="&#xE117;" FontFamily="Segoe MDL2 Assets" Size="16" Color="Black" />
+                    </Button.ImageSource>
+                </Button>
+
+                <!-- additional left-side buttons can go here -->
+            </HorizontalStackLayout>
+
+            <!-- Middle column is flexible and will expand to push the week selector to the right -->
+            <BoxView Grid.Column="1" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" />
+
+            <!-- Week selector pinned to the right -->
+            <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center" HorizontalOptions="End">
+                <Button Command="{Binding PreviousWeekCommand}" Padding="6" AutomationId="PrevWeekButton">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="&#xE72B;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
+                    </Button.ImageSource>
+                </Button>
+
+                <Frame Padding="6,3" HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" VerticalOptions="Center">
+                    <Label Text="{Binding WeekLabel}" VerticalOptions="Center" HorizontalOptions="Center" />
+                </Frame>
+
+                <Button Command="{Binding NextWeekCommand}" Padding="6" AutomationId="NextWeekButton">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="&#xE72A;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
+                    </Button.ImageSource>
+                </Button>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- Header row matching the item Grid columns (moved to Row 2 so it sits below buttons) -->
+        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80" Margin="4,0">
+            <Label Grid.Column="0" Text="Dag" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Label Grid.Column="1" Text="Datum" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Label Grid.Column="2" Text="Ingepland" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Label Grid.Column="3" Text="Uren" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Label Grid.Column="4" Text="Project" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
+            <Label Grid.Column="5" Text="Status" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="End" />
+        </Grid>
+
+        <!-- CollectionView occupies the star row so its height is stable -->
+        <CollectionView
+            Grid.Row="3"
+            x:Name="DeclaredHoursCollection"
+            ItemsSource="{Binding DeclaredHoursList}"
+            SelectionMode="None"
+            VerticalOptions="Fill"
+            HorizontalOptions="Fill">
+            
+            <CollectionView.EmptyView>
+                <Label Text="Geen gewerkte uren gevonden." 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Opacity="0.7"/>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:DeclaredHours">
+                    <Frame Margin="4" Padding="8" HasShadow="True" CornerRadius="6">
+                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80">
+                            <Label Grid.Column="0" Text="{Binding Day}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="1" Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
+                            <Label Grid.Column="2" Text="{Binding PlannedHours}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
+                            <Label Grid.Column="3" Text="{Binding WorkedHours, StringFormat='{}{0}u'}" VerticalOptions="Center" FontAttributes="Bold" FontSize="14" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
+                            <Label Grid.Column="4" Text="{Binding ProjectName}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="5" Text="{Binding State}" VerticalOptions="Center" FontSize="12" Opacity="0.8" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="End"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Footer: total worked hours pinned to bottom -->
+        <Label Grid.Row="4"
+               Text="{Binding TotalWorkedHours}"
+               FontAttributes="Bold"
+               FontSize="16"
+               Opacity="0.8"
+               VerticalOptions="Center"
+               HorizontalOptions="Start" />
+    </Grid>
+</ContentPage>

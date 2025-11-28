@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Hourregistration.App.Views.LoginPage"
+             Title="Login">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Kies een rol:" 
+               FontSize="20" 
+               HorizontalOptions="Center" />
+
+        <Button Text="Werknemer" Clicked="OnWerknemerClicked" />
+        <Button Text="Opdrachtgever" Clicked="OnOpdrachtgeverClicked" />
+        <Button Text="Administratie medewerker" Clicked="OnAdministratieClicked" />
+        <Button Text="Beheer" Clicked="OnBeheerClicked" />
+    </VerticalStackLayout>
+</ContentPage>

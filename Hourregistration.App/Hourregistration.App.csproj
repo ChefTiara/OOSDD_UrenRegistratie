@@ -70,11 +70,14 @@
 	<ItemGroup>
 	  <Compile Update="Views\AdministratiemedewerkerUrenoverzichtView.xaml.cs">
 	    <DependentUpon>AdministratiemedewerkerUrenoverzichttView.xaml</DependentUpon>
+	  <Compile Update="Views\DeclarationPage.xaml.cs">
+	    <DependentUpon>DeclarationPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Resources\Styles\MyStyles.xaml">
+	  <MauiXaml Update="Views\EmployeeOverviewView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Footer.xaml">
@@ -90,6 +93,7 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	  <MauiXaml Update="Views\Page1.xaml">
+	  <MauiXaml Update="Views\DeclarationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

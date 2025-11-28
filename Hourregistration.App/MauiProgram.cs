@@ -6,6 +6,15 @@ using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Services;
 using Hourregistration.App.ViewModels;
 using Hourregistration.App.Views;
+﻿using Hourregistration.Core.Interfaces;
+using Hourregistration.Core.Interfaces.Repositories;
+using Hourregistration.Core.Interfaces.Services;
+using Hourregistration.Core.Data.Repositories;
+using Hourregistration.Core.Services;
+using Microsoft.Extensions.Logging;
+using Hourregistration.App.ViewModels;
+using Hourregistration.App.Views;
+using Hourregistration.App.Services;
 
 namespace Hourregistration.App
 {
@@ -22,17 +31,22 @@ namespace Hourregistration.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            #if DEBUG
-            builder.Logging.AddDebug();
-            #endif
-
-            // Register repository / service / viewmodel / view so DI can resolve the page and its VM
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
             builder.Services.AddTransient<AdministratiemedewerkerUrenoverzichtViewModel>();
             builder.Services.AddTransient<AdministratiemedewerkerUrenoverzichtView>();
 
-            return builder.Build();
+            builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
+
+            #if DEBUG
+            builder.Logging.AddDebug();
+            #endif
+            
+            var app = builder.Build();            
+
+            ServiceHelper.Initialize(app.Services);
+
+            return app;
         }
     }
 }

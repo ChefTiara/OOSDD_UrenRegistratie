@@ -34,8 +34,8 @@ public partial class MainPage : ContentPage
         var services = Application.Current?.Handler?.MauiContext?.Services;
         if (services != null)
         {
-            var page = services.GetService<MedewerkerUrenoverzichtView>()
-                       ?? new MedewerkerUrenoverzichtView(services.GetRequiredService<MedewerkerUrenoverzichtViewModel>());
+            var page = services.GetService<AdministratiemedewerkerUrenoverzichtView>()
+                       ?? new AdministratiemedewerkerUrenoverzichtView(services.GetRequiredService<AdministratiemedewerkerUrenoverzichtViewModel>());
             // Use Navigation to display a Page, or set as MainPage, not as Content
             Navigation.PushAsync(page);
             return;

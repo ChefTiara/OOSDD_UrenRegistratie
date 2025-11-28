@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Hourregistration.App.ViewModels"
              xmlns:m="clr-namespace:Hourregistration.Core.Models;assembly=Hourregistration.Core"
-             x:Class="Hourregistration.App.Views.MedewerkerUrenoverzichtView"
-             x:DataType="vm:MedewerkerUrenoverzichtViewModel"
-             Title="MedewerkerUrenoverzichtView">
+             x:Class="Hourregistration.App.Views.AdministratiemedewerkerUrenoverzichtView"
+             x:DataType="vm:AdministratiemedewerkerUrenoverzichtViewModel"
+             Title="AdministratiemedewerkerUrenoverzichtView">
 
     <!-- Grid with an extra Auto row for the button row -->
     <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*,Auto" ColumnDefinitions="*" RowSpacing="8">
@@ -25,8 +25,8 @@
             <!-- Left-side buttons -->
             <HorizontalStackLayout Grid.Column="0" Spacing="8" HorizontalOptions="Start" VerticalOptions="Center">
 
-  
-                
+
+
                 <!-- Filterpaneel onder de zoekrij; zichtbaar maken via binding -->
                 <StackLayout Grid.Row="1" Grid.ColumnSpan="2" IsVisible="{Binding IsFilterVisible}" Padding="0,8,0,0" Spacing="8">
                     <!-- Pas deze controls aan naar jouw filtercriteria -->
@@ -39,7 +39,7 @@
                         <Button Text="Reset" Command="{Binding ResetFiltersCommand}" />
                     </HorizontalStackLayout>
                 </StackLayout>
-                
+
                 <Button Text="Opnieuw laden"
                         Command="{Binding RefreshCommand}"
                         Padding="8,6"

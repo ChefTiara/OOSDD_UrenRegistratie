@@ -2,9 +2,10 @@ using Hourregistration.App.ViewModels;
 
 namespace Hourregistration.App.Views;
 
-public partial class MedewerkerUrenoverzichtView : ContentPage
+public partial class AdministratiemedewerkerUrenoverzichtView : ContentPage
 {
-    public MedewerkerUrenoverzichtView(MedewerkerUrenoverzichtViewModel viewModel)
+
+    public AdministratiemedewerkerUrenoverzichtView(AdministratiemedewerkerUrenoverzichtViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
@@ -13,7 +14,7 @@ public partial class MedewerkerUrenoverzichtView : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        if (BindingContext is MedewerkerUrenoverzichtViewModel bindingContext)
+        if (BindingContext is AdministratiemedewerkerUrenoverzichtViewModel bindingContext)
         {
             bindingContext.OnAppearing();
 
@@ -23,7 +24,7 @@ public partial class MedewerkerUrenoverzichtView : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        if (BindingContext is MedewerkerUrenoverzichtViewModel bindingContext)
+        if (BindingContext is AdministratiemedewerkerUrenoverzichtViewModel bindingContext)
         {
             bindingContext.OnDisappearing();
         }

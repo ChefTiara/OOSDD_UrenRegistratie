@@ -29,8 +29,8 @@ namespace Hourregistration.App
             // Register repository / service / viewmodel / view so DI can resolve the page and its VM
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
-            builder.Services.AddTransient<MedewerkerUrenoverzichtViewModel>();
-            builder.Services.AddTransient<MedewerkerUrenoverzichtView>();
+            builder.Services.AddTransient<AdministratiemedewerkerUrenoverzichtViewModel>();
+            builder.Services.AddTransient<AdministratiemedewerkerUrenoverzichtView>();
 
             return builder.Build();
         }

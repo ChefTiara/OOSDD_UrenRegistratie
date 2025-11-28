@@ -30,18 +30,24 @@
                             SelectedItem="{Binding SelectedProjectOption}"
                             Title="Projectnaam"
                             WidthRequest="160"
+                            HeightRequest="70"
                             VerticalOptions="Center"/>
                     <Picker ItemsSource="{Binding StateOptions}"
                             SelectedItem="{Binding SelectedStateOption}"
                             Title="Status"
                             WidthRequest="120"
+                            HeightRequest="70"
                             VerticalOptions="Center"/>
 
-                    <DatePicker
-                        Date="{Binding SelectedDateNonNull, Mode=TwoWay}"
-                        Format="dd-MM-yyyy"
-                        WidthRequest="140"
-                        VerticalOptions="Center" />
+                    <!-- DatePicker with a label above to match other controls -->
+                    <StackLayout Orientation="Vertical" Spacing="2" VerticalOptions="Center">
+                        <Label Text="Datum" FontSize="14" Opacity="0.8" VerticalOptions="Center" HorizontalOptions="Start" />
+                        <DatePicker
+                            Date="{Binding SelectedDateNonNull, Mode=TwoWay}"
+                            Format="dd-MM-yyyy"
+                            WidthRequest="140"
+                            VerticalOptions="Center" />
+                    </StackLayout>
                 </StackLayout>
 
                 <!-- additional left-side buttons can go here -->

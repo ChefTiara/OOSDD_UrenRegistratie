@@ -9,6 +9,19 @@ namespace Hourregistration.Core.Models
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
         public double WorkedHours { get; set; }
+        public string FunctieName { get; set; }
+        public string Voornaam { get; set; }
+        public string Achternaam { get; set; }
+
+        public int V1 { get; }
+        public DateOnly DateOnly { get; }
+        public TimeOnly TimeOnly1 { get; }
+        public TimeOnly TimeOnly2 { get; }
+        public string V2 { get; }
+        
+        //DeclaredHours van UC4 is nu gecomment omdat het in conflict komt met de Declaratie pagina van Ruben
+        //public DeclaredHours(int id, string voornaam, string achternaam, string name, DateOnly date, TimeOnly startTime, TimeOnly endTime, string functieName) : base(id, name)
+        
         public string ProjectName { get; set; }
         public DeclaredState State { get; set; } = DeclaredState.Verzonden;
 
@@ -31,6 +44,9 @@ namespace Hourregistration.Core.Models
             Date = date;
             StartTime = startTime;
             EndTime = endTime;
+            FunctieName = functieName;
+            Voornaam = voornaam;
+            Achternaam = achternaam; 
             ProjectName = projectName;
 
             // Calculate worked hours inbetween endTime and startTime and apply to WorkedHours
@@ -41,6 +57,7 @@ namespace Hourregistration.Core.Models
             {
                 difference += TimeSpan.FromDays(1);
             }
+
             
             WorkedHours = (double)difference.TotalHours;
         }

@@ -4,7 +4,7 @@ namespace Hourregistration.App.Views;
 
 public partial class EmployeeOverviewView : ContentPage
 {
-	public EmployeeOverviewView(EmployeeOverviewViewModel viewModel)
+    public EmployeeOverviewView(EmployeeOverviewViewModel viewModel)
 	{
 		InitializeComponent();
 		BindingContext = viewModel;

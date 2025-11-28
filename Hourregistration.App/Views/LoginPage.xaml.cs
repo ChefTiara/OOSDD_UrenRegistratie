@@ -42,7 +42,7 @@ public partial class LoginPage : ContentPage
     private async Task NavigateToStartPage()
     {
         // Pagina 1 is je "hoofdscherm"
-        Application.Current.MainPage = new NavigationPage(new Page1());
+        Application.Current.MainPage = new NavigationPage(new DeclarationPage());
         await Task.CompletedTask;
     }
 }

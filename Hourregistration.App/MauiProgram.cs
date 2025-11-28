@@ -23,16 +23,17 @@ namespace Hourregistration.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            #if DEBUG
-    		builder.Logging.AddDebug();
-#endif
-
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
 
             builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
 
-            var app = builder.Build();
+            #if DEBUG
+            builder.Logging.AddDebug();
+            #endif
+
+            var app = builder.Build();            
+
             ServiceHelper.Initialize(app.Services);
 
             return app;

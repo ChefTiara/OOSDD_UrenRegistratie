@@ -1,5 +1,6 @@
 ﻿using Hourregistration.Core.Models;
 using Hourregistration.App.Services;
+using Hourregistration.App.ViewModels;
 
 namespace Hourregistration.App.Views;
 
@@ -13,7 +14,11 @@ public partial class LoginPage : ContentPage
     private async void OnWerknemerClicked(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = Role.Werknemer;
-        await NavigateToStartPage();
+
+        var vm = ServiceHelper.GetService<EmployeeOverviewViewModel>();
+        if (vm == null)
+            throw new InvalidOperationException("EmployeeOverviewViewModel is not registered in the service container.");
+        await Navigation.PushAsync(new EmployeeOverviewView(vm));
     }
 
     private async void OnOpdrachtgeverClicked(object sender, EventArgs e)

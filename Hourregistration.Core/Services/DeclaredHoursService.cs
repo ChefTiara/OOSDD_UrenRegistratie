@@ -17,13 +17,17 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.Get(id);
         }
-        public List<DeclaredHours> GetAll()
+        public List<DeclaredHours> GetByClientId(long clientId)
         {
-            return _declaredHoursRepository.GetAll();
+            return _declaredHoursRepository.GetByClientId(clientId);
         }
         public List<DeclaredHours> GetByState(DeclaredState state)
         {
             return _declaredHoursRepository.GetByState(state);
+        }
+        public List<DeclaredHours> GetAll()
+        {
+            return _declaredHoursRepository.GetAll();
         }
         public DeclaredHours Add(DeclaredHours declaredHour)
         {
@@ -42,13 +46,17 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.GetAsync(id);
         }
-        public Task<List<DeclaredHours>> GetAllAsync()
+        public Task<List<DeclaredHours>> GetByClientIdAsync(long clientId)
         {
-            return _declaredHoursRepository.GetAllAsync();
+            return _declaredHoursRepository.GetByClientIdAsync(clientId);
         }
         public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
         {
             return _declaredHoursRepository.GetByStateAsync(state);
+        }
+        public Task<List<DeclaredHours>> GetAllAsync()
+        {
+            return _declaredHoursRepository.GetAllAsync();
         }
         public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
         {

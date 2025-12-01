@@ -89,7 +89,7 @@
         </Grid>
 
         <!-- Header row matching the item Grid columns (moved to Row 2 so it sits below buttons) -->
-        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80" Margin="4,0">
+        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,Auto" Margin="4,0">
             <Label Grid.Column="0" Text="Dag" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="1" Text="Datum" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="2" Text="Ingepland" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
@@ -106,7 +106,7 @@
             SelectionMode="None"
             VerticalOptions="Fill"
             HorizontalOptions="Fill">
-            
+
             <CollectionView.EmptyView>
                 <Label Text="Geen gewerkte uren gevonden." 
                        HorizontalOptions="Center"
@@ -116,14 +116,54 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHours">
-                    <Frame Margin="4" Padding="8" HasShadow="True" CornerRadius="6">
-                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80">
+                    <Frame Margin="4" Padding="8,8,12,8" HasShadow="True" CornerRadius="6">
+                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,Auto">
                             <Label Grid.Column="0" Text="{Binding Day}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start" />
                             <Label Grid.Column="1" Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
                             <Label Grid.Column="2" Text="{Binding PlannedHours}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
                             <Label Grid.Column="3" Text="{Binding WorkedHours, StringFormat='{}{0}u'}" VerticalOptions="Center" FontAttributes="Bold" FontSize="14" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
                             <Label Grid.Column="4" Text="{Binding ProjectName}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
-                            <Label Grid.Column="5" Text="{Binding State}" VerticalOptions="Center" FontSize="12" Opacity="0.8" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="End"/>
+
+                            <!-- State + Segoe MDL2 icon -->
+                            <HorizontalStackLayout Grid.Column="5" HorizontalOptions="End" VerticalOptions="Center" Spacing="6">
+                                <Label Text="{Binding State}"
+                                       VerticalOptions="Center"
+                                       FontSize="12"
+                                       Opacity="0.9"
+                                       LineBreakMode="NoWrap"
+                                       MaxLines="1"
+                                       HorizontalOptions="End">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Akkoord">
+                                            <Setter Property="TextColor" Value="LightGreen" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Geweigerd">
+                                            <Setter Property="TextColor" Value="Red" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Verzonden">
+                                            <Setter Property="TextColor" Value="White" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <!-- Icon using Segoe MDL2 Assets -->
+                                <Label VerticalOptions="Center" FontSize="16" FontFamily="Segoe MDL2 Assets" HorizontalOptions="End" Margin="0,0,0,0">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Akkoord">
+                                            <Setter Property="Text" Value="&#xE73E;" />
+                                            <Setter Property="TextColor" Value="LightGreen" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Geweigerd">
+                                            <Setter Property="Text" Value="&#xE711;" />
+                                            <Setter Property="TextColor" Value="Red" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Verzonden">
+                                            <Setter Property="Text" Value="&#xE119;" />
+                                            <Setter Property="TextColor" Value="White" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </HorizontalStackLayout>
                         </Grid>
                     </Frame>
                 </DataTemplate>

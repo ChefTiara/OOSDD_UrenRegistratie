@@ -15,9 +15,9 @@ namespace Hourregistration.Core.Data.Repositories
                 new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp"),
                 new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp"),
 
-                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie"),
+                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie") { State = DeclaredState.Akkoord },
                 new DeclaredHours(7, new DateOnly(2025, 11, 11), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp"),
-                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie"),
+                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie") { State = DeclaredState.Geweigerd },
             ];
         }
 

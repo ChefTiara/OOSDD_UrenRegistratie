@@ -20,6 +20,9 @@
             </Picker.Items>
         </Picker>
 
+        <Label Text="Beschrijving gewerkte uren (optioneel)" Margin="0,20,0,0"/>
+        <Entry x:Name="DescriptionEntry" Keyboard="Text" />
+
         <Button 
             Text="Indienen"
             Margin="0,30,0,0"

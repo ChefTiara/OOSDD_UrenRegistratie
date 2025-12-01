@@ -1,6 +1,7 @@
-using Hourregistration.Core.Models;
 using Hourregistration.App.Services;
+using Hourregistration.Core.Models;
 using Hourregistration.Core.Services;
+using System.Text.RegularExpressions;
 
 namespace Hourregistration.App.Views;
 
@@ -11,6 +12,7 @@ public partial class DeclarationPage : ContentPage
     public DeclarationPage()
     {
         InitializeComponent();
+        _service = new DeclarationService();
     }
 
     protected override void OnAppearing()
@@ -26,7 +28,7 @@ public partial class DeclarationPage : ContentPage
 
     private async void DenyAccess()
     {
-        await DisplayAlert("Geen toegang", "Je hebt geen toegang tot Pagina 1.", "OK");
+        await DisplayAlert("Geen toegang", "Je hebt geen toegang tot de declaratiepagina.", "OK");
         await Navigation.PopAsync();
     }
 
@@ -53,11 +55,15 @@ public partial class DeclarationPage : ContentPage
             return;
         }
 
+        var reden = RedenPicker.SelectedItem as string;
+
         // Maak declaratie object
         var declaratie = new Declaration
         {
             Datum = DatumPicker.Date,
-            AantalUren = uren
+            AantalUren = uren,
+            Reden = reden,
+            Beschrijving = DescriptionEntry.Text
         };
 
         // Valideer via service

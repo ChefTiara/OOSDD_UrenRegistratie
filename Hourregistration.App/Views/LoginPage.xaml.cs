@@ -14,6 +14,12 @@ public partial class LoginPage : ContentPage
     private async void OnWerknemerClicked(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = Role.Werknemer;
+        await NavigateToDeclaratiePage();
+    }
+
+    private async void OnOpdrachtgeverClicked(object sender, EventArgs e)
+    {
+        SessionManager.CurrentRole = Role.Opdrachtgever;
 
         var vm = ServiceHelper.GetService<EmployeeOverviewViewModel>();
         if (vm == null)
@@ -21,27 +27,21 @@ public partial class LoginPage : ContentPage
         await Navigation.PushAsync(new EmployeeOverviewView(vm));
     }
 
-    private async void OnOpdrachtgeverClicked(object sender, EventArgs e)
-    {
-        SessionManager.CurrentRole = Role.Opdrachtgever;
-        await NavigateToStartPage();
-    }
-
     private async void OnAdministratieClicked(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = Role.AdministratieMedewerker;
-        await NavigateToStartPage();
+        await NavigateToDeclaratiePage();
     }
 
     private async void OnBeheerClicked(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = Role.Beheer;
-        await NavigateToStartPage();
+        await NavigateToDeclaratiePage();
     }
 
-    private async Task NavigateToStartPage()
+    private async Task NavigateToDeclaratiePage()
     {
-        // Pagina 1 is je "hoofdscherm"
+        // Navigatie naar de declaratie invul pagina 
         Application.Current.MainPage = new NavigationPage(new DeclarationPage());
         await Task.CompletedTask;
     }

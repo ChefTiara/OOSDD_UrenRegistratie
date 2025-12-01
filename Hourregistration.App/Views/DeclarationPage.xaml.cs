@@ -46,6 +46,13 @@ public partial class DeclarationPage : ContentPage
             return;
         }
 
+        // Validatie van reden uren 
+        if (RedenPicker.SelectedItem == null)
+        {
+            FeedbackLabel.Text = "Selecteer een reden.";
+            return;
+        }
+
         // Maak declaratie object
         var declaratie = new Declaration
         {

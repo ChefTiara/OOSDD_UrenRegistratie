@@ -51,5 +51,30 @@ namespace Hourregistration.Core.Data.Repositories
             declaredHoursList.Remove(existingDeclaredHour);
             return existingDeclaredHour;
         }
+
+        public Task<DeclaredHours?> GetAsync(int id)
+        {
+            return Task.FromResult(Get(id));
+        }
+        public Task<List<DeclaredHours>> GetAllAsync()
+        {
+            return Task.FromResult(GetAll());
+        }
+        public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
+        {
+            return Task.FromResult(GetByState(state));
+        }
+        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
+        {
+            return Task.FromResult(Add(declaredHour));
+        }
+        public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour)
+        {
+            return Task.FromResult(Update(declaredHour));
+        }
+        public Task<DeclaredHours> DeleteAsync(int id)
+        {
+            return Task.FromResult(Delete(id));
+        }
     }
 }

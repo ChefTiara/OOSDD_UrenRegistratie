@@ -2,11 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
-using Microsoft.Maui.ApplicationModel;
-using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 
 namespace Hourregistration.App.ViewModels
 {
@@ -16,10 +13,10 @@ namespace Hourregistration.App.ViewModels
         private bool _suppressApply = false;
 
         // show only the currently visible week's items
-        public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = new ObservableCollection<DeclaredHours>();
+        public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = [];
 
         // Filter pickers (dropdowns) - project filter intentionally empty for now
-        private ObservableCollection<string> _projectOptions = new ObservableCollection<string>();
+        private ObservableCollection<string> _projectOptions = [];
         public ObservableCollection<string> ProjectOptions
         {
             get => _projectOptions;
@@ -31,7 +28,7 @@ namespace Hourregistration.App.ViewModels
             }
         }
 
-        private ObservableCollection<string> _stateOptions = new ObservableCollection<string>();
+        private ObservableCollection<string> _stateOptions = [];
         public ObservableCollection<string> StateOptions
         {
             get => _stateOptions;
@@ -90,11 +87,10 @@ namespace Hourregistration.App.ViewModels
 
                 if (!_suppressApply)
                 {
-                    // ensure ApplyWeek runs on UI thread
                     if (MainThread.IsMainThread)
-                        ApplyWeek();
+                        _ = ApplyWeek();
                     else
-                        MainThread.BeginInvokeOnMainThread(ApplyWeek);
+                        MainThread.BeginInvokeOnMainThread(() => _ = ApplyWeek());
                 }
             }
         }
@@ -119,7 +115,7 @@ namespace Hourregistration.App.ViewModels
                 }
                 OnPropertyChanged(nameof(IsDateFilterEnabled));
                 OnPropertyChanged(nameof(SelectedDateNonNull));
-                if (!_suppressApply) ApplyWeek();
+                if (!_suppressApply) _ = ApplyWeek();
             }
         }
 
@@ -132,7 +128,7 @@ namespace Hourregistration.App.ViewModels
                 if (_selectedProjectOption == value) return;
                 _selectedProjectOption = value;
                 OnPropertyChanged(nameof(SelectedProjectOption));
-                if (!_suppressApply) ApplyWeek();
+                if (!_suppressApply) _ = ApplyWeek();
             }
         }
 
@@ -145,7 +141,7 @@ namespace Hourregistration.App.ViewModels
                 if (_selectedStateOption == value) return;
                 _selectedStateOption = value;
                 OnPropertyChanged(nameof(SelectedStateOption));
-                if (!_suppressApply) ApplyWeek();
+                if (!_suppressApply) _ = ApplyWeek();
             }
         }
 
@@ -176,27 +172,31 @@ namespace Hourregistration.App.ViewModels
                 states.Add(name);
             StateOptions = states;
 
-            // date filter starts disabled (All) and SelectedDate is null so the picker shows today
+            // date filter starts disabled (All)
             SelectedDate = null;
             _isDateFilterEnabled = false;
 
             _selectedProjectOption = ProjectOptions.FirstOrDefault();
             _selectedStateOption = StateOptions.FirstOrDefault();
 
-            ApplyWeek(); // load initial week items
+            // schedule initial load without blocking constructor
+            if (MainThread.IsMainThread)
+                _ = ApplyWeek();
+            else
+                MainThread.BeginInvokeOnMainThread(() => _ = ApplyWeek());
         }
 
-        public override void Load() => ApplyWeek();
+        public override void Load() => _ = ApplyWeek();
 
         public override void OnAppearing() => Load();
 
         public override void OnDisappearing() => DeclaredHoursList.Clear();
 
         [RelayCommand]
-        private void Refresh() => ApplyWeek();
+        private async Task Refresh() => await ApplyWeek();
 
         [RelayCommand]
-        private void PreviousWeek()
+        private async Task PreviousWeek()
         {
             _currentWeekStart = _currentWeekStart.AddDays(-7);
             OnPropertyChanged(nameof(WeekLabel));
@@ -209,11 +209,11 @@ namespace Hourregistration.App.ViewModels
             OnPropertyChanged(nameof(SelectedDateNonNull));
             _suppressApply = false;
 
-            ApplyWeek();
+            await ApplyWeek();
         }
 
         [RelayCommand]
-        private void NextWeek()
+        private async Task NextWeek()
         {
             _currentWeekStart = _currentWeekStart.AddDays(7);
             OnPropertyChanged(nameof(WeekLabel));
@@ -226,7 +226,7 @@ namespace Hourregistration.App.ViewModels
             OnPropertyChanged(nameof(SelectedDateNonNull));
             _suppressApply = false;
 
-            ApplyWeek();
+            await ApplyWeek();
         }
 
         [RelayCommand]
@@ -237,9 +237,9 @@ namespace Hourregistration.App.ViewModels
         }
 
         // Load items for the current week and notify UI
-        private void ApplyWeek()
+        private async Task ApplyWeek()
         {
-            var all = _declaredHoursService.GetAll() ?? Enumerable.Empty<DeclaredHours>();
+            var all = await _declaredHoursService.GetAllAsync() ?? Enumerable.Empty<DeclaredHours>();
 
             var weekStart = _currentWeekStart.Date;
             var weekEnd = weekStart.AddDays(6).Date;
@@ -278,13 +278,26 @@ namespace Hourregistration.App.ViewModels
             }
 
             // default ordering (by date then start time)
-            var ordered = filtered.OrderBy(i => i.Date).ThenBy(i => i.StartTime);
+            var ordered = filtered.OrderBy(i => i.Date).ThenBy(i => i.StartTime).ToList();
 
-            DeclaredHoursList.Clear();
-            foreach (var item in ordered)
-                DeclaredHoursList.Add(item);
-
-            OnPropertyChanged(nameof(TotalWorkedHours));
+            // Update ObservableCollection on UI thread
+            if (MainThread.IsMainThread)
+            {
+                DeclaredHoursList.Clear();
+                foreach (var item in ordered)
+                    DeclaredHoursList.Add(item);
+                OnPropertyChanged(nameof(TotalWorkedHours));
+            }
+            else
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    DeclaredHoursList.Clear();
+                    foreach (var item in ordered)
+                        DeclaredHoursList.Add(item);
+                    OnPropertyChanged(nameof(TotalWorkedHours));
+                });
+            }
         }
 
         private static DateTime GetStartOfWeek(DateTime date)

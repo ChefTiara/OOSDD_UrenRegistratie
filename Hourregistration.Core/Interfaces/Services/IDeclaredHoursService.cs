@@ -10,5 +10,12 @@ namespace Hourregistration.Core.Interfaces.Services
         public DeclaredHours Add(DeclaredHours declaredHour);
         public DeclaredHours Update(DeclaredHours declaredHour);
         public DeclaredHours Delete(int id);
+
+        public Task<DeclaredHours?> GetAsync(int id);
+        public Task<List<DeclaredHours>> GetAllAsync();
+        public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state);
+        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour);
+        public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour);
+        public Task<DeclaredHours> DeleteAsync(int id);
     }
 }

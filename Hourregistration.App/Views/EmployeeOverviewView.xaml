@@ -58,6 +58,18 @@
 
             <!-- Week selector pinned to the right -->
             <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center" HorizontalOptions="End">
+                <!-- Refresh icon-only button placed on the left of the week selector -->
+                <Button Command="{Binding RefreshCommand}"
+                        AutomationId="RefreshButton"
+                        Padding="6"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        HorizontalOptions="End">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="&#xE117;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
+                    </Button.ImageSource>
+                </Button>
+                
                 <Button Command="{Binding PreviousWeekCommand}" Padding="6" AutomationId="PrevWeekButton">
                     <Button.ImageSource>
                         <FontImageSource Glyph="&#xE72B;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
@@ -71,18 +83,6 @@
                 <Button Command="{Binding NextWeekCommand}" Padding="6" AutomationId="NextWeekButton">
                     <Button.ImageSource>
                         <FontImageSource Glyph="&#xE72A;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
-                    </Button.ImageSource>
-                </Button>
-
-                <!-- Refresh icon-only button placed to the right of the week selector -->
-                <Button Command="{Binding RefreshCommand}"
-                        AutomationId="RefreshButton"
-                        Padding="6"
-                        WidthRequest="40"
-                        HeightRequest="40"
-                        HorizontalOptions="End">
-                    <Button.ImageSource>
-                        <FontImageSource Glyph="&#xE117;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
                     </Button.ImageSource>
                 </Button>
             </HorizontalStackLayout>

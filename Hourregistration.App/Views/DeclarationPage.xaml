@@ -11,6 +11,15 @@
         <Label Text="Datum" />
         <DatePicker x:Name="DatumPicker" />
 
+        <Label Text="Reden uren" />
+        <Picker x:Name="RedenPicker">
+            <Picker.Items>
+                <x:String>Werk</x:String>
+                <x:String>Verlof</x:String>
+                <x:String>Ziek</x:String>
+            </Picker.Items>
+        </Picker>
+
         <Button 
             Text="Indienen"
             Margin="0,30,0,0"

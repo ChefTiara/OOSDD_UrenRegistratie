@@ -3,8 +3,8 @@ namespace Hourregistration.Core.Models
 {
     public enum DeclaredState : ushort
     {
-        Pending = 0,
-        Approved = 1,
-        Denied = 2,
+        Verzonden = 0,
+        Akkoord = 1,
+        Geweigerd = 2,
     }
 }

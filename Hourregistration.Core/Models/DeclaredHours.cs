@@ -10,7 +10,7 @@ namespace Hourregistration.Core.Models
         public TimeOnly EndTime { get; set; }
         public double WorkedHours { get; set; }
         public string ProjectName { get; set; }
-        public DeclaredState State { get; set; } = DeclaredState.Pending;
+        public DeclaredState State { get; set; } = DeclaredState.Verzonden;
 
         public string PlannedHours => $"{StartTime.ToString("HH:mm")}-{EndTime.ToString("HH:mm")}";
 

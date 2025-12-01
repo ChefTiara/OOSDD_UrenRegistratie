@@ -20,6 +20,9 @@ namespace Hourregistration.Core.Services
             if (declaratie.Datum == default)
                 return (false, "Selecteer een geldige datum.");
 
+            if (declaratie.Reden == default)
+                return (false, "Selecteer een geldige reden.");
+
             return (true, "Declaratie is succesvol ingediend!");
         }
     }

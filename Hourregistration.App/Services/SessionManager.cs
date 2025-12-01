@@ -24,11 +24,11 @@ namespace Hourregistration.App.Services
 
                 case Role.AdministratieMedewerker:
                     // Administratie medewerker: pagina 1, 2 en 3
-                    return pageNumber == 1 || pageNumber == 2 || pageNumber == 3;
+                    return pageNumber == 3;
 
                 case Role.Beheer:
                     // Beheer: pagina 1 t/m 4
-                    return pageNumber >= 1 && pageNumber <= 4;
+                    return pageNumber <= 4;
 
                 default:
                     return false;

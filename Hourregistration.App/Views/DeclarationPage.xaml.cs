@@ -1,7 +1,7 @@
+using System.Collections.ObjectModel;
 using Hourregistration.App.Services;
 using Hourregistration.Core.Models;
 using Hourregistration.Core.Services;
-using System.Text.RegularExpressions;
 
 namespace Hourregistration.App.Views;
 
@@ -9,17 +9,25 @@ public partial class DeclarationPage : ContentPage
 {
     private readonly DeclarationService _service;
 
+    // Dynamische collection of rows
+    public ObservableCollection<DeclarationRowModel> Rows { get; set; }
+        = new ObservableCollection<DeclarationRowModel>();
+
     public DeclarationPage()
     {
         InitializeComponent();
         _service = new DeclarationService();
+
+        // Start page with 1 row 
+        Rows.Add(new DeclarationRowModel());
+
+        BindingContext = this;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
 
-        // Rol mag deze pagina niet zien? Blokkeer.
         if (!SessionManager.CanAccessPage(1))
         {
             DenyAccess();
@@ -32,44 +40,49 @@ public partial class DeclarationPage : ContentPage
         await Navigation.PopAsync();
     }
 
-    private void OnLogout(object sender, EventArgs e)
+    private async void OnLogout(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = null;
-        Application.Current.MainPage = new NavigationPage(new LoginPage());
+        await Navigation.PushAsync(new LoginPage());
     }
 
+    // Adding rows
+    private void OnAddRowClicked(object sender, EventArgs e)
+    {
+        Rows.Add(new DeclarationRowModel());
+    }
+
+    // Saving all rows present 
     private void OnIndienenClicked(object sender, EventArgs e)
     {
-        // Validatie van invoer uren
-        if (!double.TryParse(UrenEntry.Text, out double uren))
+        foreach (var row in Rows)
         {
-            FeedbackLabel.Text = "Voer een geldig aantal in.";
-            FeedbackLabel.TextColor = Colors.Red;
-            return;
+            if (row.AantalUren == null || row.AantalUren <= 0)
+            {
+                FeedbackLabel.Text = "Voer geldige uren in.";
+                FeedbackLabel.TextColor = Colors.Red;
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(row.Reden))
+            {
+                FeedbackLabel.Text = "Selecteer een geldige reden.";
+                FeedbackLabel.TextColor = Colors.Red;
+                return;
+            }
+
+            var declaratie = new Declaration
+            {
+                Datum = row.Datum,
+                AantalUren = row.AantalUren.Value,
+                Reden = row.Reden,
+                Beschrijving = row.Beschrijving
+            };
+
+            _service.Indienen(declaratie);
         }
 
-        // Validatie van reden uren 
-        if (RedenPicker.SelectedItem == null)
-        {
-            FeedbackLabel.Text = "Selecteer een reden.";
-            return;
-        }
-
-        var reden = RedenPicker.SelectedItem as string;
-
-        // Maak declaratie object
-        var declaratie = new Declaration
-        {
-            Datum = DatumPicker.Date,
-            AantalUren = uren,
-            Reden = reden,
-            Beschrijving = DescriptionEntry.Text
-        };
-
-        // Valideer via service
-        var result = _service.Indienen(declaratie);
-
-        FeedbackLabel.Text = result.Message;
-        FeedbackLabel.TextColor = result.Success ? Colors.Green : Colors.Red;
+        FeedbackLabel.Text = "Alle declaraties succesvol verwerkt!";
+        FeedbackLabel.TextColor = Colors.Green;
     }
 }

@@ -1,10 +1,12 @@
-﻿using Hourregistration.Core.Models;
+﻿using Hourregistration.Core;
+using Hourregistration.Core.Models;
 using Hourregistration.App.Services;
-using Hourregistration.App.ViewModels;
+using Microsoft.Maui.Controls;
+using System;
+using System.Threading.Tasks;
+using Hourregistration.App.Views;
 
-namespace Hourregistration.App.Views;
-
-public partial class LoginPage : ContentPage
+namespace Hourregistration.App
 {
     public LoginPage()
     {

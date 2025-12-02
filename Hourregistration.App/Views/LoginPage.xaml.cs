@@ -14,7 +14,7 @@ public partial class LoginPage : ContentPage
     private async void OnWerknemerClicked(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = Role.Werknemer;
-        await NavigateToDeclaratiePage();
+        await NavigateToDeclaratieHomePage();
     }
 
     private async void OnOpdrachtgeverClicked(object sender, EventArgs e)
@@ -30,19 +30,19 @@ public partial class LoginPage : ContentPage
     private async void OnAdministratieClicked(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = Role.AdministratieMedewerker;
-        await NavigateToDeclaratiePage();
+        await NavigateToDeclaratieHomePage();
     }
 
     private async void OnBeheerClicked(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = Role.Beheer;
-        await NavigateToDeclaratiePage();
+        await NavigateToDeclaratieHomePage();
     }
 
-    private async Task NavigateToDeclaratiePage()
+    private async Task NavigateToDeclaratieHomePage()
     {
-        // Navigatie naar de declaratie invul pagina 
-        Application.Current.MainPage = new NavigationPage(new DeclarationPage());
+        // Navigation to declaration home page
+        Application.Current.MainPage = new NavigationPage(new DeclaratieHomeView());
         await Task.CompletedTask;
     }
 }

@@ -122,7 +122,7 @@ namespace Hourregistration.App.ViewModels
         private string? _selectedProjectOption;
         public string SelectedProjectOption
         {
-            get => _selectedProjectOption ?? ProjectOptions.FirstOrDefault() ?? "All";
+            get => _selectedProjectOption ?? ProjectOptions.FirstOrDefault() ?? "Alle";
             set
             {
                 if (_selectedProjectOption == value) return;
@@ -135,7 +135,7 @@ namespace Hourregistration.App.ViewModels
         private string? _selectedStateOption;
         public string SelectedStateOption
         {
-            get => _selectedStateOption ?? StateOptions.FirstOrDefault() ?? "All";
+            get => _selectedStateOption ?? StateOptions.FirstOrDefault() ?? "Alle";
             set
             {
                 if (_selectedStateOption == value) return;
@@ -167,7 +167,7 @@ namespace Hourregistration.App.ViewModels
             ProjectOptions = new ObservableCollection<string>();
 
             // populate state options from the enum to always show available states
-            var states = new ObservableCollection<string> { "All" };
+            var states = new ObservableCollection<string> { "Alle" };
             foreach (var name in Enum.GetNames(typeof(DeclaredState)).OrderBy(n => n))
                 states.Add(name);
             StateOptions = states;
@@ -263,12 +263,12 @@ namespace Hourregistration.App.ViewModels
             // apply selected filters
             var filtered = items.AsEnumerable();
 
-            var selectedProject = SelectedProjectOption ?? "All";
-            if (selectedProject != "All")
+            var selectedProject = SelectedProjectOption ?? "Alle";
+            if (selectedProject != "Alle")
                 filtered = filtered.Where(i => (i.ProjectName ?? string.Empty) == selectedProject);
 
-            var selectedState = SelectedStateOption ?? "All";
-            if (selectedState != "All")
+            var selectedState = SelectedStateOption ?? "Alle";
+            if (selectedState != "Alle")
                 filtered = filtered.Where(i => i.State.ToString() == selectedState);
 
             if (IsDateFilterEnabled && SelectedDate.HasValue)

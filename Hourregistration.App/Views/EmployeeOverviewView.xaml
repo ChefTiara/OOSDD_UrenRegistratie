@@ -90,7 +90,7 @@
 
         <!-- Header row matching the item Grid columns (moved to Row 2 so it sits below buttons)
              NOTE: left margin increased so header columns align with Frame content inside items -->
-        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,Auto,*,Auto" Margin="12,0">
+        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,140,*,Auto" Margin="12,0">
             <Label Grid.Column="0" Text="Dag" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="1" Text="Datum" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="2" Text="Ingepland" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
@@ -116,7 +116,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHours">
                     <Frame Margin="4" Padding="8,8,12,8" HasShadow="True" CornerRadius="6">
-                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,Auto,*,Auto">
+                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,140,*,Auto">
                             <Label Grid.Column="0" Text="{Binding Day}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start" />
                             <Label Grid.Column="1" Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
                             <Label Grid.Column="2" Text="{Binding PlannedHours}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>

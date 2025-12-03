@@ -5,6 +5,6 @@
         public static IServiceProvider? Services { get; private set; }
         public static void Initialize(IServiceProvider serviceProvider) =>
             Services = serviceProvider;
-        public static T? GetService<T>() where T : class => Services != null ? Services.GetService<T>() : null;
+        public static T? GetService<T>() where T : class => Services?.GetService<T>();
     }
 }

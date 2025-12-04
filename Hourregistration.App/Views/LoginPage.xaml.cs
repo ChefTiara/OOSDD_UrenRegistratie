@@ -30,7 +30,11 @@ public partial class LoginPage : ContentPage
     private async void OnAdministratieClicked(object sender, EventArgs e)
     {
         SessionManager.CurrentRole = Role.AdministratieMedewerker;
-        await NavigateToStartPage();
+
+        var vm = ServiceHelper.GetService<AdministratieUrenoverzichtViewModel>();
+        if (vm == null)
+            throw new InvalidOperationException("AdministratieUrenoverzichtViewModel is not registered in the service container.");
+        await Navigation.PushAsync(new AdministratieUrenoverzichtView(vm));
     }
 
     private async void OnBeheerClicked(object sender, EventArgs e)

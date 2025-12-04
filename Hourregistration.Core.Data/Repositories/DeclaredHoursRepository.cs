@@ -9,15 +9,15 @@ namespace Hourregistration.Core.Data.Repositories
         public DeclaredHoursRepository()
         {
             declaredHoursList = [
-                new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp"),
-                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp"),
-                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp"),
-                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp"),
-                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp"),
+                new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "Boodschappen", 0),
+                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp", "Het is etenstijd waar ben je >:(", 0),
+                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0),
+                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "", 0),
+                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp", "Werk jij op vrijdag??", 0),
 
-                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie"),
-                new DeclaredHours(7, new DateOnly(2025, 11, 11), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp"),
-                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie"),
+                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 0) { State = DeclaredState.Akkoord },
+                new DeclaredHours(7, new DateOnly(2025, 11, 11), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0),
+                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 0) { State = DeclaredState.Geweigerd },
             ];
         }
 
@@ -25,13 +25,17 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return declaredHoursList.FirstOrDefault(dh => dh.Id == id);
         }
-        public List<DeclaredHours> GetAll()
+        public List<DeclaredHours> GetByClientId(long clientId)
         {
-            return declaredHoursList;
+            return declaredHoursList.Where(dh => dh.ClientId == clientId).ToList();
         }
         public List<DeclaredHours> GetByState(DeclaredState state)
         {
             return declaredHoursList.Where(dh => dh.State == state).ToList();
+        }
+        public List<DeclaredHours> GetAll()
+        {
+            return declaredHoursList;
         }
         public DeclaredHours Add(DeclaredHours declaredHour)
         {
@@ -50,6 +54,35 @@ namespace Hourregistration.Core.Data.Repositories
             DeclaredHours? existingDeclaredHour = Get(id) ?? throw new ArgumentException("Declared hour not found");
             declaredHoursList.Remove(existingDeclaredHour);
             return existingDeclaredHour;
+        }
+
+        public Task<DeclaredHours?> GetAsync(int id)
+        {
+            return Task.FromResult(Get(id));
+        }
+        public Task<List<DeclaredHours>> GetByClientIdAsync(long clientId)
+        {
+            return Task.FromResult(GetByClientId(clientId));
+        }
+        public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
+        {
+            return Task.FromResult(GetByState(state));
+        }
+        public Task<List<DeclaredHours>> GetAllAsync()
+        {
+            return Task.FromResult(GetAll());
+        }
+        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
+        {
+            return Task.FromResult(Add(declaredHour));
+        }
+        public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour)
+        {
+            return Task.FromResult(Update(declaredHour));
+        }
+        public Task<DeclaredHours> DeleteAsync(int id)
+        {
+            return Task.FromResult(Delete(id));
         }
     }
 }

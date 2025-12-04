@@ -27,8 +27,9 @@ namespace Hourregistration.App
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
 
             builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
+            builder.Services.AddTransient<AdministratieUrenoverzichtView>().AddTransient<AdministratieUrenoverzichtViewModel>();
 
-            #if DEBUG
+#if DEBUG
             builder.Logging.AddDebug();
             #endif
 

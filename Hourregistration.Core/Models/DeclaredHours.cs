@@ -8,8 +8,10 @@ namespace Hourregistration.Core.Models
         public DateOnly Date { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
-        public double WorkedHours { get; set; }
-        public string ProjectName { get; set; }
+        public double WorkedHours { get; set; } = 0.0;
+        public string ProjectName { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public long ClientId { get; set; } = 0;
         public DeclaredState State { get; set; } = DeclaredState.Verzonden;
 
         public string PlannedHours => $"{StartTime.ToString("HH:mm")}-{EndTime.ToString("HH:mm")}";
@@ -26,12 +28,14 @@ namespace Hourregistration.Core.Models
             }
         }
 
-        public DeclaredHours(int id, DateOnly date, TimeOnly startTime, TimeOnly endTime, string projectName) : base(id)
+        public DeclaredHours(int id, DateOnly date, TimeOnly startTime, TimeOnly endTime, string projectName, string description, long clientId) : base(id)
         {
             Date = date;
             StartTime = startTime;
             EndTime = endTime;
             ProjectName = projectName;
+            Description = description;
+            ClientId = clientId;
 
             // Calculate worked hours inbetween endTime and startTime and apply to WorkedHours
             TimeSpan startSpan = StartTime.ToTimeSpan();
@@ -41,7 +45,7 @@ namespace Hourregistration.Core.Models
             {
                 difference += TimeSpan.FromDays(1);
             }
-            
+
             WorkedHours = (double)difference.TotalHours;
         }
     }

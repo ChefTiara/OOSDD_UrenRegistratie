@@ -74,6 +74,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\AdministratieUrenoverzichtView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\EmployeeOverviewView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

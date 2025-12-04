@@ -6,18 +6,22 @@ namespace Hourregistration.Core.Data.Repositories
     public class DeclaredHoursRepository : IDeclaredHoursRepository
     {
         private readonly List<DeclaredHours> declaredHoursList;
-        public DeclaredHoursRepository()
-        {
-            declaredHoursList = [
-                new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "Boodschappen", 0),
-                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp", "Het is etenstijd waar ben je >:(", 0),
-                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0),
-                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "", 0),
-                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp", "Werk jij op vrijdag??", 0),
+        private readonly IClientRepository _clientRepository;
 
-                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 0) { State = DeclaredState.Akkoord },
-                new DeclaredHours(7, new DateOnly(2025, 11, 11), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0),
-                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 0) { State = DeclaredState.Geweigerd },
+        public DeclaredHoursRepository(IClientRepository clientRepository)
+        {
+            _clientRepository = clientRepository;
+
+            declaredHoursList = [
+                new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "Boodschappen", _clientRepository.Get(0)),
+                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp", "Het is etenstijd waar ben je >:(", _clientRepository.Get(1)),
+                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", _clientRepository.Get(1)),
+                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "", _clientRepository.Get(0)),
+                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp", "Werk jij op vrijdag??", _clientRepository.Get(1)),
+
+                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", _clientRepository.Get(0)) { State = DeclaredState.Akkoord },
+                new DeclaredHours(7, new DateOnly(2025, 11, 11), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", _clientRepository.Get(1)),
+                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", _clientRepository.Get(0)) { State = DeclaredState.Geweigerd },
             ];
         }
 
@@ -25,9 +29,9 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return declaredHoursList.FirstOrDefault(dh => dh.Id == id);
         }
-        public List<DeclaredHours> GetByClientId(long clientId)
+        public List<DeclaredHours> GetByClient(Client client)
         {
-            return declaredHoursList.Where(dh => dh.ClientId == clientId).ToList();
+            return declaredHoursList.Where(dh => dh.Client == client).ToList();
         }
         public List<DeclaredHours> GetByState(DeclaredState state)
         {
@@ -60,9 +64,9 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return Task.FromResult(Get(id));
         }
-        public Task<List<DeclaredHours>> GetByClientIdAsync(long clientId)
+        public Task<List<DeclaredHours>> GetByClientAsync(Client client)
         {
-            return Task.FromResult(GetByClientId(clientId));
+            return Task.FromResult(GetByClient(client));
         }
         public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
         {

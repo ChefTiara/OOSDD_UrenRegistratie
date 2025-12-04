@@ -1,16 +1,18 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Windows.Input;
+using Hourregistration.Core.Services;
 
 namespace Hourregistration.App.ViewModels
 {
     public partial class AdministratieUrenoverzichtViewModel : BaseViewModel
     {
         private readonly IDeclaredHoursService _declaredHoursService;
+        private readonly IClientService _clientService;
 
         // Items die in de UI getoond worden
         public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = new();
@@ -70,9 +72,10 @@ namespace Hourregistration.App.ViewModels
         public ICommand ApplyFiltersCommand { get; }
         public ICommand ResetFiltersCommand { get; }
 
-        public AdministratieUrenoverzichtViewModel(IDeclaredHoursService declaredHoursService)
+        public AdministratieUrenoverzichtViewModel(IDeclaredHoursService declaredHoursService, IClientService clientService)
         {
             _declaredHoursService = declaredHoursService;
+            _clientService = clientService;
 
             ApplyWeek();
 
@@ -123,6 +126,27 @@ namespace Hourregistration.App.ViewModels
                 .OrderBy(i => i.Date)
                 .ThenBy(i => i.StartTime)
                 .ToList();
+
+            // If repository did not set DeclaredHours.Client, try to attach existing clients:
+            // (safe: Client may already be set by repository; we only set when null)
+            var clients = _clientService.GetAll() ?? Enumerable.Empty<Client>();
+            var clientById = clients.ToDictionary(c => c.Id, c => c);
+
+            foreach (var item in _allWeekItems)
+            {
+                if (item.Client is null && item is not null)
+                {
+                    // if DeclaredHours has no Client but contains an Id fallback, try to use it
+                    // (some older code used ClientId; if present as property, use it; otherwise skip)
+                    var clientIdProp = item.GetType().GetProperty("ClientId");
+                    if (clientIdProp != null)
+                    {
+                        var val = clientIdProp.GetValue(item);
+                        if (val is int cid && cid != 0 && clientById.TryGetValue(cid, out var client))
+                            item.Client = client;
+                    }
+                }
+            }
 
             // eerst alles opnieuw tonen
             DeclaredHoursList.Clear();

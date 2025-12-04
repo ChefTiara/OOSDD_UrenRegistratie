@@ -102,9 +102,9 @@
                 <DataTemplate x:DataType="m:DeclaredHours">
                     <Frame Margin="4" Padding="8" HasShadow="True" CornerRadius="6">
                         <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="10,90,120,*,80">
-                            <Label Grid.Column="1" Text="{Binding Voornaam}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
-                            <Label Grid.Column="2" Text="{Binding Achternaam}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
-                            <Label Grid.Column="3" Text="{Binding FunctieName}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="1" Text="{Binding Client.Voornaam}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="2" Text="{Binding Client.Achternaam}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="3" Text="{Binding Client.Function}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
                             <Label Grid.Column="4" Text="{Binding State}" VerticalOptions="Center" FontSize="12" Opacity="0.8" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="End"/>
                         </Grid>
                     </Frame>

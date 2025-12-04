@@ -2,14 +2,16 @@
 {
     public partial class Client : Model
     {
-        public string Name { get; set; } = string.Empty;
+        public string Voornaam { get; set; } = string.Empty;
+        public string Achternaam { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public Role FunctionName { get; set; } = Role.Werknemer;
-        public Client(int id, string name, string email) : base(id)
+        public Role Function { get; set; } = Role.Werknemer;
+        public Client(int id, string voornaam, string achternaam, string email) : base(id)
         {
-            Name = name;
+            Voornaam = voornaam;
+            Achternaam = achternaam;
             Email = email;
-            FunctionName = Role.Werknemer;
+            Function = Role.Werknemer;
         }
     }
 }

@@ -17,7 +17,7 @@
         FontSize="22"
         FontAttributes="Bold" />
         
-        <!-- HEADER ROW - volledige breedte -->
+        <!-- HEADER ROW -->
         <Grid HorizontalOptions="FillAndExpand"
               ColumnSpacing="12"
               RowDefinitions="Auto"
@@ -40,7 +40,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHoursEmployee">
 
-                    <!-- ROW GRID (100% breedte) -->
+                    <!-- ROW GRID -->
                     <Grid ColumnSpacing="12"
                           Padding="4"
                           HorizontalOptions="FillAndExpand"

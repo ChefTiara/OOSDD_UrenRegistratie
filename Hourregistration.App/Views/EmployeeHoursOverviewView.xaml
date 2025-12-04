@@ -11,26 +11,34 @@
                          Spacing="14"
                          HorizontalOptions="FillAndExpand">
 
-        <!-- TITLE + SEARCH IN ONE ROW -->
-        <Grid ColumnDefinitions="Auto,*"
-              HorizontalOptions="FillAndExpand">
+        <!-- TITLE + SEARCH + FILTERS in one horizontal row -->
+        <Grid ColumnDefinitions="Auto,*,Auto,Auto"
+          ColumnSpacing="12"
+          HorizontalOptions="FillAndExpand">
 
-            <!-- Title -->
+            <!-- TITLE -->
             <Label Text="Urenoverzicht:"
            FontSize="22"
            FontAttributes="Bold"
            VerticalOptions="Center"
            HorizontalOptions="Start"/>
 
-            <!-- Search -->
+            <!-- SEARCHBAR -->
             <SearchBar Grid.Column="1"
                Placeholder="Zoeken op naam..."
                Text="{Binding SearchText}"
-               VerticalOptions="Center"
                HorizontalOptions="FillAndExpand"
-               Margin="12,0,0,0"/>
-        </Grid>
+               VerticalOptions="Center"/>
 
+            <!-- FILTER PICKER (Functie) -->
+            <Picker Grid.Column="2"
+            WidthRequest="130"
+            ItemsSource="{Binding FunctieOptions}"
+            SelectedItem="{Binding SelectedFunctie}"
+            Title="Functie"
+            VerticalOptions="Center"
+            />
+        </Grid>
 
         <!-- HEADER ROW -->
         <Grid HorizontalOptions="FillAndExpand"

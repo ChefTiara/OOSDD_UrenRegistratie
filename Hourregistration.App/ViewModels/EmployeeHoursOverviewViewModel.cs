@@ -10,6 +10,7 @@ namespace Hourregistration.App.ViewModels
         private readonly IDeclaredHoursRepository _repository;
 
         public ObservableCollection<DeclaredHoursEmployee> EmployeeHours { get; set; } = new();
+        private List<DeclaredHoursEmployee> _allEmployeeHours = new();
 
         public EmployeeHoursOverviewViewModel(IDeclaredHoursRepository repository)
         {
@@ -25,8 +26,37 @@ namespace Hourregistration.App.ViewModels
                                  ?.OrderBy(x => x.FullName)
                                  .ToList() ?? new();
 
+            _allEmployeeHours = all;
+
             EmployeeHours.Clear();
             foreach (var item in all)
+                EmployeeHours.Add(item);
+        }
+
+        private string searchText;
+        public string SearchText
+        {
+            get => searchText;
+            set
+            {
+                if (SetProperty(ref searchText, value))
+                    ApplySearch();
+            }
+        }
+        private void ApplySearch()
+        {
+            if (_allEmployeeHours == null) return;
+
+            IEnumerable<DeclaredHoursEmployee> filtered = _allEmployeeHours;
+
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                filtered = filtered.Where(x =>
+                    x.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+            }
+
+            EmployeeHours.Clear();
+            foreach (var item in filtered)
                 EmployeeHours.Add(item);
         }
     }

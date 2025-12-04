@@ -53,7 +53,7 @@ namespace Hourregistration.App
             {
                 Role.Werknemer => new DeclaratieHomeView(),
                 Role.Opdrachtgever => CreateEmployeeOverviewPage(),
-                Role.AdministratieMedewerker => CreateEmployeeOverviewPage(),
+                Role.AdministratieMedewerker => CreateAdministrationOverviewPage(),
                 Role.Beheer => CreateEmployeeOverviewPage(),
                 _ => null
             };
@@ -79,6 +79,16 @@ namespace Hourregistration.App
                 throw new InvalidOperationException("EmployeeOverviewViewModel is not registered in the service container.");
 
             return new EmployeeOverviewView(vm);
+        }
+        
+        private Page CreateAdministrationOverviewPage()
+        {
+            var vm = ServiceHelper.GetService<AdministratieUrenoverzichtViewModel>();
+            
+            if (vm == null)
+                throw new InvalidOperationException("AdministratieUrenoverzichtViewModel is not registered in the service container.");
+                
+            return new AdministratieUrenoverzichtView(vm);
         }
     }
 }

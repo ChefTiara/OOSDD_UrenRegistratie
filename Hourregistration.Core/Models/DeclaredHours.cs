@@ -44,9 +44,6 @@ namespace Hourregistration.Core.Models
             Date = date;
             StartTime = startTime;
             EndTime = endTime;
-            FunctieName = functieName;
-            Voornaam = voornaam;
-            Achternaam = achternaam; 
             ProjectName = projectName;
 
             // Calculate worked hours inbetween endTime and startTime and apply to WorkedHours

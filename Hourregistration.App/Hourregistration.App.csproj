@@ -57,45 +57,43 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Hourregistration.Core.Data\Hourregistration.Core.Data.csproj" />
-	  <ProjectReference Include="..\Hourregistration.Core\Hourregistration.Core.csproj" />
+		<ProjectReference Include="..\Hourregistration.Core.Data\Hourregistration.Core.Data.csproj" />
+		<ProjectReference Include="..\Hourregistration.Core\Hourregistration.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\AdministratiemedewerkerUrenoverzichtView.xaml.cs">
-	    <DependentUpon>AdministratiemedewerkerUrenoverzichttView.xaml</DependentUpon>
-	  <Compile Update="Views\DeclarationPage.xaml.cs">
-	    <DependentUpon>DeclarationPage.xaml</DependentUpon>
-	  </Compile>
+		<Compile Update="Views\DeclarationPage.xaml.cs">
+			<DependentUpon>DeclarationPage.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Resources\Styles\MyStyles.xaml">
-	  <MauiXaml Update="Views\EmployeeOverviewView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Footer.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Header.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\MainPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-		<MauiXaml Update="Views\AdministratiemedewerkerUrenoverzichtView.xaml">
+		<MauiXaml Update="Views\DeclaratieHomeView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-	  <MauiXaml Update="Views\Page1.xaml">
-	  <MauiXaml Update="Views\DeclarationPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Views\EmployeeOverviewView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Footer.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Header.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\MainPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\DeclarationPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>

@@ -11,12 +11,27 @@
                          Spacing="14"
                          HorizontalOptions="FillAndExpand">
 
-        <!-- Title -->
-        <Label Grid.Row="0" Grid.Column="0"
-        Text="Urenoverzicht: "
-        FontSize="22"
-        FontAttributes="Bold" />
-        
+        <!-- TITLE + SEARCH IN ONE ROW -->
+        <Grid ColumnDefinitions="Auto,*"
+              HorizontalOptions="FillAndExpand">
+
+            <!-- Title -->
+            <Label Text="Urenoverzicht:"
+           FontSize="22"
+           FontAttributes="Bold"
+           VerticalOptions="Center"
+           HorizontalOptions="Start"/>
+
+            <!-- Search -->
+            <SearchBar Grid.Column="1"
+               Placeholder="Zoeken op naam..."
+               Text="{Binding SearchText}"
+               VerticalOptions="Center"
+               HorizontalOptions="FillAndExpand"
+               Margin="12,0,0,0"/>
+        </Grid>
+
+
         <!-- HEADER ROW -->
         <Grid HorizontalOptions="FillAndExpand"
               ColumnSpacing="12"

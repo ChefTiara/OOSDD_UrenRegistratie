@@ -65,38 +65,32 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Hourregistration.Core.Data\Hourregistration.Core.Data.csproj" />
-	  <ProjectReference Include="..\Hourregistration.Core\Hourregistration.Core.csproj" />
+		<ProjectReference Include="..\Hourregistration.Core.Data\Hourregistration.Core.Data.csproj" />
+		<ProjectReference Include="..\Hourregistration.Core\Hourregistration.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\DeclarationPage.xaml.cs">
-	    <DependentUpon>DeclarationPage.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="Views\AdministratieUrenoverzichtView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-	  <MauiXaml Update="Views\DeclaratieHomeView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\EmployeeOverviewView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Footer.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Header.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\MainPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DeclarationPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Views\DeclarationPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\AdministratieUrenoverzichtView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\DeclaratieHomeView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\EmployeeOverviewView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Footer.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Header.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\MainPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>

@@ -1,52 +1,94 @@
-﻿using Hourregistration.Core.Models;
-using Hourregistration.App.Services;
+﻿using Hourregistration.App.Services;
+using Hourregistration.Core.Models;
+using Hourregistration.App.Views;
 using Hourregistration.App.ViewModels;
 
-namespace Hourregistration.App.Views;
-
-public partial class LoginPage : ContentPage
+namespace Hourregistration.App
 {
-    public LoginPage()
+    public partial class LoginPage : ContentPage
     {
-        InitializeComponent();
-    }
+        private readonly LocalAuthService _authService;
 
-    private async void OnWerknemerClicked(object sender, EventArgs e)
-    {
-        SessionManager.CurrentRole = Role.Werknemer;
+        public LoginPage()
+        {
+            InitializeComponent();
+            _authService = new LocalAuthService();
+        }
 
-        var vm = ServiceHelper.GetService<EmployeeOverviewViewModel>();
-        if (vm == null)
-            throw new InvalidOperationException("EmployeeOverviewViewModel is not registered in the service container.");
-        await Navigation.PushAsync(new EmployeeOverviewView(vm));
-    }
+        private async void OnLoginButtonClicked(object sender, EventArgs e)
+        {
+            string username = UsernameEntry.Text;
+            string password = PasswordEntry.Text;
 
-    private async void OnOpdrachtgeverClicked(object sender, EventArgs e)
-    {
-        SessionManager.CurrentRole = Role.Opdrachtgever;
-        await NavigateToStartPage();
-    }
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                ErrorMessageLabel.Text = "Gebruikersnaam of wachtwoord kan niet leeg zijn.";
+                ErrorMessageLabel.IsVisible = true;
+                return;
+            }
 
-    private async void OnAdministratieClicked(object sender, EventArgs e)
-    {
-        SessionManager.CurrentRole = Role.AdministratieMedewerker;
+            var (ok, roleString) = _authService.Authenticate(username, password);
 
-        var vm = ServiceHelper.GetService<AdministratieUrenoverzichtViewModel>();
-        if (vm == null)
-            throw new InvalidOperationException("AdministratieUrenoverzichtViewModel is not registered in the service container.");
-        await Navigation.PushAsync(new AdministratieUrenoverzichtView(vm));
-    }
+            if (!ok)
+            {
+                ErrorMessageLabel.Text = "Ongeldige inloggegevens.";
+                ErrorMessageLabel.IsVisible = true;
+                return;
+            }
 
-    private async void OnBeheerClicked(object sender, EventArgs e)
-    {
-        SessionManager.CurrentRole = Role.Beheer;
-        await NavigateToStartPage();
-    }
+            if (!Enum.TryParse<Role>(roleString, out var parsedRole))
+            {
+                ErrorMessageLabel.Text = "Onbekende rol.";
+                ErrorMessageLabel.IsVisible = true;
+                return;
+            }
 
-    private async Task NavigateToStartPage()
-    {
-        // Pagina 1 is je "hoofdscherm"
-        Application.Current.MainPage = new NavigationPage(new DeclarationPage());
-        await Task.CompletedTask;
+            SessionManager.CurrentRole = parsedRole;
+
+            // -------------------------------
+            // ROLE-BASED REDIRECTION
+            // -------------------------------
+
+            Page nextPage = parsedRole switch
+            {
+                Role.Werknemer => new DeclaratieHomeView(),
+                Role.Opdrachtgever => CreateEmployeeOverviewPage(),
+                Role.AdministratieMedewerker => CreateAdministrationOverviewPage(),
+                Role.Beheer => CreateEmployeeOverviewPage(),
+                _ => null
+            };
+
+            if (nextPage == null)
+            {
+                ErrorMessageLabel.Text = "Geen geldig scherm beschikbaar voor deze rol.";
+                ErrorMessageLabel.IsVisible = true;
+                return;
+            }
+
+            await Navigation.PushAsync(nextPage);
+        }
+
+        // =====================================================
+        // THIS MUST BE OUTSIDE THE LOGIN METHOD!!!
+        // =====================================================
+        private Page CreateEmployeeOverviewPage()
+        {
+            var vm = ServiceHelper.GetService<EmployeeOverviewViewModel>();
+
+            if (vm == null)
+                throw new InvalidOperationException("EmployeeOverviewViewModel is not registered in the service container.");
+
+            return new EmployeeOverviewView(vm);
+        }
+        
+        private Page CreateAdministrationOverviewPage()
+        {
+            var vm = ServiceHelper.GetService<AdministratieUrenoverzichtViewModel>();
+            
+            if (vm == null)
+                throw new InvalidOperationException("AdministratieUrenoverzichtViewModel is not registered in the service container.");
+                
+            return new AdministratieUrenoverzichtView(vm);
+        }
     }
 }

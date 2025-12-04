@@ -19,7 +19,7 @@ namespace Hourregistration.Core.Services
         }
         public List<DeclaredHours> GetByClient(Client client)
         {
-            return _declaredHoursRepository.GetByClient(client);
+            return _declaredHoursRepository.GetByClient(client);        
         }
         public List<DeclaredHours> GetByState(DeclaredState state)
         {

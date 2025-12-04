@@ -1,14 +1,27 @@
-﻿using Hourregistration.Core.Interfaces.Repositories;
+﻿using Hourregistration.App.Models;
+using Hourregistration.Core.Interfaces.Repositories;
 using Hourregistration.Core.Models;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Hourregistration.Core.Data.Repositories
+namespace Hourregistration.App.Repositories
 {
-    public class TempRepository : ITempRepository
+    public class LocalUserRepository
     {
-        public TempRepository()
+        private readonly List<LocalUser> _users = new()
         {
-            
-        }
+            new LocalUser { Username = "Wuser",  Password = "1234", Role = "Werknemer" },
+            new LocalUser { Username = "OGuser",      Password = "1234", Role = "Opdrachtgever" },
+            new LocalUser { Username = "AMuser",   Password = "1234", Role = "AdministratieMedewerker" },
+            new LocalUser { Username = "Buser",  Password = "1234", Role = "Beheer" }
+        };
 
+        public LocalUser? Authenticate(string username, string password)
+        {
+            return _users.FirstOrDefault(
+                u => u.Username.Equals(username, System.StringComparison.OrdinalIgnoreCase)
+                && u.Password == password
+            );
+        }
     }
 }

@@ -58,6 +58,18 @@
 
             <!-- Week selector pinned to the right -->
             <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center" HorizontalOptions="End">
+                <!-- Refresh icon-only button placed on the left of the week selector -->
+                <Button Command="{Binding RefreshCommand}"
+                        AutomationId="RefreshButton"
+                        Padding="6"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        HorizontalOptions="End">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="&#xE117;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
+                    </Button.ImageSource>
+                </Button>
+                
                 <Button Command="{Binding PreviousWeekCommand}" Padding="6" AutomationId="PrevWeekButton">
                     <Button.ImageSource>
                         <FontImageSource Glyph="&#xE72B;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
@@ -73,29 +85,19 @@
                         <FontImageSource Glyph="&#xE72A;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
                     </Button.ImageSource>
                 </Button>
-
-                <!-- Refresh icon-only button placed to the right of the week selector -->
-                <Button Command="{Binding RefreshCommand}"
-                        AutomationId="RefreshButton"
-                        Padding="6"
-                        WidthRequest="40"
-                        HeightRequest="40"
-                        HorizontalOptions="End">
-                    <Button.ImageSource>
-                        <FontImageSource Glyph="&#xE117;" FontFamily="Segoe MDL2 Assets" Size="18" Color="Black" />
-                    </Button.ImageSource>
-                </Button>
             </HorizontalStackLayout>
         </Grid>
 
-        <!-- Header row matching the item Grid columns (moved to Row 2 so it sits below buttons) -->
-        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80" Margin="4,0">
+        <!-- Header row matching the item Grid columns (moved to Row 2 so it sits below buttons)
+             NOTE: left margin increased so header columns align with Frame content inside items -->
+        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,140,*,Auto" Margin="12,0">
             <Label Grid.Column="0" Text="Dag" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="1" Text="Datum" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="2" Text="Ingepland" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="3" Text="Uren" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="4" Text="Project" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
-            <Label Grid.Column="5" Text="Status" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="End" />
+            <Label Grid.Column="5" Text="Beschrijving" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
+            <Label Grid.Column="6" Text="Status" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="End" />
         </Grid>
 
         <!-- CollectionView occupies the star row so its height is stable -->
@@ -106,24 +108,55 @@
             SelectionMode="None"
             VerticalOptions="Fill"
             HorizontalOptions="Fill">
-            
+
             <CollectionView.EmptyView>
-                <Label Text="Geen gewerkte uren gevonden." 
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
-                       Opacity="0.7"/>
+                <Label Text="Geen gewerkte uren gevonden." HorizontalOptions="Center" VerticalOptions="Center" Opacity="0.7"/>
             </CollectionView.EmptyView>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHours">
-                    <Frame Margin="4" Padding="8" HasShadow="True" CornerRadius="6">
-                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,*,80">
+                    <Frame Margin="4" Padding="8,8,12,8" HasShadow="True" CornerRadius="6">
+                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,140,*,Auto">
                             <Label Grid.Column="0" Text="{Binding Day}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start" />
                             <Label Grid.Column="1" Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
                             <Label Grid.Column="2" Text="{Binding PlannedHours}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
                             <Label Grid.Column="3" Text="{Binding WorkedHours, StringFormat='{}{0}u'}" VerticalOptions="Center" FontAttributes="Bold" FontSize="14" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
                             <Label Grid.Column="4" Text="{Binding ProjectName}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
-                            <Label Grid.Column="5" Text="{Binding State}" VerticalOptions="Center" FontSize="12" Opacity="0.8" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="End"/>
+                            <Label Grid.Column="5" Text="{Binding Description}" VerticalOptions="Center" FontSize="12" Opacity="0.75" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start"/>
+
+                            <!-- State + Segoe MDL2 icon in the last column -->
+                            <HorizontalStackLayout Grid.Column="6" HorizontalOptions="End" VerticalOptions="Center" Spacing="6">
+                                <Label Text="{Binding State}" VerticalOptions="Center" FontSize="12" Opacity="0.9" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="End">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Akkoord">
+                                            <Setter Property="TextColor" Value="LightGreen" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Geweigerd">
+                                            <Setter Property="TextColor" Value="Red" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Verzonden">
+                                            <Setter Property="TextColor" Value="White" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Label VerticalOptions="Center" FontSize="16" FontFamily="Segoe MDL2 Assets" HorizontalOptions="End">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Akkoord">
+                                            <Setter Property="Text" Value="&#xE73E;" />
+                                            <Setter Property="TextColor" Value="LightGreen" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Geweigerd">
+                                            <Setter Property="Text" Value="&#xE711;" />
+                                            <Setter Property="TextColor" Value="Red" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Verzonden">
+                                            <Setter Property="Text" Value="&#xE119;" />
+                                            <Setter Property="TextColor" Value="White" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </HorizontalStackLayout>
                         </Grid>
                     </Frame>
                 </DataTemplate>

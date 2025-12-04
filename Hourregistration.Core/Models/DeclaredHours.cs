@@ -14,6 +14,7 @@ namespace Hourregistration.Core.Models
         public string ProjectName { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public Client? Client { get; set; }
+
         public DeclaredState State { get; set; } = DeclaredState.Verzonden;
 
         public string PlannedHours => $"{StartTime.ToString("HH:mm")}-{EndTime.ToString("HH:mm")}";

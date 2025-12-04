@@ -10,5 +10,7 @@ namespace Hourregistration.Core.Models
     {
         public double AantalUren { get; set; }
         public DateTime Datum { get; set; }
+        public required string Reden { get; set; }
+        public string? Beschrijving { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace Hourregistration.Core.Models
         //public DeclaredHours(int id, string voornaam, string achternaam, string name, DateOnly date, TimeOnly startTime, TimeOnly endTime, string functieName) : base(id, name)
         
         public string ProjectName { get; set; }
-        public DeclaredState State { get; set; } = DeclaredState.Pending;
+        public DeclaredState State { get; set; } = DeclaredState.Verzonden;
 
         public string PlannedHours => $"{StartTime.ToString("HH:mm")}-{EndTime.ToString("HH:mm")}";
 

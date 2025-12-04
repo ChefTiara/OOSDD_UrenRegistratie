@@ -103,5 +103,18 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return Task.FromResult(Delete(id));
         }
+        public List<DeclaredHoursEmployee> GetAllEmployeeHours()
+        {
+            return declaredHoursList4;
+        }
+        public DeclaredHoursEmployee? GetEmployeeHour(int id)
+        {
+            return declaredHoursList4.FirstOrDefault(d => d.Id == id);
+        }
+        public DeclaredHoursEmployee AddEmployeeHour(DeclaredHoursEmployee hour)
+        {
+            declaredHoursList4.Add(hour);
+            return hour;
+        }
     }
 }

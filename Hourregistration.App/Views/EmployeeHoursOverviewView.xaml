@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Hourregistration.App.ViewModels"
+             xmlns:m="clr-namespace:Hourregistration.Core.Models;assembly=Hourregistration.Core"
+             x:Class="Hourregistration.App.Views.EmployeeHoursOverviewView"
+             x:DataType="vm:EmployeeHoursOverviewViewModel"
+             Title="Urenoverzicht medewerkers">
+
+    <VerticalStackLayout Padding="12"
+                         Spacing="14"
+                         HorizontalOptions="FillAndExpand">
+
+        <!-- Title -->
+        <Label Grid.Row="0" Grid.Column="0"
+        Text="Urenoverzicht: "
+        FontSize="22"
+        FontAttributes="Bold" />
+        
+        <!-- HEADER ROW -->
+        <Grid HorizontalOptions="FillAndExpand"
+              ColumnSpacing="12"
+              RowDefinitions="Auto"
+              ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
+
+            <Label Text="Naam" FontAttributes="Bold"/>
+            <Label Grid.Column="1" Text="Functie" FontAttributes="Bold"/>
+            <Label Grid.Column="2" Text="Datum" FontAttributes="Bold"/>
+            <Label Grid.Column="3" Text="Ingepland" FontAttributes="Bold"/>
+            <Label Grid.Column="4" Text="Uren" FontAttributes="Bold"/>
+            <Label Grid.Column="5"/>
+        </Grid>
+
+        <!-- TABLE BODY -->
+        <CollectionView ItemsSource="{Binding EmployeeHours}"
+                        SelectionMode="None"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:DeclaredHoursEmployee">
+
+                    <!-- ROW GRID -->
+                    <Grid ColumnSpacing="12"
+                          Padding="4"
+                          HorizontalOptions="FillAndExpand"
+                          ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
+
+                        <Label Text="{Binding FullName}"
+                               VerticalOptions="Center"
+                               LineBreakMode="TailTruncation"
+                               MaxLines="1"/>
+
+                        <Label Grid.Column="1"
+                               Text="{Binding Role}"
+                               VerticalOptions="Center"/>
+
+                        <Label Grid.Column="2"
+                               Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}"
+                               VerticalOptions="Center"/>
+
+                        <Label Grid.Column="3"
+                               Text="{Binding PlannedHours}"
+                               VerticalOptions="Center"
+                               MaxLines="1"/>
+
+                        <Label Grid.Column="4"
+                               Text="{Binding WorkedHours, StringFormat='{0}u'}"
+                               VerticalOptions="Center"
+                               FontAttributes="Bold"/>
+
+                        <Label Grid.Column="5"
+                               Text="›"
+                               FontSize="20"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"/>
+                    </Grid>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </VerticalStackLayout>
+
+</ContentPage>

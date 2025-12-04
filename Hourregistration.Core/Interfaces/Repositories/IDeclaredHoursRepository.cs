@@ -19,5 +19,8 @@ namespace Hourregistration.Core.Interfaces.Repositories
         public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour);
         public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour);
         public Task<DeclaredHours> DeleteAsync(int id);
+        public List<DeclaredHoursEmployee> GetAllEmployeeHours();
+        public DeclaredHoursEmployee? GetEmployeeHour(int id);
+        public DeclaredHoursEmployee AddEmployeeHour(DeclaredHoursEmployee hour);
     }
 }

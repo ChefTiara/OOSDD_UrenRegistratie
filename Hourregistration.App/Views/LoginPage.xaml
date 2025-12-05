@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Hourregistration.App.LoginPage">
+
+    <VerticalStackLayout Padding="30">
+
+        <!-- Username Entry -->
+        <Entry x:Name="UsernameEntry"
+               Placeholder="Gebruikersnaam"
+               Keyboard="Email"
+               Margin="0,10,0,0" />
+
+        <!-- Password Entry -->
+        <Entry x:Name="PasswordEntry"
+               Placeholder="Wachtwoord"
+               IsPassword="True"
+               Margin="0,10,0,0" />
+
+        <!-- Login Button -->
+        <Button Text="Inloggen"
+                Clicked="OnLoginButtonClicked"
+                Margin="0,20,0,0" />
+
+        <!-- Error Message -->
+        <Label x:Name="ErrorMessageLabel"
+               TextColor="Red"
+               IsVisible="False"
+               Margin="0,10,0,0"
+               HorizontalOptions="Center" />
+
+    </VerticalStackLayout>
+</ContentPage>

@@ -9,12 +9,12 @@
 
     <VerticalStackLayout Padding="12"
                          Spacing="14"
-                         HorizontalOptions="FillAndExpand">
+                         HorizontalOptions="Fill">
 
         <!-- TITLE + SEARCH + FILTERS in one horizontal row -->
         <Grid ColumnDefinitions="Auto,*,Auto,Auto"
           ColumnSpacing="12"
-          HorizontalOptions="FillAndExpand">
+          HorizontalOptions="Fill">
 
             <!-- TITLE -->
             <Label Text="Urenoverzicht:"
@@ -27,7 +27,7 @@
             <SearchBar Grid.Column="1"
                Placeholder="Zoeken op naam..."
                Text="{Binding SearchText}"
-               HorizontalOptions="FillAndExpand"
+               HorizontalOptions="Fill"
                VerticalOptions="Center"/>
 
             <!-- FILTER PICKER (Functie) -->
@@ -41,7 +41,7 @@
         </Grid>
 
         <!-- HEADER ROW -->
-        <Grid HorizontalOptions="FillAndExpand"
+        <Grid HorizontalOptions="Fill"
               ColumnSpacing="12"
               RowDefinitions="Auto"
               ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
@@ -57,8 +57,8 @@
         <!-- TABLE BODY -->
         <CollectionView ItemsSource="{Binding EmployeeHours}"
                         SelectionMode="None"
-                        HorizontalOptions="FillAndExpand"
-                        VerticalOptions="FillAndExpand">
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Fill">
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHoursEmployee">
@@ -66,7 +66,7 @@
                     <!-- ROW GRID -->
                     <Grid ColumnSpacing="12"
                           Padding="4"
-                          HorizontalOptions="FillAndExpand"
+                          HorizontalOptions="Fill"
                           ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
 
                         <Label Text="{Binding FullName}"
@@ -92,11 +92,16 @@
                                VerticalOptions="Center"
                                FontAttributes="Bold"/>
 
+                        <!-- Make the chevron tappable: attach TapGestureRecognizer to the Label -->
                         <Label Grid.Column="5"
                                Text="›"
                                FontSize="20"
                                VerticalOptions="Center"
-                               HorizontalOptions="Center"/>
+                               HorizontalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnEmployeeTapped" NumberOfTapsRequired="1" />
+                            </Label.GestureRecognizers>
+                        </Label>
                     </Grid>
 
                 </DataTemplate>

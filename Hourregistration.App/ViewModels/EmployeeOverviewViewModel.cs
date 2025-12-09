@@ -4,6 +4,7 @@ using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Hourregistration.App.ViewModels
 {
@@ -261,7 +262,11 @@ namespace Hourregistration.App.ViewModels
             _suppressApply = false;
 
             // apply selected filters
-            var filtered = items.AsEnumerable();
+            IEnumerable<DeclaredHours> filtered = items.AsEnumerable();
+
+            // apply client filter if provided
+            if (FilterUserId.HasValue)
+                filtered = filtered.Where(i => i.UserId == FilterUserId.Value);
 
             var selectedProject = SelectedProjectOption ?? "Alle";
             if (selectedProject != "Alle")
@@ -319,6 +324,18 @@ namespace Hourregistration.App.ViewModels
             var startStr = start.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
             var endStr = end.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
             return $"Week {weekNumber} ({startStr} / {endStr})";
+        }
+
+        // New: optional client filter. When set, ApplyWeek will restrict results to this client.
+        public long? FilterUserId { get; private set; }
+
+        // Public helper to set the client filter from outside (e.g. navigation).
+        // It sets the filter and triggers a reload for the current week.
+        public void SetClientFilter(long clientId)
+        {
+            FilterUserId = clientId;
+            // schedule reload without blocking caller
+            _ = ApplyWeek();
         }
     }
 }

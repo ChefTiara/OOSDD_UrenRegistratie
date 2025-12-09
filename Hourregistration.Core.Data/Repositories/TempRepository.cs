@@ -4,7 +4,7 @@ using Hourregistration.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Hourregistration.App.Repositories
+namespace Hourregistration.Core.Data.Repositories
 {
     public class LocalUserRepository
     {
@@ -19,7 +19,7 @@ namespace Hourregistration.App.Repositories
         public LocalUser? Authenticate(string username, string password)
         {
             return _users.FirstOrDefault(
-                u => u.Username.Equals(username, System.StringComparison.OrdinalIgnoreCase)
+                u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)
                 && u.Password == password
             );
         }

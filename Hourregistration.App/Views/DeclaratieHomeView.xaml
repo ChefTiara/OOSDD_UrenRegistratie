@@ -30,7 +30,7 @@
                TextColor="Gray"
                Margin="0,5,0,15" />
 
-        <!-- Draft box (big box left) -->
+        <!-- Draft box -->
         <Border 
             Grid.Row="2" Grid.Column="0"
             Stroke="Black"
@@ -38,17 +38,54 @@
             BackgroundColor="White"
             Padding="15"
             HeightRequest="350">
-            
-            <!-- Contents draft box -->
+
             <VerticalStackLayout>
                 <Label Text="Concepten"
                        FontAttributes="Bold"
                        FontSize="16" />
 
-                <Label Text="U heeft geen concepten"
-                       FontSize="13"
-                       TextColor="Gray"
-                       Margin="0,10,0,0"/>
+                <!-- List of drafts -->
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Drafts}"
+                                     x:Name="DraftsList"
+                                     Spacing="10">
+
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+
+                            <Frame Padding="10"
+                                   BorderColor="#CCCCCC"
+                                   CornerRadius="6"
+                                   BackgroundColor="#F8F8F8">
+
+                                <VerticalStackLayout Spacing="5">
+
+                                    <Label Text="{Binding Datum, StringFormat='Datum: {0:dd-MM-yyyy}'}"
+                                           FontSize="13"/>
+
+                                    <Label Text="{Binding AantalUren, StringFormat='Uren: {0}'}"
+                                           FontSize="13"/>
+
+                                    <Label Text="{Binding Reden, StringFormat='Reden: {0}'}"
+                                           FontSize="13"/>
+
+                                    <Label Text="{Binding Beschrijving, StringFormat='Omschrijving: {0}'}"
+                                           FontSize="13"/>
+
+                                    <Button Text="Open concept"
+                                            Padding="5"
+                                            CornerRadius="4"
+                                            BackgroundColor="#A7C6E6"
+                                            CommandParameter="{Binding}"
+                                            Clicked="OnConceptOpenClicked"/>
+                                </VerticalStackLayout>
+
+                            </Frame>
+
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+
+                </VerticalStackLayout>
+
             </VerticalStackLayout>
         </Border>
 

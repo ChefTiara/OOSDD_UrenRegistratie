@@ -13,6 +13,17 @@ namespace Hourregistration.App.ViewModels
         private readonly IDeclaredHoursService _declaredHoursService;
         private bool _suppressApply = false;
 
+        // New: page title that the view binds to
+        private string _pageTitle = "Urenoverzicht";
+        public string PageTitle
+        {
+            get => _pageTitle;
+            set => SetProperty(ref _pageTitle, value);
+        }
+
+        // New: optional client/user filter
+        public long? FilterUserId { get; private set; }
+
         // show only the currently visible week's items
         public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = [];
 
@@ -164,6 +175,9 @@ namespace Hourregistration.App.ViewModels
         {
             _declaredHoursService = declaredHoursService;
 
+            // initial title (can be overridden when navigated-to)
+            PageTitle = "Urenoverzicht";
+
             // Project filter intentionally empty for now
             ProjectOptions = new ObservableCollection<string>();
 
@@ -235,6 +249,15 @@ namespace Hourregistration.App.ViewModels
         {
             IsDateFilterEnabled = false;
             // SelectedDate will be set to null by IsDateFilterEnabled setter and ApplyWeek will run
+        }
+
+        // Public helper to set a client/user filter and optionally set the title
+        public void SetUserFilter(long userId, string? displayName = null)
+        {
+            FilterUserId = userId;
+            PageTitle = string.IsNullOrWhiteSpace(displayName) ? $"Urenoverzicht (ID: {userId})" : $"Urenoverzicht - {displayName}";
+            // reload current week
+            _ = ApplyWeek();
         }
 
         // Load items for the current week and notify UI
@@ -324,18 +347,6 @@ namespace Hourregistration.App.ViewModels
             var startStr = start.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
             var endStr = end.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
             return $"Week {weekNumber} ({startStr} / {endStr})";
-        }
-
-        // New: optional client filter. When set, ApplyWeek will restrict results to this client.
-        public long? FilterUserId { get; private set; }
-
-        // Public helper to set the client filter from outside (e.g. navigation).
-        // It sets the filter and triggers a reload for the current week.
-        public void SetClientFilter(long clientId)
-        {
-            FilterUserId = clientId;
-            // schedule reload without blocking caller
-            _ = ApplyWeek();
         }
     }
 }

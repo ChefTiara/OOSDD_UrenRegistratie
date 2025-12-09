@@ -5,7 +5,7 @@
              xmlns:m="clr-namespace:Hourregistration.Core.Models;assembly=Hourregistration.Core"
              x:Class="Hourregistration.App.Views.EmployeeOverviewView"
              x:DataType="vm:EmployeeOverviewViewModel"
-             Title="Urenoverzicht">
+             Title="{Binding PageTitle}">
 
     <!-- Grid with an extra Auto row for the sort button -->
     <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*,Auto" ColumnDefinitions="*" RowSpacing="8">

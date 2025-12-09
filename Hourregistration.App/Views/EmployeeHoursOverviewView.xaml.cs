@@ -13,13 +13,12 @@ public partial class EmployeeHoursOverviewView : ContentPage
         BindingContext = vm;
     }
 
-    // Tapped handler wired from XAML DataTemplate.
-    // Sender is the visual element that was tapped (the Label in the template).
+    // Handler wired in item template's TapGestureRecognizer
     private async void OnEmployeeTapped(object sender, TappedEventArgs e)
     {
         if (sender is VisualElement ve && ve.BindingContext is DeclaredHoursEmployee employee)
         {
-            // Resolve EmployeeOverviewView from the DI container
+            // Resolve the EmployeeOverview page from DI
             var page = ServiceHelper.GetService<EmployeeOverviewView>();
             if (page == null)
             {
@@ -27,10 +26,11 @@ public partial class EmployeeHoursOverviewView : ContentPage
                 return;
             }
 
-            // Ensure ViewModel exists and set the client filter so the overview shows the tapped employee
+            // Set the filtered user and title on the viewmodel before navigation
             if (page.BindingContext is EmployeeOverviewViewModel vm)
             {
-                vm.SetClientFilter(employee.UserId);
+                // Use the model's user id and display name (FullName)
+                vm.SetUserFilter(employee.UserId, employee.FullName);
             }
 
             await Navigation.PushAsync(page);

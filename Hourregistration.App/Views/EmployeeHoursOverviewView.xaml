@@ -7,30 +7,21 @@
              x:DataType="vm:EmployeeHoursOverviewViewModel"
              Title="Urenoverzicht medewerkers">
 
-    <VerticalStackLayout Padding="12"
-                         Spacing="14"
-                         HorizontalOptions="Fill">
-
-        <!-- TITLE + SEARCH + FILTERS in one horizontal row -->
-        <Grid ColumnDefinitions="Auto,*,Auto,Auto"
-              ColumnSpacing="12"
-              HorizontalOptions="Fill">
-
-            <!-- TITLE -->
+    <!-- Use Grid so CollectionView can get a star-sized row (and therefore scroll) -->
+    <Grid Padding="12" RowSpacing="14" RowDefinitions="Auto,Auto,*,Auto">
+        <!-- Row 0: Title + Search + Filters -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto"
+              ColumnSpacing="12" HorizontalOptions="Fill">
             <Label Text="Urenoverzicht:"
                    FontSize="22"
                    FontAttributes="Bold"
                    VerticalOptions="Center"
                    HorizontalOptions="Start"/>
-
-            <!-- SEARCHBAR -->
             <SearchBar Grid.Column="1"
                        Placeholder="Zoeken op naam..."
                        Text="{Binding SearchText}"
                        HorizontalOptions="Fill"
                        VerticalOptions="Center"/>
-
-            <!-- FILTER PICKER (Functie) -->
             <Picker Grid.Column="2"
                     WidthRequest="130"
                     ItemsSource="{Binding FunctieOptions}"
@@ -39,12 +30,11 @@
                     VerticalOptions="Center"/>
         </Grid>
 
-        <!-- HEADER ROW -->
-        <Grid HorizontalOptions="Fill"
+        <!-- Row 1: Header Row -->
+        <Grid Grid.Row="1" HorizontalOptions="Fill"
               ColumnSpacing="12"
               RowDefinitions="Auto"
               ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
-
             <Label Text="Naam" FontAttributes="Bold"/>
             <Label Grid.Column="1" Text="Functie" FontAttributes="Bold"/>
             <Label Grid.Column="2" Text="Datum" FontAttributes="Bold"/>
@@ -53,48 +43,29 @@
             <Label Grid.Column="5"/>
         </Grid>
 
-        <!-- TABLE BODY -->
-        <CollectionView ItemsSource="{Binding EmployeeHours}"
+        <!-- Row 2: CollectionView (star row -> constrained -> scrolls) -->
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding EmployeeHours}"
                         SelectionMode="None"
                         HorizontalOptions="Fill"
                         VerticalOptions="Fill">
-
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHoursEmployee">
-
-                    <!-- ROW GRID -->
                     <Grid ColumnSpacing="12"
                           Padding="4"
                           HorizontalOptions="Fill"
                           ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
-
                         <Label Text="{Binding FullName}"
                                VerticalOptions="Center"
                                LineBreakMode="TailTruncation"
                                MaxLines="1"/>
-
-                        <Label Grid.Column="1"
-                               Text="{Binding Role}"
-                               VerticalOptions="Center"/>
-
-                        <Label Grid.Column="2"
-                               Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}"
-                               VerticalOptions="Center"/>
-
-                        <Label Grid.Column="3"
-                               Text="{Binding PlannedHours}"
-                               VerticalOptions="Center"
-                               MaxLines="1"/>
-
-                        <Label Grid.Column="4"
-                               Text="{Binding WorkedHours, StringFormat='{0}u'}"
-                               VerticalOptions="Center"
-                               FontAttributes="Bold"/>
-
-                        <!-- Replace plain chevron with an icon Button (Segoe MDL2 Assets) -->
+                        <Label Grid.Column="1" Text="{Binding Role}" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="{Binding PlannedHours}" VerticalOptions="Center" MaxLines="1"/>
+                        <Label Grid.Column="4" Text="{Binding WorkedHours, StringFormat='{0}u'}" VerticalOptions="Center" FontAttributes="Bold"/>
                         <Button Grid.Column="5"
-                                HeightRequest="12"
-                                WidthRequest="12"
+                                HeightRequest="36"
+                                WidthRequest="36"
                                 BackgroundColor="Transparent"
                                 Padding="0"
                                 Clicked="OnEmployeeClicked"
@@ -108,12 +79,11 @@
                             </Button.ImageSource>
                         </Button>
                     </Grid>
-
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-
         </CollectionView>
 
-    </VerticalStackLayout>
+        <!-- Row 3: optional footer (if you had one) -->
+    </Grid>
 
 </ContentPage>

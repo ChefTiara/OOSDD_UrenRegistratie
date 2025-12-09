@@ -13,31 +13,30 @@
 
         <!-- TITLE + SEARCH + FILTERS in one horizontal row -->
         <Grid ColumnDefinitions="Auto,*,Auto,Auto"
-          ColumnSpacing="12"
-          HorizontalOptions="Fill">
+              ColumnSpacing="12"
+              HorizontalOptions="Fill">
 
             <!-- TITLE -->
             <Label Text="Urenoverzicht:"
-           FontSize="22"
-           FontAttributes="Bold"
-           VerticalOptions="Center"
-           HorizontalOptions="Start"/>
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start"/>
 
             <!-- SEARCHBAR -->
             <SearchBar Grid.Column="1"
-               Placeholder="Zoeken op naam..."
-               Text="{Binding SearchText}"
-               HorizontalOptions="Fill"
-               VerticalOptions="Center"/>
+                       Placeholder="Zoeken op naam..."
+                       Text="{Binding SearchText}"
+                       HorizontalOptions="Fill"
+                       VerticalOptions="Center"/>
 
             <!-- FILTER PICKER (Functie) -->
             <Picker Grid.Column="2"
-            WidthRequest="130"
-            ItemsSource="{Binding FunctieOptions}"
-            SelectedItem="{Binding SelectedFunctie}"
-            Title="Functie"
-            VerticalOptions="Center"
-            />
+                    WidthRequest="130"
+                    ItemsSource="{Binding FunctieOptions}"
+                    SelectedItem="{Binding SelectedFunctie}"
+                    Title="Functie"
+                    VerticalOptions="Center"/>
         </Grid>
 
         <!-- HEADER ROW -->
@@ -92,16 +91,22 @@
                                VerticalOptions="Center"
                                FontAttributes="Bold"/>
 
-                        <!-- Make the chevron tappable: attach TapGestureRecognizer to the Label -->
-                        <Label Grid.Column="5"
-                               Text="›"
-                               FontSize="20"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnEmployeeTapped" NumberOfTapsRequired="1" />
-                            </Label.GestureRecognizers>
-                        </Label>
+                        <!-- Replace plain chevron with an icon Button (Segoe MDL2 Assets) -->
+                        <Button Grid.Column="5"
+                                HeightRequest="12"
+                                WidthRequest="12"
+                                BackgroundColor="Transparent"
+                                Padding="0"
+                                Clicked="OnEmployeeClicked"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center">
+                            <Button.ImageSource>
+                                <FontImageSource Glyph="&#xE76C;"
+                                                 FontFamily="Segoe MDL2 Assets"
+                                                 Size="12"
+                                                 Color="White" />
+                            </Button.ImageSource>
+                        </Button>
                     </Grid>
 
                 </DataTemplate>

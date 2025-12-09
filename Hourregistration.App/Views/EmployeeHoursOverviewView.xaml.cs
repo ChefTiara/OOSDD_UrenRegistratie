@@ -13,12 +13,13 @@ public partial class EmployeeHoursOverviewView : ContentPage
         BindingContext = vm;
     }
 
-    // Handler wired in item template's TapGestureRecognizer
-    private async void OnEmployeeTapped(object sender, TappedEventArgs e)
+    // Click handler for the icon Button in the DataTemplate.
+    // Sender is the Button inside the templated row; its BindingContext is the item (DeclaredHoursEmployee).
+    private async void OnEmployeeClicked(object sender, EventArgs e)
     {
         if (sender is VisualElement ve && ve.BindingContext is DeclaredHoursEmployee employee)
         {
-            // Resolve the EmployeeOverview page from DI
+            // Resolve a new EmployeeOverviewView from DI
             var page = ServiceHelper.GetService<EmployeeOverviewView>();
             if (page == null)
             {
@@ -26,10 +27,10 @@ public partial class EmployeeHoursOverviewView : ContentPage
                 return;
             }
 
-            // Set the filtered user and title on the viewmodel before navigation
+            // Set the client/user filter and optional title on the viewmodel before navigation
             if (page.BindingContext is EmployeeOverviewViewModel vm)
             {
-                // Use the model's user id and display name (FullName)
+                // Adjust property names if DeclaredHoursEmployee uses different id/name fields
                 vm.SetUserFilter(employee.UserId, employee.FullName);
             }
 

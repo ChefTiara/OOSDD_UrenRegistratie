@@ -1,13 +1,16 @@
-using System.Collections.ObjectModel;
 using Hourregistration.App.Services;
 using Hourregistration.Core.Models;
 using Hourregistration.Core.Services;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Hourregistration.App.Views;
 
 public partial class DeclarationPage : ContentPage
 {
     private readonly DeclarationService _service;
+    bool actionPerformed = false;
+    public ICommand DeleteRowCommand { get; }
 
     // Dynamische collection of rows
     public ObservableCollection<DeclarationRowModel> Rows { get; set; }
@@ -18,7 +21,8 @@ public partial class DeclarationPage : ContentPage
         InitializeComponent();
         _service = new DeclarationService();
 
-        // Start page with 1 row 
+        DeleteRowCommand = new Command<DeclarationRowModel>(DeleteRow);
+
         Rows.Add(new DeclarationRowModel());
 
         BindingContext = this;
@@ -52,8 +56,17 @@ public partial class DeclarationPage : ContentPage
         Rows.Add(new DeclarationRowModel());
     }
 
+    // Deleting rows
+    private void DeleteRow(DeclarationRowModel row)
+    {
+        if (row != null && Rows.Contains(row))
+        {
+            Rows.Remove(row);
+        }
+    }
+
     // Saving all rows present 
-    private void OnIndienenClicked(object sender, EventArgs e)
+    private async void OnIndienenClicked(object sender, EventArgs e)
     {
         foreach (var row in Rows)
         {
@@ -82,7 +95,15 @@ public partial class DeclarationPage : ContentPage
             _service.Indienen(declaratie);
         }
 
-        FeedbackLabel.Text = "Alle declaraties succesvol verwerkt!";
+        await Navigation.PopAsync();
+    }
+
+    // Deleting all rows present 
+    private async void OnVerwijderenClicked(object sender, EventArgs e)
+    {
+        FeedbackLabel.Text = "Declaratie succesvol verwijderd!";
         FeedbackLabel.TextColor = Colors.Green;
+
+        await Navigation.PopAsync(); 
     }
 }

@@ -25,5 +25,9 @@ namespace Hourregistration.Core.Services
 
             return (true, "Declaratie is succesvol ingediend!");
         }
+        public (bool Success, string Message) Verwijderen(Declaration declaratie)
+        {
+            return (true, "Declaratie is succesvol verwijderd!");
+        }
     }
 }

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hourregistration.App.Views.DeclarationPage"
+             x:Name="declarationPage"
              Title="Urenregistratie concept">
 
     <VerticalStackLayout Padding="20" Spacing="20">
@@ -34,7 +35,7 @@
                                 <Grid ColumnSpacing="10"
                                        Padding="5"
                                        HorizontalOptions="Fill"
-                                       ColumnDefinitions="120, 80, 120, *">
+                                       ColumnDefinitions="120, 80, 120, *, 40">
 
                                     <!-- Date -->
                                     <VerticalStackLayout Grid.Column="0">
@@ -80,6 +81,17 @@
                                                 Placeholder="Omschrijving..."
                                                 HeightRequest="40"/>
                                     </VerticalStackLayout>
+                                    
+                                    <!-- Delete button -->
+                                    <Button Grid.Column="4"
+                                            Text="X" 
+                                            BackgroundColor="{StaticResource Tertiary}"      
+                                            TextColor="Black"
+                                            FontAttributes="Bold"
+                                            CornerRadius="4"
+                                            Command="{Binding Source={x:Reference declarationPage}, Path=DeleteRowCommand}"
+                                            CommandParameter="{Binding}" 
+                                    />
 
                                 </Grid>
 
@@ -108,7 +120,8 @@
                     Text="Declaratie verwijderen"
                     BackgroundColor="#E6A8A8"
                     TextColor="Black"
-                    CornerRadius="6"/>
+                    CornerRadius="6"
+                    Clicked="OnVerwijderenClicked"/>
 
             <Button Grid.Column="1"
                     Text="Wijzigingen opslaan"

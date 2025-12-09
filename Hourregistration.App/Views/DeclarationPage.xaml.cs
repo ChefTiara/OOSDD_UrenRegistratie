@@ -95,7 +95,7 @@ public partial class DeclarationPage : ContentPage
             _service.Indienen(declaratie);
         }
 
-        await Navigation.PushAsync(new DeclaratieHomeView());
+        await Navigation.PopAsync();
     }
 
     // Deleting all rows present 
@@ -104,6 +104,6 @@ public partial class DeclarationPage : ContentPage
         FeedbackLabel.Text = "Declaratie succesvol verwijderd!";
         FeedbackLabel.TextColor = Colors.Green;
 
-        await Navigation.PushAsync(new DeclaratieHomeView());
+        await Navigation.PopAsync(); 
     }
 }

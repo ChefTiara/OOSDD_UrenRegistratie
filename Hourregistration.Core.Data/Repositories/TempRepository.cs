@@ -9,10 +9,10 @@ namespace Hourregistration.Core.Data.Repositories
     {
         private readonly List<LocalUser> _users = new()
         {
-            new LocalUser { Username = "Wuser",  Password = "1234", Role = "Werknemer" },
-            new LocalUser { Username = "OGuser",      Password = "1234", Role = "Opdrachtgever" },
-            new LocalUser { Username = "AMuser",   Password = "1234", Role = "AdministratieMedewerker" },
-            new LocalUser { Username = "Buser",  Password = "1234", Role = "Beheer" }
+            new LocalUser(1, "Wuser", "1234", Role.Werknemer),
+            new LocalUser(2, "OGuser", "1234", Role.Opdrachtgever),
+            new LocalUser(3, "AMuser", "1234", Role.AdministratieMedewerker),
+            new LocalUser(4, "Buser", "1234", Role.Beheer)
         };
 
         public LocalUser? Authenticate(string username, string password)

@@ -19,7 +19,7 @@ namespace Hourregistration.App.Services
             if (user == null)
                 return (false, null);
 
-            return (true, user.Role);
+            return (true, user.Role.ToString());
         }
     }
 }

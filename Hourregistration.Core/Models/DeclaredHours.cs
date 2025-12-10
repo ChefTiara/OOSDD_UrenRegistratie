@@ -8,6 +8,8 @@ namespace Hourregistration.Core.Models
         public DateOnly Date { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
         public double WorkedHours { get; set; } = 0.0;
         public string ProjectName { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
@@ -28,7 +30,7 @@ namespace Hourregistration.Core.Models
             }
         }
 
-        public DeclaredHours(int id, DateOnly date, TimeOnly startTime, TimeOnly endTime, string projectName, string description, long userId) : base(id)
+        public DeclaredHours(long id, DateOnly date, TimeOnly startTime, TimeOnly endTime, string projectName, string description, long userId) : base(id)
         {
             Date = date;
             StartTime = startTime;
@@ -47,6 +49,7 @@ namespace Hourregistration.Core.Models
             }
             
             WorkedHours = (double)difference.TotalHours;
+            CreatedAt = DateTime.Now;
         }
     }
 }

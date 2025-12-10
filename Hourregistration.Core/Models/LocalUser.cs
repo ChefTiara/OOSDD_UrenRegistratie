@@ -6,10 +6,20 @@ using System.Threading.Tasks;
 
 namespace Hourregistration.Core.Models
 {
-    public class LocalUser
+    public partial class LocalUser : Model
     {
+        public string FullName { get; set; }
         public string Username { get; set; }
         public string Password { get; set; } // plain text for demo
-        public string Role { get; set; }     // store as string, parse later
+        public Role Role { get; set; } = Role.Werknemer;     // store as string, parse later
+        public bool IsActive { get; set; } = true;
+
+        public LocalUser(long id, string username, string password, Role role): base(id)
+        {
+            Username = username;
+            Password = password;
+            Role = role;
+
+        }
     }
 }

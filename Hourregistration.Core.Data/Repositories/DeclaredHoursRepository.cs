@@ -40,7 +40,7 @@ namespace Hourregistration.Core.Data.Repositories
             ];
         }
 
-        public DeclaredHours? Get(int id)
+        public DeclaredHours? Get(long id)
         {
             return declaredHoursList.FirstOrDefault(dh => dh.Id == id);
         }
@@ -68,14 +68,14 @@ namespace Hourregistration.Core.Data.Repositories
             declaredHoursList.Add(declaredHour);
             return declaredHour;
         }
-        public DeclaredHours Delete(int id)
+        public DeclaredHours Delete(long id)
         {
             DeclaredHours? existingDeclaredHour = Get(id) ?? throw new ArgumentException("Declared hour not found");
             declaredHoursList.Remove(existingDeclaredHour);
             return existingDeclaredHour;
         }
 
-        public Task<DeclaredHours?> GetAsync(int id)
+        public Task<DeclaredHours?> GetAsync(long id)
         {
             return Task.FromResult(Get(id));
         }
@@ -99,7 +99,7 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return Task.FromResult(Update(declaredHour));
         }
-        public Task<DeclaredHours> DeleteAsync(int id)
+        public Task<DeclaredHours> DeleteAsync(long id)
         {
             return Task.FromResult(Delete(id));
         }
@@ -107,7 +107,7 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return declaredHoursList4;
         }
-        public DeclaredHoursEmployee? GetEmployeeHour(int id)
+        public DeclaredHoursEmployee? GetEmployeeHour(long id)
         {
             return declaredHoursList4.FirstOrDefault(d => d.Id == id);
         }

@@ -51,7 +51,7 @@ namespace Hourregistration.App
 
             Page nextPage = parsedRole switch
             {
-                Role.Werknemer => ServiceHelper.GetService<DeclaratieHomeView>(),
+                Role.Werknemer => ServiceHelper.GetService<DeclarationHomeView>(),
                 Role.Opdrachtgever => CreateEmployeeOverviewPage(),
                 Role.AdministratieMedewerker => CreateEmployeeHoursOverviewPage(),
                 Role.Beheer => CreateEmployeeHoursOverviewPage(),

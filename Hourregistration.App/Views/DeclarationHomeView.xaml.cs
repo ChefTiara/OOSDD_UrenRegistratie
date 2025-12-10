@@ -6,13 +6,13 @@ using Microsoft.Maui.Controls; // for BindableLayout
 
 namespace Hourregistration.App.Views;
 
-public partial class DeclaratieHomeView : ContentPage
+public partial class DeclarationHomeView : ContentPage
 {
     private readonly IDraftDeclarationRepository _draftRepo;
 
     public List<Declaration> Drafts { get; set; } = new();
 
-    public DeclaratieHomeView(IDraftDeclarationRepository draftRepo)
+    public DeclarationHomeView(IDraftDeclarationRepository draftRepo)
     {
         InitializeComponent();
 

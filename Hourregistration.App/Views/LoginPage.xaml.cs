@@ -53,7 +53,7 @@ namespace Hourregistration.App
             {
                 Role.Werknemer => ServiceHelper.GetService<DeclaratieHomeView>(),
                 Role.Opdrachtgever => CreateEmployeeOverviewPage(),
-                Role.AdministratieMedewerker => CreateEmployeeHoursOverviewPage(),
+                Role.Administratiemedewerker => CreateEmployeeHoursOverviewPage(),
                 Role.Beheer => CreateEmployeeHoursOverviewPage(),
                 _ => null
             };

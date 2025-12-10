@@ -10,7 +10,7 @@ namespace Hourregistration.Core.Data.Repositories
         private readonly List<LocalUser> _users = [
             new LocalUser(1, "Wuser", "1234", Role.Werknemer),
             new LocalUser(2, "OGuser", "1234", Role.Opdrachtgever),
-            new LocalUser(3, "AMuser", "1234", Role.AdministratieMedewerker),
+            new LocalUser(3, "AMuser", "1234", Role.Administratiemedewerker),
             new LocalUser(4, "Buser", "1234", Role.Beheer)
         ];
 

@@ -37,16 +37,18 @@
               ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
             <Label Text="Naam" FontAttributes="Bold"/>
             <Label Grid.Column="1" Text="Functie" FontAttributes="Bold"/>
+            <Label Grid.Column="2" Text="Recente declaratie" FontAttributes="Bold"/>
         </Grid>
 
         <!-- Row 2: CollectionView (star row -> constrained -> scrolls) -->
         <CollectionView Grid.Row="2"
-                        ItemsSource="{Binding EmployeeHours}"
+                        ItemsSource="{Binding Users}"
                         SelectionMode="None"
                         HorizontalOptions="Fill"
                         VerticalOptions="Fill">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="m:DeclaredHoursEmployee">
+                <!-- use the wrapper type here -->
+                <DataTemplate x:DataType="vm:UserListItem">
                     <Grid HeightRequest="38"
                           MinimumHeightRequest="34"
                           ColumnSpacing="12"
@@ -54,11 +56,15 @@
                           HorizontalOptions="Fill"
                           VerticalOptions="Center"
                           ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
-                        <Label Text="{Binding FullName}"
+                        <Label Text="{Binding Username}"
                                VerticalOptions="Center"
                                LineBreakMode="TailTruncation"
                                MaxLines="1"/>
                         <Label Grid.Column="1" Text="{Binding Role}" VerticalOptions="Center"/>
+                        <Label Grid.Column="2"
+                               Text="{Binding LatestDeclarationDisplay}"
+                               TextColor="{Binding LatestDeclarationColor}"
+                               VerticalOptions="Center"/>
                         <Button Grid.Column="5"
                                 HeightRequest="12"
                                 WidthRequest="12"

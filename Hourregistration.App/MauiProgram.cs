@@ -28,8 +28,6 @@ namespace Hourregistration.App
             builder.Services.AddSingleton<IDeclarationRepository, DeclarationRepository>();
             builder.Services.AddSingleton<IDraftDeclarationRepository, DraftDeclarationRepository>();
             builder.Services.AddSingleton<DeclarationService>();
-            builder.Services.AddSingleton<DraftDeclarationRepository>();
-            builder.Services.AddSingleton<DeclarationRepository>();
 
             builder.Services.AddTransient<DeclaratieHomeView>();
             builder.Services.AddTransient<DeclarationPage>();

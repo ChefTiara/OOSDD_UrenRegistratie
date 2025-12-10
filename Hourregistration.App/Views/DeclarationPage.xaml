@@ -39,6 +39,7 @@
                                     <VerticalStackLayout Grid.Column="0">
                                         <Label Text="Datum" FontSize="12"/>
                                         <DatePicker Date="{Binding Datum}"
+                                                    Format="dd-MM-yyyy"
                                                     BackgroundColor="#F2F2F2"
                                                     TextColor="Black"
                                                     HeightRequest="40"/>

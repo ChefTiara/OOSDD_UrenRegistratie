@@ -92,6 +92,13 @@ public partial class DeclarationPage : ContentPage
                 return;
             }
 
+            if (row.AantalUren > 8 && row.Beschrijving == null)
+            {
+                FeedbackLabel.Text = "Voer een beschrijving voor uw uren in.";
+                FeedbackLabel.TextColor = Colors.Red;
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(row.Reden))
             {
                 FeedbackLabel.Text = "Selecteer een geldige reden.";
@@ -111,11 +118,12 @@ public partial class DeclarationPage : ContentPage
             var rowsForDate = group.Value;
 
             // STEP 3: Same date, same reason?
-            var duplicateReason = rowsForDate
+            bool hasDuplicateReason = rowsForDate
+                .Where(r => !string.IsNullOrWhiteSpace(r.Reden))
                 .GroupBy(r => r.Reden)
-                .FirstOrDefault(g => g.Key != null && g.Count() > 1);
+                .Any(g => g.Count() > 1);
 
-            if (duplicateReason != null)
+            if (hasDuplicateReason)
             {
                 FeedbackLabel.Text = "U kunt niet meerdere declaraties indienen met dezelfde datum en dezelfde reden.";
                 FeedbackLabel.TextColor = Colors.Red;
@@ -132,7 +140,7 @@ public partial class DeclarationPage : ContentPage
                 return;
             }
 
-            // STEP 5: If total > 8 ? require description for ALL rows on that date
+            // STEP 5: If total > 8 ? require description
             if (totalHours > 8)
             {
                 bool missingDesc = rowsForDate.Any(r => string.IsNullOrWhiteSpace(r.Beschrijving));

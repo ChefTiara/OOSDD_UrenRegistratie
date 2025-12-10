@@ -37,10 +37,6 @@
               ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
             <Label Text="Naam" FontAttributes="Bold"/>
             <Label Grid.Column="1" Text="Functie" FontAttributes="Bold"/>
-            <Label Grid.Column="2" Text="Datum" FontAttributes="Bold"/>
-            <Label Grid.Column="3" Text="Ingepland" FontAttributes="Bold"/>
-            <Label Grid.Column="4" Text="Uren" FontAttributes="Bold"/>
-            <Label Grid.Column="5"/>
         </Grid>
 
         <!-- Row 2: CollectionView (star row -> constrained -> scrolls) -->
@@ -51,21 +47,21 @@
                         VerticalOptions="Fill">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHoursEmployee">
-                    <Grid ColumnSpacing="12"
-                          Padding="4"
+                    <Grid HeightRequest="38"
+                          MinimumHeightRequest="34"
+                          ColumnSpacing="12"
+                          Padding="6, 4"
                           HorizontalOptions="Fill"
+                          VerticalOptions="Center"
                           ColumnDefinitions="2*,1.2*,1.2*,1.2*,0.8*,0.4*">
                         <Label Text="{Binding FullName}"
                                VerticalOptions="Center"
                                LineBreakMode="TailTruncation"
                                MaxLines="1"/>
                         <Label Grid.Column="1" Text="{Binding Role}" VerticalOptions="Center"/>
-                        <Label Grid.Column="2" Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" VerticalOptions="Center"/>
-                        <Label Grid.Column="3" Text="{Binding PlannedHours}" VerticalOptions="Center" MaxLines="1"/>
-                        <Label Grid.Column="4" Text="{Binding WorkedHours, StringFormat='{0}u'}" VerticalOptions="Center" FontAttributes="Bold"/>
                         <Button Grid.Column="5"
-                                HeightRequest="36"
-                                WidthRequest="36"
+                                HeightRequest="12"
+                                WidthRequest="12"
                                 BackgroundColor="Transparent"
                                 Padding="0"
                                 Clicked="OnEmployeeClicked"

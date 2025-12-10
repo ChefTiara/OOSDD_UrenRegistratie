@@ -58,25 +58,35 @@
                                    BackgroundColor="#F8F8F8">
 
                                 <VerticalStackLayout Spacing="5">
+                                    <HorizontalStackLayout Spacing="5">
+                                        <Label Text="{Binding Datum, StringFormat='Datum: {0:dd-MM-yyyy}'}"
+                                           FontSize="13" TextColor="Black"/>
 
-                                    <Label Text="{Binding Datum, StringFormat='Datum: {0:dd-MM-yyyy}'}"
+                                        <Label Text="{Binding AantalUren, StringFormat='Uren: {0}'}"
+                                           FontSize="13"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Spacing="5">
+                                        <Label Text="{Binding Reden, StringFormat='Reden: {0}'}"
                                            FontSize="13"/>
 
-                                    <Label Text="{Binding AantalUren, StringFormat='Uren: {0}'}"
+                                        <Label Text="{Binding Beschrijving, StringFormat='Omschrijving: {0}'}"
                                            FontSize="13"/>
-
-                                    <Label Text="{Binding Reden, StringFormat='Reden: {0}'}"
-                                           FontSize="13"/>
-
-                                    <Label Text="{Binding Beschrijving, StringFormat='Omschrijving: {0}'}"
-                                           FontSize="13"/>
-
-                                    <Button Text="Open concept"
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Spacing="5">
+                                        <Button Text="Open concept"
                                             Padding="5"
                                             CornerRadius="4"
                                             BackgroundColor="#A7C6E6"
                                             CommandParameter="{Binding}"
                                             Clicked="OnConceptOpenClicked"/>
+
+                                        <Button Text="Verwijder"
+                                            Padding="5"
+                                            CornerRadius="4"
+                                            BackgroundColor="#E6A8A8"
+                                            CommandParameter="{Binding}"
+                                            Clicked="OnConceptDeleteClicked"/>
+                                    </HorizontalStackLayout>
                                 </VerticalStackLayout>
 
                             </Frame>

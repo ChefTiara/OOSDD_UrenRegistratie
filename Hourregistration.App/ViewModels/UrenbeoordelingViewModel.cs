@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 
 namespace Hourregistration.App.ViewModels
@@ -43,9 +44,18 @@ namespace Hourregistration.App.ViewModels
         }
 
         [RelayCommand]
-        private void Approve(DeclaredHours item)
+        private async Task Approve(DeclaredHours item)
         {
             if (item is null) return;
+
+            // Confirm approval with the user
+            var confirmed = await (Application.Current?.MainPage?.DisplayAlert(
+                "Uren bevestigen",
+                $"Weet u zeker dat u deze uren wilt goedkeuren voor {item.EmployeeName} ({item.ProjectName})?",
+                "Bevestigen",
+                "Annuleren") ?? Task.FromResult(false));
+
+            if (!confirmed) return;
 
             item.State = DeclaredState.Approved;
             item.ReviewedOn = DateOnly.FromDateTime(DateTime.Now);
@@ -57,9 +67,18 @@ namespace Hourregistration.App.ViewModels
         }
 
         [RelayCommand]
-        private void Reject(DeclaredHours item)
+        private async Task Reject(DeclaredHours item)
         {
             if (item is null) return;
+
+            // Confirm rejection with the user
+            var confirmed = await (Application.Current?.MainPage?.DisplayAlert(
+                "Uren afwijzen",
+                $"Weet u zeker dat u deze uren wilt afwijzen voor {item.EmployeeName} ({item.ProjectName})?",
+                "Afwijzen",
+                "Annuleren") ?? Task.FromResult(false));
+
+            if (!confirmed) return;
 
             item.State = DeclaredState.Denied;
             item.ReviewedOn = DateOnly.FromDateTime(DateTime.Now);

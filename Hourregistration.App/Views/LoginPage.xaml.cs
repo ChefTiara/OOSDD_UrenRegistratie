@@ -1,5 +1,6 @@
 ﻿using Hourregistration.Core.Models;
 using Hourregistration.App.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Hourregistration.App.Views;
 
@@ -18,8 +19,11 @@ public partial class LoginPage : ContentPage
 
     private async void OnOpdrachtgeverClicked(object sender, EventArgs e)
     {
-        SessionManager.CurrentRole = Role.Opdrachtgever;
-        await Navigation.PushAsync(new UrenbeoordelingPage());
+        var page = Handler?.MauiContext?.Services.GetRequiredService<UrenbeoordelingPage>();
+        if (page is not null)
+            await Navigation.PushAsync(page);
+        else
+            await DisplayAlert("Error", "Kon UrenbeoordelingPage niet laden.", "OK");
     }
 
     private async void OnAdministratieClicked(object sender, EventArgs e)

@@ -62,7 +62,7 @@ namespace Hourregistration.Core.Data.Repositories
                     "Jannet M.",
                     submittedOn: new DateOnly(2025, 11, 10),
                     reviewedOn: new DateOnly(2025, 11, 11),
-                    state: DeclaredState.Approved),
+                    state: DeclaredState.Akkoord),
                 new DeclaredHours(
                     29,
                     new DateOnly(2025, 11, 11),
@@ -72,7 +72,7 @@ namespace Hourregistration.Core.Data.Repositories
                     "Jens K.",
                     submittedOn: new DateOnly(2025, 11, 11),
                     reviewedOn: new DateOnly(2025, 11, 12),
-                    state: DeclaredState.Denied),
+                    state: DeclaredState.Geweigerd),
             new DeclaredHours(7, 
                 new DateOnly(2025, 11, 11), 
                 new TimeOnly(8, 20), 

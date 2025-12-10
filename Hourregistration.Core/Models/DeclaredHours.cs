@@ -15,9 +15,8 @@ namespace Hourregistration.Core.Models
         public string? Description { get; set; } = string.Empty;
         public long UserId { get; set; } = 0;
         public LocalUser User { get; set; } = null!;
-        public DeclaredState State { get; set; } = DeclaredState.Verzonden;
         public string EmployeeName { get; set; }
-        public DeclaredState State { get; set; } = DeclaredState.Pending;
+        public DeclaredState State { get; set; } = DeclaredState.Verzonden;
         public DateOnly SubmittedOn { get; set; }
         public DateOnly? ReviewedOn { get; set; }
 
@@ -35,17 +34,17 @@ namespace Hourregistration.Core.Models
             }
         }
 
-        public DeclaredHours(long id, DateOnly date, TimeOnly startTime, TimeOnly endTime, string projectName, string description, long userId) : base(id)
         public DeclaredHours(
-            int id,
+            long id,
             DateOnly date,
             TimeOnly startTime,
             TimeOnly endTime,
             string projectName,
+            string description,
             string employeeName = "Onbekend",
             DateOnly? submittedOn = null,
             DateOnly? reviewedOn = null,
-            DeclaredState state = DeclaredState.Pending) : base(id)
+            DeclaredState state = DeclaredState.Verzonden) : base(id)
         {
             Date = date;
             StartTime = startTime;

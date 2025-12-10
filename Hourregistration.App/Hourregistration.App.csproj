@@ -70,18 +70,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\DeclarationHomeView.xaml.cs">
+	    <DependentUpon>DeclarationHomeView.xaml</DependentUpon>
+	  </Compile>
 		<Compile Update="Views\UrenbeoordelingPage.xaml.cs">
 			<DependentUpon>UrenbeoordelingPage.xaml</DependentUpon>
 		</Compile>
-	</ItemGroup>
-	<ItemGroup>
 	  <Compile Update="Views\DeclarationPage.xaml.cs">
 	    <DependentUpon>DeclarationPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <MauiXaml Update="Views\DeclaratieHomeView.xaml">
+	  <MauiXaml Update="Views\DeclarationHomeView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EmployeeHoursOverviewView.xaml">

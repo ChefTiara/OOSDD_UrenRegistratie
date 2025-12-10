@@ -58,6 +58,14 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return declaredHoursList;
         }
+        public DeclaredHours GetLatestDeclarationFromUserId(long userId)
+        {
+            return declaredHoursList
+                .Where(dh => dh.UserId == userId)
+                .OrderByDescending(dh => dh.Date)
+                .ThenByDescending(dh => dh.CreatedAt)
+                .First();
+        }
         public DeclaredHours Add(DeclaredHours declaredHour)
         {
             declaredHoursList.Add(declaredHour);
@@ -92,6 +100,10 @@ namespace Hourregistration.Core.Data.Repositories
         public Task<List<DeclaredHours>> GetAllAsync()
         {
             return Task.FromResult(GetAll());
+        }
+        public Task<DeclaredHours> GetLatestDeclarationFromUserIdAsync(long userId)
+        {
+            return Task.FromResult(GetLatestDeclarationFromUserId(userId));
         }
         public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
         {

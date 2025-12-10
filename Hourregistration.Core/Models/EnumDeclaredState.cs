@@ -1,5 +1,4 @@
-﻿
-namespace Hourregistration.Core.Models
+﻿namespace Hourregistration.Core.Models
 {
     public enum DeclaredState : ushort
     {

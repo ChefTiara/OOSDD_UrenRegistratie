@@ -6,38 +6,55 @@ namespace Hourregistration.Core.Data.Repositories
     public class DeclaredHoursRepository : IDeclaredHoursRepository
     {
         private readonly List<DeclaredHours> declaredHoursList;
-        public DeclaredHoursRepository()
+        private readonly List<DeclaredHoursEmployee> declaredHoursList4;
+        private readonly ILocalUserRepository _localUserRepository;
+        public DeclaredHoursRepository(ILocalUserRepository localUserRepository)
         {
+            _localUserRepository = localUserRepository;
             declaredHoursList = [
-                // Pending examples
-                new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "Angela de Wit"),
-                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp", "Boris Hout"),
-                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "Abel van Rutje"),
-
-                // Reviewed examples
                 new DeclaredHours(
-                    4,
-                    new DateOnly(2025, 11, 6),
-                    new TimeOnly(8, 20),
-                    new TimeOnly(16, 20),
-                    "Boodschappenapp",
-                    "Angela de Wit",
-                    submittedOn: new DateOnly(2025, 11, 6),
-                    reviewedOn: new DateOnly(2025, 11, 7),
-                    state: DeclaredState.Approved),
+                    1, 
+                    new DateOnly(2025, 11, 3), 
+                    new TimeOnly(8, 20), 
+                    new TimeOnly(16, 20), 
+                    "Boodschappenapp", 
+                    "Boodschappen", 0) 
+                { User = _localUserRepository.Get(0).Result! },
                 new DeclaredHours(
-                    5,
-                    new DateOnly(2025, 11, 7),
-                    new TimeOnly(9, 20),
+                    2, 
+                    new DateOnly(2025, 11, 4), 
+                    new TimeOnly(7, 20), 
+                    new TimeOnly(18, 20), 
+                    "Boodschappenapp", 
+                    "Het is etenstijd waar ben je >:(", 1) 
+                { User = _localUserRepository.Get(1).Result! },
+                new DeclaredHours(
+                    3, 
+                    new DateOnly(2025, 11, 5), 
+                    new TimeOnly(8, 20), 
                     new TimeOnly(17, 20),
-                    "Boodschappenapp",
-                    "Boris Hout",
-                    submittedOn: new DateOnly(2025, 11, 7),
-                    reviewedOn: new DateOnly(2025, 11, 8),
-                    state: DeclaredState.Denied),
-
+                    "Boodschappenapp", 
+                    "", 0) 
+                { User = _localUserRepository.Get(0).Result! },
                 new DeclaredHours(
-                    6,
+                    4, 
+                    new DateOnly(2025, 11, 6), 
+                    new TimeOnly(8, 20), 
+                    new TimeOnly(16, 20), 
+                    "Boodschappenapp", 
+                    "", 2) 
+                { User = _localUserRepository.Get(2).Result! },
+                new DeclaredHours(
+                    5, 
+                    new DateOnly(2025, 11, 7), 
+                    new TimeOnly(9, 20), 
+                    new TimeOnly(17, 20), 
+                    "Boodschappenapp", 
+                    "Werk jij op vrijdag??", 1) 
+                { User = _localUserRepository.Get(1).Result! },
+
+            new DeclaredHours(
+                    28,
                     new DateOnly(2025, 11, 10),
                     new TimeOnly(9, 20),
                     new TimeOnly(17, 20),
@@ -47,7 +64,7 @@ namespace Hourregistration.Core.Data.Repositories
                     reviewedOn: new DateOnly(2025, 11, 11),
                     state: DeclaredState.Approved),
                 new DeclaredHours(
-                    7,
+                    29,
                     new DateOnly(2025, 11, 11),
                     new TimeOnly(8, 20),
                     new TimeOnly(17, 20),
@@ -57,17 +74,48 @@ namespace Hourregistration.Core.Data.Repositories
                     reviewedOn: new DateOnly(2025, 11, 12),
                     state: DeclaredState.Denied),
                 new DeclaredHours(
-                    8,
+                    30,
                     new DateOnly(2025, 11, 12),
                     new TimeOnly(9, 20),
                     new TimeOnly(17, 20),
                     "Urenregistratie",
                     "Maaike V.",
                     submittedOn: new DateOnly(2025, 11, 12))
+                22,
+                "Finn",
+                "Smits",
+                "Medewerker",
+                13,
+                new DateOnly(2025, 11, 17),
+                new TimeOnly(8, 20),
+                new TimeOnly(16, 20)),
+                new DeclaredHours(6,
+                new DateOnly(2025, 11, 10), 
+                new TimeOnly(9, 20), 
+                new TimeOnly(17, 20), 
+                "Urenregistratie", 
+                "", 3) 
+                { State = DeclaredState.Akkoord, User = _localUserRepository.Get(3).Result! },
+                new DeclaredHours(7, 
+                new DateOnly(2025, 11, 11), 
+                new TimeOnly(8, 20), 
+                new TimeOnly(17, 20), 
+                "Boodschappenapp", 
+                "", 0) 
+                { User = _localUserRepository.Get(0).Result! },
+            new DeclaredHours(
+                8, 
+                new DateOnly(2025, 11, 12), 
+                new TimeOnly(9, 20), 
+                new TimeOnly(17, 20), 
+                "Urenregistratie", 
+                "", 2) 
+            { State = DeclaredState.Geweigerd, User = _localUserRepository.Get(2).Result! },
             ];
+
         }
 
-        public DeclaredHours? Get(int id)
+        public DeclaredHours? Get(long id)
         {
             return declaredHoursList.FirstOrDefault(dh => dh.Id == id);
         }
@@ -91,11 +139,53 @@ namespace Hourregistration.Core.Data.Repositories
             declaredHoursList.Add(declaredHour);
             return declaredHour;
         }
-        public DeclaredHours Delete(int id)
+        public DeclaredHours Delete(long id)
         {
             DeclaredHours? existingDeclaredHour = Get(id) ?? throw new ArgumentException("Declared hour not found");
             declaredHoursList.Remove(existingDeclaredHour);
             return existingDeclaredHour;
+        }
+
+        public Task<DeclaredHours?> GetAsync(long id)
+        {
+            return Task.FromResult(Get(id));
+        }
+        public Task<List<DeclaredHours>> GetByUserIdAsync(long userId)
+        {
+            return Task.FromResult(GetByUserId(userId));
+        }
+        public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
+        {
+            return Task.FromResult(GetByState(state));
+        }
+        public Task<List<DeclaredHours>> GetAllAsync()
+        {
+            return Task.FromResult(GetAll());
+        }
+        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
+        {
+            return Task.FromResult(Add(declaredHour));
+        }
+        public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour)
+        {
+            return Task.FromResult(Update(declaredHour));
+        }
+        public Task<DeclaredHours> DeleteAsync(long id)
+        {
+            return Task.FromResult(Delete(id));
+        }
+        public List<DeclaredHoursEmployee> GetAllEmployeeHours()
+        {
+            return declaredHoursList4;
+        }
+        public DeclaredHoursEmployee? GetEmployeeHour(long id)
+        {
+            return declaredHoursList4.FirstOrDefault(d => d.Id == id);
+        }
+        public DeclaredHoursEmployee AddEmployeeHour(DeclaredHoursEmployee hour)
+        {
+            declaredHoursList4.Add(hour);
+            return hour;
         }
     }
 }

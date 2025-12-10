@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hourregistration.App.Models
+namespace Hourregistration.Core.Models
 {
     public class LocalUser
     {

@@ -1,5 +1,4 @@
-﻿using Hourregistration.App.Models;
-using Hourregistration.Core.Interfaces.Repositories;
+﻿using Hourregistration.Core.Interfaces.Repositories;
 using Hourregistration.Core.Models;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,6 +4,7 @@ using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Hourregistration.App.ViewModels
 {
@@ -11,6 +12,17 @@ namespace Hourregistration.App.ViewModels
     {
         private readonly IDeclaredHoursService _declaredHoursService;
         private bool _suppressApply = false;
+
+        // New: page title that the view binds to
+        private string _pageTitle = "Urenoverzicht";
+        public string PageTitle
+        {
+            get => _pageTitle;
+            set => SetProperty(ref _pageTitle, value);
+        }
+
+        // New: optional client/user filter
+        public long? FilterUserId { get; private set; }
 
         // show only the currently visible week's items
         public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = [];
@@ -163,6 +175,9 @@ namespace Hourregistration.App.ViewModels
         {
             _declaredHoursService = declaredHoursService;
 
+            // initial title (can be overridden when navigated-to)
+            PageTitle = "Urenoverzicht";
+
             // Project filter intentionally empty for now
             ProjectOptions = new ObservableCollection<string>();
 
@@ -236,6 +251,15 @@ namespace Hourregistration.App.ViewModels
             // SelectedDate will be set to null by IsDateFilterEnabled setter and ApplyWeek will run
         }
 
+        // Public helper to set a client/user filter and optionally set the title
+        public void SetUserFilter(long userId, string? displayName = null)
+        {
+            FilterUserId = userId;
+            PageTitle = string.IsNullOrWhiteSpace(displayName) ? $"Urenoverzicht (ID: {userId})" : $"Urenoverzicht - {displayName}";
+            // reload current week
+            _ = ApplyWeek();
+        }
+
         // Load items for the current week and notify UI
         private async Task ApplyWeek()
         {
@@ -261,7 +285,11 @@ namespace Hourregistration.App.ViewModels
             _suppressApply = false;
 
             // apply selected filters
-            var filtered = items.AsEnumerable();
+            IEnumerable<DeclaredHours> filtered = items.AsEnumerable();
+
+            // apply client filter if provided
+            if (FilterUserId.HasValue)
+                filtered = filtered.Where(i => i.UserId == FilterUserId.Value);
 
             var selectedProject = SelectedProjectOption ?? "Alle";
             if (selectedProject != "Alle")

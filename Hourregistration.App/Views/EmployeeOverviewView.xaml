@@ -5,18 +5,10 @@
              xmlns:m="clr-namespace:Hourregistration.Core.Models;assembly=Hourregistration.Core"
              x:Class="Hourregistration.App.Views.EmployeeOverviewView"
              x:DataType="vm:EmployeeOverviewViewModel"
-             Title="Urenoverzicht">
+             Title="{Binding PageTitle}">
 
     <!-- Grid with an extra Auto row for the sort button -->
     <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*,Auto" ColumnDefinitions="*" RowSpacing="8">
-        <!-- Title -->
-        <Label Grid.Row="0"
-               Text="Urenoverzicht"
-               FontAttributes="Bold"
-               FontSize="18"
-               VerticalOptions="Center"
-               HorizontalOptions="Center" />
-
         <!-- Button bar replaced with a 3-column Grid:
              Column 0: left buttons (Auto)
              Column 1: flexible spacer (*)

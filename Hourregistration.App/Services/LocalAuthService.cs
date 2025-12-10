@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Hourregistration.App.Repositories;
-using Hourregistration.App.Models;
+using Hourregistration.Core.Data.Repositories;
+using Hourregistration.Core.Models;
 
 namespace Hourregistration.App.Services
 {

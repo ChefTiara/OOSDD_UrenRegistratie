@@ -13,6 +13,7 @@ namespace Hourregistration.Core.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Role { get; set; }
+        public long UserId { get; set; } = 0;
 
         public DateOnly Date { get; set; }
         public TimeOnly StartTime { get; set; }
@@ -28,6 +29,7 @@ namespace Hourregistration.Core.Models
             string firstName,
             string lastName,
             string role,
+            long userId,
             DateOnly date,
             TimeOnly startTime,
             TimeOnly endTime
@@ -36,6 +38,7 @@ namespace Hourregistration.Core.Models
             FirstName = firstName;
             LastName = lastName;
             Role = role;
+            UserId = userId;
             Date = date;
             StartTime = startTime;
             EndTime = endTime;

@@ -17,9 +17,9 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.Get(id);
         }
-        public List<DeclaredHours> GetByClientId(long clientId)
+        public List<DeclaredHours> GetByUserId(long userId)
         {
-            return _declaredHoursRepository.GetByClientId(clientId);
+            return _declaredHoursRepository.GetByUserId(userId);
         }
         public List<DeclaredHours> GetByState(DeclaredState state)
         {
@@ -46,9 +46,9 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.GetAsync(id);
         }
-        public Task<List<DeclaredHours>> GetByClientIdAsync(long clientId)
+        public Task<List<DeclaredHours>> GetByUserIdAsync(long userId)
         {
-            return _declaredHoursRepository.GetByClientIdAsync(clientId);
+            return _declaredHoursRepository.GetByUserIdAsync(userId);
         }
         public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
         {

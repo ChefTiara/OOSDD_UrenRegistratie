@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Hourregistration.Core.Data.Repositories;
+using Hourregistration.Core.Interfaces.Repositories;
 using Hourregistration.Core.Models;
 
 namespace Hourregistration.App.Services
 {
     public class LocalAuthService
     {
-        private readonly LocalUserRepository _repo = new();
+        private readonly ILocalUserRepository _localUserRepository = ServiceHelper.GetService<ILocalUserRepository>()!;
 
-        public (bool ok, string role) Authenticate(string username, string password)
+        public (bool ok, string? role) Authenticate(string username, string password)
         {
-            LocalUser user = _repo.Authenticate(username, password);
+            LocalUser? user = _localUserRepository.Authenticate(username, password);
 
             if (user == null)
                 return (false, null);

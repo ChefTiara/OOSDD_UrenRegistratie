@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Hourregistration.Core.Data.Repositories
 {
-    public class LocalUserRepository
+    public class LocalUserRepository : ILocalUserRepository
     {
         private readonly List<LocalUser> _users = [
             new LocalUser(1, "Wuser", "1234", Role.Werknemer),

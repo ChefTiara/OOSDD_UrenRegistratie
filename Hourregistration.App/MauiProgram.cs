@@ -25,6 +25,12 @@ namespace Hourregistration.App
 
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
+            builder.Services.AddSingleton<IDeclarationRepository, DeclarationRepository>();
+            builder.Services.AddSingleton<IDraftDeclarationRepository, DraftDeclarationRepository>();
+            builder.Services.AddSingleton<DeclarationService>();
+
+            builder.Services.AddTransient<DeclaratieHomeView>();
+            builder.Services.AddTransient<DeclarationPage>();
 
             builder.Services.AddTransient<EmployeeHoursOverviewViewModel>().AddTransient<EmployeeHoursOverviewView>(); ;
             builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();

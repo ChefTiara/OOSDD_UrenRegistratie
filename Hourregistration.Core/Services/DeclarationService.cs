@@ -4,11 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Hourregistration.Core.Interfaces.Repositories;
 
 namespace Hourregistration.Core.Services
 {
     public class DeclarationService
     {
+        private readonly IDeclarationRepository _declarationRepo;
+        private readonly IDraftDeclarationRepository _draftRepo;
+
+        public DeclarationService(
+            IDeclarationRepository declarationRepo,
+            IDraftDeclarationRepository draftRepo)
+        {
+            _declarationRepo = declarationRepo;
+            _draftRepo = draftRepo;
+        }
+
+
         public (bool Success, string Message) Indienen(Declaration declaratie)
         {
             if (declaratie.AantalUren <= 0)
@@ -20,14 +33,24 @@ namespace Hourregistration.Core.Services
             if (declaratie.Datum == default)
                 return (false, "Selecteer een geldige datum.");
 
-            if (declaratie.Reden == default)
+            if (string.IsNullOrWhiteSpace(declaratie.Reden))
                 return (false, "Selecteer een geldige reden.");
+
+            _declarationRepo.Add(declaratie);
 
             return (true, "Declaratie is succesvol ingediend!");
         }
-        public (bool Success, string Message) Verwijderen(Declaration declaratie)
+
+
+        public void OpslaanAlsDraft(Declaration declaratie)
         {
-            return (true, "Declaratie is succesvol verwijderd!");
+            _draftRepo.AddDraft(declaratie);
+        }
+
+
+        public void VerwijderenDraft(Declaration declaratie)
+        {
+            _draftRepo.DeleteDraft(declaratie);
         }
     }
 }

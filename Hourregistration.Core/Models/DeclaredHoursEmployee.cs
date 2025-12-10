@@ -25,7 +25,7 @@ namespace Hourregistration.Core.Models
         public string PlannedHours => $"{StartTime:HH\\:mm}-{EndTime:HH\\:mm}";
 
         public DeclaredHoursEmployee(
-            int id,
+            long id,
             string firstName,
             string lastName,
             string role,

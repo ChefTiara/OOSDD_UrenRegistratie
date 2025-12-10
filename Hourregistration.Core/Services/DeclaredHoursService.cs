@@ -13,7 +13,7 @@ namespace Hourregistration.Core.Services
             _declaredHoursRepository = declaredHoursRepository;
         }
 
-        public DeclaredHours? Get(int id)
+        public DeclaredHours? Get(long id)
         {
             return _declaredHoursRepository.Get(id);
         }
@@ -37,12 +37,12 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.Update(declaredHour);
         }
-        public DeclaredHours Delete(int id)
+        public DeclaredHours Delete(long id)
         {
             return _declaredHoursRepository.Delete(id);
         }
 
-        public Task<DeclaredHours?> GetAsync(int id)
+        public Task<DeclaredHours?> GetAsync(long id)
         {
             return _declaredHoursRepository.GetAsync(id);
         }
@@ -66,7 +66,7 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.UpdateAsync(declaredHour);
         }
-        public Task<DeclaredHours> DeleteAsync(int id)
+        public Task<DeclaredHours> DeleteAsync(long id)
         {
             return _declaredHoursRepository.DeleteAsync(id);
         }

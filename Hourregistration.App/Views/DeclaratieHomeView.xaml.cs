@@ -58,4 +58,16 @@ public partial class DeclaratieHomeView : ContentPage
             await Navigation.PushAsync(page);
         }
     }
+    private void OnConceptDeleteClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.CommandParameter is Declaration concept)
+        {
+            _draftRepo.DeleteDraft(concept);
+
+            // Refresh UI
+            Drafts = _draftRepo.GetAllDrafts();
+            BindableLayout.SetItemsSource(DraftsList, null);
+            BindableLayout.SetItemsSource(DraftsList, Drafts);
+        }
+    }
 }

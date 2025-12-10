@@ -11,6 +11,7 @@ public partial class DeclarationPage : ContentPage
     private readonly DeclarationService _service;
 
     public ICommand DeleteRowCommand { get; }
+    private Declaration? _loadedDraft;
 
     // Dynamische collection of rows
     public ObservableCollection<DeclarationRowModel> Rows { get; set; }
@@ -108,6 +109,10 @@ public partial class DeclarationPage : ContentPage
             }
         }
 
+        // Deleting original draft if declaration is being submitted 
+        if (_loadedDraft != null)
+            _service.VerwijderenDraft(_loadedDraft);
+
         await Navigation.PopAsync();
     }
 
@@ -135,6 +140,10 @@ public partial class DeclarationPage : ContentPage
             _service.VerwijderenDraft(declaratie);
         }
 
+        // Deleting original draft if declaration came from draft
+        if (_loadedDraft != null)
+            _service.VerwijderenDraft(_loadedDraft);
+
         FeedbackLabel.Text = "Concept succesvol verwijderd!";
         FeedbackLabel.TextColor = Colors.Green;
 
@@ -144,6 +153,8 @@ public partial class DeclarationPage : ContentPage
     // Called when opening an existing draft
     public void LoadFromDraft(Declaration draft)
     {
+        _loadedDraft = draft; // remembering which draft is being edited 
+
         Rows.Clear();
 
         Rows.Add(new DeclarationRowModel

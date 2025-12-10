@@ -79,7 +79,8 @@
                        Margin="0,16,0,0" />
 
                 <CollectionView ItemsSource="{Binding ReviewedDeclarations}"
-                                SelectionMode="None">
+                                SelectionMode="None"
+                                ItemsUpdatingScrollMode="KeepScrollOffset">
                     <CollectionView.Header>
                         <Grid ColumnDefinitions="2*,2*,2*,1.2*,1.2*,1.2*,1*"
                               Padding="10,6"

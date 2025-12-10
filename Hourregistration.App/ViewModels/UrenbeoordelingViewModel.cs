@@ -39,7 +39,7 @@ namespace Hourregistration.App.ViewModels
             var approved = _declaredHoursService.GetByState(DeclaredState.Approved);
             var denied = _declaredHoursService.GetByState(DeclaredState.Denied);
 
-            foreach (var d in approved.Concat(denied))
+            foreach (var d in approved.Concat(denied).OrderByDescending(ReviewedSortKey))
                 ReviewedDeclarations.Add(d);
         }
 
@@ -62,8 +62,7 @@ namespace Hourregistration.App.ViewModels
             _declaredHoursService.Update(item);
 
             PendingDeclarations.Remove(item);
-            if (!ReviewedDeclarations.Contains(item))
-                ReviewedDeclarations.Add(item);
+            AddReviewedOrdered(item);
         }
 
         [RelayCommand]
@@ -85,8 +84,26 @@ namespace Hourregistration.App.ViewModels
             _declaredHoursService.Update(item);
 
             PendingDeclarations.Remove(item);
-            if (!ReviewedDeclarations.Contains(item))
-                ReviewedDeclarations.Add(item);
+            AddReviewedOrdered(item);
+        }
+
+        private void AddReviewedOrdered(DeclaredHours item)
+        {
+            if (item is null) return;
+
+            // If already present, leave it in place to avoid extra UI churn
+            if (ReviewedDeclarations.Contains(item))
+                return;
+
+            // Insert at top so existing items visually slide down
+            ReviewedDeclarations.Insert(0, item);
+        }
+
+        private static DateOnly ReviewedSortKey(DeclaredHours d)
+        {
+            if (d.ReviewedOn is DateOnly reviewed)
+                return reviewed;
+            return d.SubmittedOn;
         }
     }
 }

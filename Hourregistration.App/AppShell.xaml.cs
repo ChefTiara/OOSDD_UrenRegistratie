@@ -6,7 +6,6 @@
         {
             InitializeComponent();
 
-            /// Routing.RegisterRoute(nameof(TemplateView), typeof(TemplateView));
         }
     }
 }

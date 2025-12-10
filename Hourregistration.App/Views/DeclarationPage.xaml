@@ -2,25 +2,140 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hourregistration.App.Views.DeclarationPage"
-             Title="Declaratie pagina">
+             x:Name="declarationPage"
+             Title="Urenregistratie concept">
 
-    <VerticalStackLayout Padding="20" Spacing="10">
-        <Label Text="Aantal gewerkte uren" Margin="0,20,0,0"/>
-        <Entry x:Name="UrenEntry" Keyboard="Numeric" />
+    <VerticalStackLayout Padding="20" Spacing="20">
 
-        <Label Text="Datum" />
-        <DatePicker x:Name="DatumPicker" />
+        <!-- Title -->
+        <Label Text="Declaratie concept"
+               FontSize="22"
+               FontAttributes="Bold" />
 
-        <Button 
-            Text="Indienen"
-            Margin="0,30,0,0"
-            Clicked="OnIndienenClicked" />
+        <!-- Big box -->
+        <Border Stroke="Black"
+                StrokeThickness="1"
+                BackgroundColor="White"
+                Padding="15"
+                HeightRequest="400">
 
-        <Label 
-            x:Name="FeedbackLabel"
-            TextColor="Red"
-            Margin="0,20,0,0" />
+            <ScrollView>
+                <VerticalStackLayout Spacing="15">
 
-        <Button Text="Terug naar Login (uitloggen)" Clicked="OnLogout" />
+                    <!-- Dynamic rows -->
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Rows}"
+                                         x:Name="InputContainer"
+                                         Spacing="10">
+
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <!-- Grid-based declaration row -->
+                                <Grid ColumnSpacing="10"
+                                      Padding="5"
+                                      HorizontalOptions="Fill"
+                                      ColumnDefinitions="120, 80, 120, *, 40">
+
+                                    <!-- Date -->
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="Datum" FontSize="12"/>
+                                        <DatePicker Date="{Binding Datum}"
+                                                    Format="dd-MM-yyyy"
+                                                    BackgroundColor="#F2F2F2"
+                                                    TextColor="Black"
+                                                    HeightRequest="40"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Hours -->
+                                    <VerticalStackLayout Grid.Column="1">
+                                        <Label Text="Aantal uren" FontSize="12"/>
+                                        <Entry Text="{Binding AantalUren}"
+                                               Keyboard="Numeric"
+                                               BackgroundColor="#F2F2F2"
+                                               TextColor="Black"
+                                               Placeholder="0"
+                                               HeightRequest="40"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Reason -->
+                                    <VerticalStackLayout Grid.Column="2">
+                                        <Label Text="Reden" FontSize="12"/>
+                                        <Picker SelectedItem="{Binding Reden}"
+                                                BackgroundColor="#F2F2F2"
+                                                TextColor="Black"
+                                                HeightRequest="40">
+                                            <Picker.Items>
+                                                <x:String>Werk</x:String>
+                                                <x:String>Verlof</x:String>
+                                                <x:String>Ziek</x:String>
+                                            </Picker.Items>
+                                        </Picker>
+                                    </VerticalStackLayout>
+
+                                    <!-- Description -->
+                                    <VerticalStackLayout Grid.Column="3">
+                                        <Label Text="Beschrijving" FontSize="12"/>
+                                        <Entry Text="{Binding Beschrijving}"
+                                               BackgroundColor="#F2F2F2"
+                                               TextColor="Black"
+                                               Placeholder="Omschrijving..."
+                                               HeightRequest="40"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Delete Row Button -->
+                                    <Button Grid.Column="4"
+                                            Text="X"
+                                            BackgroundColor="#FFB3B3"
+                                            TextColor="Black"
+                                            FontAttributes="Bold"
+                                            CornerRadius="4"
+                                            Command="{Binding Source={x:Reference declarationPage}, Path=DeleteRowCommand}"
+                                            CommandParameter="{Binding}" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <!-- Add (+) button -->
+                    <Button Text="+"
+                            FontSize="18"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            HorizontalOptions="Center"
+                            Clicked="OnAddRowClicked"/>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!-- Bottom buttons -->
+        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+
+            <Button Grid.Column="0"
+                    Text="Declaratie verwijderen"
+                    BackgroundColor="#E6A8A8"
+                    TextColor="Black"
+                    CornerRadius="6"
+                    Clicked="OnVerwijderenClicked"/>
+
+            <Button Grid.Column="1"
+                    Text="Opslaan als concept"
+                    BackgroundColor="#A7D3A7"
+                    TextColor="Black"
+                    CornerRadius="6"
+                    Clicked="OnOpslaanAlsConceptClicked"/>
+
+            <Button Grid.Column="2"
+                    Text="Declaratie indienen"
+                    BackgroundColor="#A7C6E6"
+                    TextColor="Black"
+                    CornerRadius="6"
+                    Clicked="OnIndienenClicked"/>
+        </Grid>
+
+        <!-- Feedback -->
+        <Label x:Name="FeedbackLabel"
+               FontSize="14"
+               TextColor="Red"
+               HorizontalOptions="Center"/>
+
     </VerticalStackLayout>
 </ContentPage>

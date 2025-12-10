@@ -2,18 +2,160 @@
 using CommunityToolkit.Mvvm.Input;
 using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
-using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Hourregistration.App.ViewModels
 {
     public partial class EmployeeOverviewViewModel : BaseViewModel
     {
         private readonly IDeclaredHoursService _declaredHoursService;
+        private bool _suppressApply = false;
+
+        // New: page title that the view binds to
+        private string _pageTitle = "Urenoverzicht";
+        public string PageTitle
+        {
+            get => _pageTitle;
+            set => SetProperty(ref _pageTitle, value);
+        }
+
+        // New: optional client/user filter
+        public long? FilterUserId { get; private set; }
 
         // show only the currently visible week's items
         public ObservableCollection<DeclaredHours> DeclaredHoursList { get; set; } = [];
+
+        // Filter pickers (dropdowns) - project filter intentionally empty for now
+        private ObservableCollection<string> _projectOptions = [];
+        public ObservableCollection<string> ProjectOptions
+        {
+            get => _projectOptions;
+            set
+            {
+                if (ReferenceEquals(_projectOptions, value)) return;
+                _projectOptions = value;
+                OnPropertyChanged(nameof(ProjectOptions));
+            }
+        }
+
+        private ObservableCollection<string> _stateOptions = [];
+        public ObservableCollection<string> StateOptions
+        {
+            get => _stateOptions;
+            set
+            {
+                if (ReferenceEquals(_stateOptions, value)) return;
+                _stateOptions = value;
+                OnPropertyChanged(nameof(StateOptions));
+            }
+        }
+
+        // Date filter: use a DatePicker (select a date) and allow clearing the filter.
+        // SelectedDate is nullable — null == "All" (no date filter)
+        private DateTime? _selectedDate;
+        public DateTime? SelectedDate
+        {
+            get => _selectedDate;
+            private set
+            {
+                if (_selectedDate == value) return;
+                _selectedDate = value;
+                OnPropertyChanged(nameof(SelectedDate));
+                OnPropertyChanged(nameof(SelectedDateNonNull));
+            }
+        }
+
+        // Backing for DatePicker binding: non-nullable DateTime used by the control.
+        // Setting this enables the date filter.
+        public DateTime SelectedDateNonNull
+        {
+            get => SelectedDate ?? DateTime.Today;
+            set
+            {
+                // If we're making programmatic updates (initialization or clearing during navigation),
+                // don't enable the date filter or run ApplyWeek. Use _suppressApply to signal that.
+                if (_suppressApply)
+                {
+                    // update backing value so DatePicker shows the desired date,
+                    // but do not treat this as a user selection.
+                    _selectedDate = value;
+                    OnPropertyChanged(nameof(SelectedDate));
+                    OnPropertyChanged(nameof(SelectedDateNonNull));
+                    return;
+                }
+
+                // if the same date and filter already enabled, nothing to do
+                if (SelectedDate == value && _isDateFilterEnabled) return;
+
+                // enable date filter and update backing value
+                _isDateFilterEnabled = true;
+                SelectedDate = value;
+
+                // notify both properties (DatePicker reading SelectedDateNonNull, and the toggle)
+                OnPropertyChanged(nameof(SelectedDateNonNull));
+                OnPropertyChanged(nameof(IsDateFilterEnabled));
+
+                if (!_suppressApply)
+                {
+                    if (MainThread.IsMainThread)
+                        _ = ApplyWeek();
+                    else
+                        MainThread.BeginInvokeOnMainThread(() => _ = ApplyWeek());
+                }
+            }
+        }
+
+        private bool _isDateFilterEnabled = false;
+        public bool IsDateFilterEnabled
+        {
+            get => _isDateFilterEnabled;
+            set
+            {
+                if (_isDateFilterEnabled == value) return;
+                _isDateFilterEnabled = value;
+                if (!value)
+                {
+                    // clearing the filter
+                    SelectedDate = null;
+                }
+                else
+                {
+                    // enabling without a selected date => set to today
+                    SelectedDate ??= DateTime.Today;
+                }
+                OnPropertyChanged(nameof(IsDateFilterEnabled));
+                OnPropertyChanged(nameof(SelectedDateNonNull));
+                if (!_suppressApply) _ = ApplyWeek();
+            }
+        }
+
+        private string? _selectedProjectOption;
+        public string SelectedProjectOption
+        {
+            get => _selectedProjectOption ?? ProjectOptions.FirstOrDefault() ?? "Alle";
+            set
+            {
+                if (_selectedProjectOption == value) return;
+                _selectedProjectOption = value;
+                OnPropertyChanged(nameof(SelectedProjectOption));
+                if (!_suppressApply) _ = ApplyWeek();
+            }
+        }
+
+        private string? _selectedStateOption;
+        public string SelectedStateOption
+        {
+            get => _selectedStateOption ?? StateOptions.FirstOrDefault() ?? "Alle";
+            set
+            {
+                if (_selectedStateOption == value) return;
+                _selectedStateOption = value;
+                OnPropertyChanged(nameof(SelectedStateOption));
+                if (!_suppressApply) _ = ApplyWeek();
+            }
+        }
 
         // current week's Monday
         private DateTime _currentWeekStart = GetStartOfWeek(DateTime.Today);
@@ -32,39 +174,96 @@ namespace Hourregistration.App.ViewModels
         public EmployeeOverviewViewModel(IDeclaredHoursService declaredHoursService)
         {
             _declaredHoursService = declaredHoursService;
-            ApplyWeek(); // load initial week items
+
+            // initial title (can be overridden when navigated-to)
+            PageTitle = "Urenoverzicht";
+
+            // Project filter intentionally empty for now
+            ProjectOptions = new ObservableCollection<string>();
+
+            // populate state options from the enum to always show available states
+            var states = new ObservableCollection<string> { "Alle" };
+            foreach (var name in Enum.GetNames(typeof(DeclaredState)).OrderBy(n => n))
+                states.Add(name);
+            StateOptions = states;
+
+            // date filter starts disabled (All)
+            SelectedDate = null;
+            _isDateFilterEnabled = false;
+
+            _selectedProjectOption = ProjectOptions.FirstOrDefault();
+            _selectedStateOption = StateOptions.FirstOrDefault();
+
+            // schedule initial load without blocking constructor
+            if (MainThread.IsMainThread)
+                _ = ApplyWeek();
+            else
+                MainThread.BeginInvokeOnMainThread(() => _ = ApplyWeek());
         }
 
-        public override void Load() => ApplyWeek();
+        public override void Load() => _ = ApplyWeek();
 
         public override void OnAppearing() => Load();
 
         public override void OnDisappearing() => DeclaredHoursList.Clear();
 
-        // refresh / reload the current week
         [RelayCommand]
-        private void Refresh() => ApplyWeek();
+        private async Task Refresh() => await ApplyWeek();
 
-        // previous week
         [RelayCommand]
-        private void PreviousWeek()
+        private async Task PreviousWeek()
         {
             _currentWeekStart = _currentWeekStart.AddDays(-7);
-            ApplyWeek();
+            OnPropertyChanged(nameof(WeekLabel));
+
+            // when navigating weeks, clear any active date filter so the new week shows all items
+            _suppressApply = true;
+            SelectedDate = null;
+            _isDateFilterEnabled = false;
+            OnPropertyChanged(nameof(IsDateFilterEnabled));
+            OnPropertyChanged(nameof(SelectedDateNonNull));
+            _suppressApply = false;
+
+            await ApplyWeek();
         }
 
-        // next week
         [RelayCommand]
-        private void NextWeek()
+        private async Task NextWeek()
         {
             _currentWeekStart = _currentWeekStart.AddDays(7);
-            ApplyWeek();
+            OnPropertyChanged(nameof(WeekLabel));
+
+            // when navigating weeks, clear any active date filter so the new week shows all items
+            _suppressApply = true;
+            SelectedDate = null;
+            _isDateFilterEnabled = false;
+            OnPropertyChanged(nameof(IsDateFilterEnabled));
+            OnPropertyChanged(nameof(SelectedDateNonNull));
+            _suppressApply = false;
+
+            await ApplyWeek();
+        }
+
+        [RelayCommand]
+        private void ClearDateFilter()
+        {
+            IsDateFilterEnabled = false;
+            // SelectedDate will be set to null by IsDateFilterEnabled setter and ApplyWeek will run
+        }
+
+        // Public helper to set a client/user filter and optionally set the title
+        public void SetUserFilter(long userId, string? displayName = null)
+        {
+            FilterUserId = userId;
+            PageTitle = string.IsNullOrWhiteSpace(displayName) ? $"Urenoverzicht (ID: {userId})" : $"Urenoverzicht - {displayName}";
+            // reload current week
+            _ = ApplyWeek();
         }
 
         // Load items for the current week and notify UI
-        private void ApplyWeek()
+        private async Task ApplyWeek()
         {
-            var all = _declaredHoursService.GetAll() ?? Enumerable.Empty<DeclaredHours>();
+            var all = await _declaredHoursService.GetAllAsync() ?? Enumerable.Empty<DeclaredHours>();
 
             var weekStart = _currentWeekStart.Date;
             var weekEnd = weekStart.AddDays(6).Date;
@@ -72,19 +271,61 @@ namespace Hourregistration.App.ViewModels
             var weekStartDateOnly = DateOnly.FromDateTime(weekStart);
             var weekEndDateOnly = DateOnly.FromDateTime(weekEnd);
 
-            // ORDER BY ascending so the first day (Monday) appears at the top.
-            // ThenBy StartTime ensures items on the same day are ordered by start time.
             var items = all
                 .Where(i => i.Date >= weekStartDateOnly && i.Date <= weekEndDateOnly)
-                .OrderBy(i => i.Date)
-                .ThenBy(i => i.StartTime);
+                .ToList();
 
-            DeclaredHoursList.Clear();
-            foreach (var item in items)
-                DeclaredHoursList.Add(item);
+            // prevent re-entrant ApplyWeek calls while we update lists
+            _suppressApply = true;
 
-            OnPropertyChanged(nameof(WeekLabel));
-            OnPropertyChanged(nameof(TotalWorkedHours));
+            // ProjectOptions stays intentionally empty; do not mutate it here.
+
+            // Date filter now uses SelectedDate/IsDateFilterEnabled rather than a dropdown.
+
+            _suppressApply = false;
+
+            // apply selected filters
+            IEnumerable<DeclaredHours> filtered = items.AsEnumerable();
+
+            // apply client filter if provided
+            if (FilterUserId.HasValue)
+                filtered = filtered.Where(i => i.UserId == FilterUserId.Value);
+
+            var selectedProject = SelectedProjectOption ?? "Alle";
+            if (selectedProject != "Alle")
+                filtered = filtered.Where(i => (i.ProjectName ?? string.Empty) == selectedProject);
+
+            var selectedState = SelectedStateOption ?? "Alle";
+            if (selectedState != "Alle")
+                filtered = filtered.Where(i => i.State.ToString() == selectedState);
+
+            if (IsDateFilterEnabled && SelectedDate.HasValue)
+            {
+                var dto = DateOnly.FromDateTime(SelectedDate.Value);
+                filtered = filtered.Where(i => i.Date == dto);
+            }
+
+            // default ordering (by date then start time)
+            var ordered = filtered.OrderBy(i => i.Date).ThenBy(i => i.StartTime).ToList();
+
+            // Update ObservableCollection on UI thread
+            if (MainThread.IsMainThread)
+            {
+                DeclaredHoursList.Clear();
+                foreach (var item in ordered)
+                    DeclaredHoursList.Add(item);
+                OnPropertyChanged(nameof(TotalWorkedHours));
+            }
+            else
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    DeclaredHoursList.Clear();
+                    foreach (var item in ordered)
+                        DeclaredHoursList.Add(item);
+                    OnPropertyChanged(nameof(TotalWorkedHours));
+                });
+            }
         }
 
         private static DateTime GetStartOfWeek(DateTime date)

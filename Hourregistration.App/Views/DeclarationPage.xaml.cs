@@ -82,9 +82,10 @@ public partial class DeclarationPage : ContentPage
     // Saving all rows present (submit)
     private async void OnIndienenClicked(object sender, EventArgs e)
     {
+        // STEP 1: Check row-level validation
         foreach (var row in Rows)
         {
-            if (row.AantalUren == null || row.AantalUren <= 0)
+            if (row.AantalUren == null || row.AantalUren <= 0 || row.AantalUren >= 24)
             {
                 FeedbackLabel.Text = "Voer geldige uren in.";
                 FeedbackLabel.TextColor = Colors.Red;
@@ -97,7 +98,57 @@ public partial class DeclarationPage : ContentPage
                 FeedbackLabel.TextColor = Colors.Red;
                 return;
             }
+        }
 
+        // STEP 2: Group by date
+        var rowsByDate = Rows
+            .GroupBy(r => r.Datum.Date)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        foreach (var group in rowsByDate)
+        {
+            var date = group.Key;
+            var rowsForDate = group.Value;
+
+            // STEP 3: Same date, same reason?
+            var duplicateReason = rowsForDate
+                .GroupBy(r => r.Reden)
+                .FirstOrDefault(g => g.Key != null && g.Count() > 1);
+
+            if (duplicateReason != null)
+            {
+                FeedbackLabel.Text = "U kunt niet meerdere declaraties indienen met dezelfde datum en dezelfde reden.";
+                FeedbackLabel.TextColor = Colors.Red;
+                return;
+            }
+
+            // STEP 4: Total hours per date
+            double totalHours = rowsForDate.Sum(r => r.AantalUren ?? 0);
+
+            if (totalHours <= 0 || totalHours >= 24)
+            {
+                FeedbackLabel.Text = "Voer geldige uren in.";
+                FeedbackLabel.TextColor = Colors.Red;
+                return;
+            }
+
+            // STEP 5: If total > 8 ? require description for ALL rows on that date
+            if (totalHours > 8)
+            {
+                bool missingDesc = rowsForDate.Any(r => string.IsNullOrWhiteSpace(r.Beschrijving));
+
+                if (missingDesc)
+                {
+                    FeedbackLabel.Text = "U heeft meerdere rijen onder dezelfde dag ingevoerd, waarvan het totaal boven de 8 uur is. Voer een beschrijving in.";
+                    FeedbackLabel.TextColor = Colors.Red;
+                    return;
+                }
+            }
+        }
+
+        // STEP 6: If validation succeeded ? submit everything
+        foreach (var row in Rows)
+        {
             var declaratie = MapRowToDeclaration(row);
             var result = _service.Indienen(declaratie);
 
@@ -109,7 +160,7 @@ public partial class DeclarationPage : ContentPage
             }
         }
 
-        // Deleting original draft if declaration is being submitted 
+        // Remove original draft if editing
         if (_loadedDraft != null)
             _service.VerwijderenDraft(_loadedDraft);
 

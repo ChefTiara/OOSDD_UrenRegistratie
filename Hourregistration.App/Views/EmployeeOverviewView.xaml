@@ -171,5 +171,6 @@
                Opacity="0.8"
                VerticalOptions="Center"
                HorizontalOptions="Start" />
+        <Button Grid.Row="4" Text="Genereer PDF" Clicked="Button_Clicked" HorizontalOptions="End"/>
     </Grid>
 </ContentPage>

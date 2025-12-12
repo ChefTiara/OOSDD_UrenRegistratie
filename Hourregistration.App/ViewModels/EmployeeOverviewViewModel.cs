@@ -4,7 +4,12 @@ using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
 using System.Collections.ObjectModel;
 using System.Globalization;
-
+using System.Windows.Input;
+using System.Windows.Input;
+using System.Windows.Input;
+using System.Windows.Input;
+using System.Windows.Input;
+        
 namespace Hourregistration.App.ViewModels
 {
     public partial class EmployeeOverviewViewModel : BaseViewModel

@@ -10,10 +10,10 @@ namespace Hourregistration.App.Views;
 public partial class EmployeeOverviewView : ContentPage
 {
     public EmployeeOverviewView(EmployeeOverviewViewModel viewModel)
-	{
-		InitializeComponent();
-		BindingContext = viewModel;
-	}
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
+    }
 
     protected override void OnAppearing()
     {
@@ -36,35 +36,61 @@ public partial class EmployeeOverviewView : ContentPage
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        string fileName = "mauidotnet.pdf";
+        string fileName = "Urenoverzicht.pdf";
         var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName);
 
-        using (PdfWriter writer = new PdfWriter(filePath))
+        // Get the medewerker object from the BindingContext
+        if (BindingContext is EmployeeOverviewViewModel medewerker)
         {
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
-            Paragraph header = new Paragraph("MAUI PDF Sample")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-            .SetFontSize(20);
+            using (PdfWriter writer = new PdfWriter(filePath))
+            using (PdfDocument pdf = new PdfDocument(writer))
+            using (Document document = new Document(pdf))
+            {
+                Paragraph title = new Paragraph("Urenoverzicht medewerker")
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                    .SetFontSize(20);
+                document.Add(title);
 
-            document.Add(header);
-            Paragraph subheader = new Paragraph("Welcome to .NET Multi-platform app UI")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-            .SetFontSize(15);
-            document.Add(subheader);
-            LineSeparator ls = new LineSeparator(new SolidLine());
-            document.Add(ls);
+                document.Add(new Paragraph("\n"));
 
-            Paragraph content = new Paragraph();
+                //document.Add(new Paragraph($"Naam: {medewerker.EmployeeName}"));
+                document.Add(new Paragraph($"Naam: [Onbekend]"));
+                document.Add(new Paragraph($"Week: {medewerker.WeekLabel}"));
+                document.Add(new Paragraph($"Datum gegenereerd: {DateTime.Now:dd-MM-yyyy}"));
 
+                document.Add(new Paragraph("\n"));
 
-            Paragraph footer = new Paragraph("This document was generated using iText7")
-            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-            .SetFontSize(10);
+                Table table = new Table(6).UseAllAvailableWidth();
 
-            document.Add(footer);
-            document.Close();
+                // Header row
+                table.AddHeaderCell("Dag");
+                table.AddHeaderCell("Datum");
+                table.AddHeaderCell("Ingepland");
+                table.AddHeaderCell("Uren");
+                table.AddHeaderCell("Project");
+                table.AddHeaderCell("Beschrijving");
+
+                // Replace medewerker.FilteredHours with medewerker.DeclaredHoursList
+                foreach (var item in medewerker.DeclaredHoursList)
+                {
+                    table.AddCell(item.Day);
+                    table.AddCell(item.Date.ToString("dd-MM-yyyy"));
+                    table.AddCell(item.PlannedHours);
+                    table.AddCell(item.WorkedHours.ToString() + "u");
+                    table.AddCell(item.ProjectName);
+                    table.AddCell(item.Description ?? "");
+                }
+
+                document.Add(table);
+
+                document.Add(new Paragraph("\n"));
+
+                // Totalen
+                document.Add(new Paragraph($"Totaal aantal uren: {medewerker.TotalWorkedHours} u")
+                    .SetFontSize(14));
+            }
+
+            await DisplayAlert("PDF", $"Het PDF-bestand is opgeslagen in:\n{filePath}", "OK");
         }
     }
-
 }

@@ -7,46 +7,48 @@ namespace Hourregistration.Core.Data.Repositories
     {
         private readonly List<DeclaredHours> declaredHoursList;
         private readonly List<DeclaredHoursEmployee> declaredHoursList4;
-        public DeclaredHoursRepository()
+        private readonly ILocalUserRepository _localUserRepository;
+        public DeclaredHoursRepository(ILocalUserRepository localUserRepository)
         {
+            _localUserRepository = localUserRepository;
             declaredHoursList = [
-                new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "Boodschappen", 0),
-                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp", "Het is etenstijd waar ben je >:(", 0),
-                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0),
-                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "", 0),
-                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp", "Werk jij op vrijdag??", 0),
+                new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "Boodschappen", 0) { User = _localUserRepository.Get(0).Result! },
+                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp", "Het is etenstijd waar ben je >:(", 1) { User = _localUserRepository.Get(1).Result! },
+                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0) { User = _localUserRepository.Get(0).Result! },
+                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "", 2) { User = _localUserRepository.Get(2).Result! },
+                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp", "Werk jij op vrijdag??", 1) { User = _localUserRepository.Get(1).Result! },
 
-                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 0) { State = DeclaredState.Akkoord },
-                new DeclaredHours(7, new DateOnly(2025, 11, 11), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0),
-                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 0) { State = DeclaredState.Geweigerd },
+                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 3) { State = DeclaredState.Akkoord, User = _localUserRepository.Get(3).Result! },
+                new DeclaredHours(7, new DateOnly(2025, 11, 11), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0) { User = _localUserRepository.Get(0).Result! },
+                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 2) { State = DeclaredState.Geweigerd, User = _localUserRepository.Get(2).Result! },
             ];
 
             declaredHoursList4 =
             [
-                new DeclaredHoursEmployee(9, "Kees", "Janssen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(10, "Jeroen", "de Boom", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(18, 20)),
-                new DeclaredHoursEmployee(11, "Teun", "van Kampen", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(12, "Bilal", "Hout", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(13, "Karsten", "de Lange", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(14, "Bas", "de Graaf", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(15, "Rodi", "Verschoor", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(16, "Tyrone", "van Blokken", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(17, "Daan", "de Vries", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(18, "Luuk", "Jansen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(15, 20)),
-                new DeclaredHoursEmployee(19, "Sven", "Klaassen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(20, "Milan", "de Wit", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(21, "Jesse", "van den Berg", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(22, "Finn", "Smits", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
+                new DeclaredHoursEmployee(9, "Kees", "Janssen", "Medewerker", 0, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
+                new DeclaredHoursEmployee(10, "Jeroen", "de Boom", "Medewerker", 1, new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(18, 20)),
+                new DeclaredHoursEmployee(11, "Teun", "van Kampen", "Teamleider", 2, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
+                new DeclaredHoursEmployee(12, "Bilal", "Hout", "Medewerker", 3, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
+                new DeclaredHoursEmployee(13, "Karsten", "de Lange", "Medewerker", 4, new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
+                new DeclaredHoursEmployee(14, "Bas", "de Graaf", "Medewerker", 5, new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
+                new DeclaredHoursEmployee(15, "Rodi", "Verschoor", "Teamleider", 6, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
+                new DeclaredHoursEmployee(16, "Tyrone", "van Blokken", "Medewerker", 7, new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
+                new DeclaredHoursEmployee(17, "Daan", "de Vries", "Medewerker", 8, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
+                new DeclaredHoursEmployee(18, "Luuk", "Jansen", "Medewerker", 9, new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(15, 20)),
+                new DeclaredHoursEmployee(19, "Sven", "Klaassen", "Medewerker", 10, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
+                new DeclaredHoursEmployee(20, "Milan", "de Wit", "Teamleider", 11, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
+                new DeclaredHoursEmployee(21, "Jesse", "van den Berg", "Medewerker", 12, new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
+                new DeclaredHoursEmployee(22, "Finn", "Smits", "Medewerker", 13, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
             ];
         }
 
-        public DeclaredHours? Get(int id)
+        public DeclaredHours? Get(long id)
         {
             return declaredHoursList.FirstOrDefault(dh => dh.Id == id);
         }
-        public List<DeclaredHours> GetByClientId(long clientId)
+        public List<DeclaredHours> GetByUserId(long userId)
         {
-            return declaredHoursList.Where(dh => dh.ClientId == clientId).ToList();
+            return declaredHoursList.Where(dh => dh.UserId == userId).ToList();
         }
         public List<DeclaredHours> GetByState(DeclaredState state)
         {
@@ -55,6 +57,14 @@ namespace Hourregistration.Core.Data.Repositories
         public List<DeclaredHours> GetAll()
         {
             return declaredHoursList;
+        }
+        public DeclaredHours GetLatestDeclarationFromUserId(long userId)
+        {
+            return declaredHoursList
+                .Where(dh => dh.UserId == userId)
+                .OrderByDescending(dh => dh.Date)
+                .ThenByDescending(dh => dh.CreatedAt)
+                .First();
         }
         public DeclaredHours Add(DeclaredHours declaredHour)
         {
@@ -68,20 +78,20 @@ namespace Hourregistration.Core.Data.Repositories
             declaredHoursList.Add(declaredHour);
             return declaredHour;
         }
-        public DeclaredHours Delete(int id)
+        public DeclaredHours Delete(long id)
         {
             DeclaredHours? existingDeclaredHour = Get(id) ?? throw new ArgumentException("Declared hour not found");
             declaredHoursList.Remove(existingDeclaredHour);
             return existingDeclaredHour;
         }
 
-        public Task<DeclaredHours?> GetAsync(int id)
+        public Task<DeclaredHours?> GetAsync(long id)
         {
             return Task.FromResult(Get(id));
         }
-        public Task<List<DeclaredHours>> GetByClientIdAsync(long clientId)
+        public Task<List<DeclaredHours>> GetByUserIdAsync(long userId)
         {
-            return Task.FromResult(GetByClientId(clientId));
+            return Task.FromResult(GetByUserId(userId));
         }
         public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
         {
@@ -91,6 +101,10 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return Task.FromResult(GetAll());
         }
+        public Task<DeclaredHours> GetLatestDeclarationFromUserIdAsync(long userId)
+        {
+            return Task.FromResult(GetLatestDeclarationFromUserId(userId));
+        }
         public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
         {
             return Task.FromResult(Add(declaredHour));
@@ -99,7 +113,7 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return Task.FromResult(Update(declaredHour));
         }
-        public Task<DeclaredHours> DeleteAsync(int id)
+        public Task<DeclaredHours> DeleteAsync(long id)
         {
             return Task.FromResult(Delete(id));
         }
@@ -107,7 +121,7 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return declaredHoursList4;
         }
-        public DeclaredHoursEmployee? GetEmployeeHour(int id)
+        public DeclaredHoursEmployee? GetEmployeeHour(long id)
         {
             return declaredHoursList4.FirstOrDefault(d => d.Id == id);
         }

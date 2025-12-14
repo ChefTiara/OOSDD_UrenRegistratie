@@ -26,10 +26,19 @@ namespace Hourregistration.App
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
 
+            builder.Services.AddSingleton<ILocalUserRepository, LocalUserRepository>();
+
+            builder.Services.AddSingleton<IDeclarationRepository, DeclarationRepository>();
+            builder.Services.AddSingleton<IDraftDeclarationRepository, DraftDeclarationRepository>();
+            builder.Services.AddSingleton<DeclarationService>();
+
+            builder.Services.AddSingleton<DeclarationHomeView>();
+            builder.Services.AddSingleton<DeclarationPage>();
+
             builder.Services.AddTransient<EmployeeHoursOverviewViewModel>().AddTransient<EmployeeHoursOverviewView>(); ;
             builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
 
-            #if DEBUG
+#if DEBUG
             builder.Logging.AddDebug();
             #endif
 

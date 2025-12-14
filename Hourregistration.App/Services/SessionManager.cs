@@ -41,7 +41,7 @@ namespace Hourregistration.App.Services
                 case Role.Opdrachtgever:
                     return pageNumber == 2;
 
-                case Role.AdministratieMedewerker:
+                case Role.Administratiemedewerker:
                     // Allow pages 1, 2, and 3
                     return pageNumber >= 1 && pageNumber <= 3;
 

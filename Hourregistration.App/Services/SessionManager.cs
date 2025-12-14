@@ -7,6 +7,7 @@ namespace Hourregistration.App.Services
 {
     public static class SessionManager
     {
+        
         public static Role? CurrentRole { get; set; }
 
         // Map pages to their page numbers
@@ -14,6 +15,7 @@ namespace Hourregistration.App.Services
         {
             { typeof(DeclarationPage), 4 }
         };
+        
 
         // Overload: check access by page type (e.g., typeof(DeclarationPage))
         public static bool CanAccessPage(Type pageType)
@@ -42,16 +44,17 @@ namespace Hourregistration.App.Services
                     return pageNumber == 2;
 
                 case Role.Administratiemedewerker:
-                    // Allow pages 1, 2, and 3
+                    
                     return pageNumber >= 1 && pageNumber <= 3;
 
                 case Role.Beheer:
-                    // Allow pages 1 through 4 
+                   
                     return pageNumber <= 4;
 
                 default:
                     return false;
             }
+   
         }
     }
 }

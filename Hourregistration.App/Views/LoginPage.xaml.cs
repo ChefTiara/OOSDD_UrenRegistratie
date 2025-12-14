@@ -54,7 +54,7 @@ namespace Hourregistration.App
                 Role.Werknemer => ServiceHelper.GetService<DeclarationHomeView>(),
                 Role.Opdrachtgever => CreateEmployeeOverviewPage(),
                 Role.Administratiemedewerker => CreateEmployeeHoursOverviewPage(),
-                Role.Beheer => CreateEmployeeHoursOverviewPage(),
+                Role.Beheer => CreateAccountManagementPage(),
                 _ => null
             };
 
@@ -86,5 +86,14 @@ namespace Hourregistration.App
 
             return new EmployeeHoursOverviewView(vm);
         }
+        private Page CreateAccountManagementPage()
+        {
+            var page = ServiceHelper.GetService<AccountManagementPage>();
+            if (page == null)
+                throw new InvalidOperationException("AccountManagementPage is not registered in the service container.");
+
+            return page;
+        }
+
     }
 }

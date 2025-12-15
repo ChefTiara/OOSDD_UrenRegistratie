@@ -29,6 +29,10 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.GetAll();
         }
+        public DeclaredHours GetLatestDeclarationFromUserId(long userId)
+        {
+            return _declaredHoursRepository.GetLatestDeclarationFromUserId(userId);
+        }
         public DeclaredHours Add(DeclaredHours declaredHour)
         {
             return _declaredHoursRepository.Add(declaredHour);
@@ -57,6 +61,10 @@ namespace Hourregistration.Core.Services
         public Task<List<DeclaredHours>> GetAllAsync()
         {
             return _declaredHoursRepository.GetAllAsync();
+        }
+        public Task<DeclaredHours> GetLatestDeclarationFromUserIdAsync(long userId)
+        {
+            return _declaredHoursRepository.GetLatestDeclarationFromUserIdAsync(userId);
         }
         public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
         {

@@ -4,6 +4,7 @@ using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
 using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Hourregistration.App.ViewModels
 {
@@ -32,12 +33,12 @@ namespace Hourregistration.App.ViewModels
             ReviewedDeclarations.Clear();
 
             // Get items based on State
-            var pending = _declaredHoursService.GetByState(DeclaredState.Pending);
+            var pending = _declaredHoursService.GetByState(DeclaredState.Verzonden);
             foreach (var d in pending)
                 PendingDeclarations.Add(d);
 
-            var approved = _declaredHoursService.GetByState(DeclaredState.Approved);
-            var denied = _declaredHoursService.GetByState(DeclaredState.Denied);
+            var approved = _declaredHoursService.GetByState(DeclaredState.Akkoord);
+            var denied = _declaredHoursService.GetByState(DeclaredState.Geweigerd);
 
             foreach (var d in approved.Concat(denied).OrderByDescending(ReviewedSortKey))
                 ReviewedDeclarations.Add(d);
@@ -57,7 +58,7 @@ namespace Hourregistration.App.ViewModels
 
             if (!confirmed) return;
 
-            item.State = DeclaredState.Approved;
+            item.State = DeclaredState.Akkoord;
             item.ReviewedOn = DateOnly.FromDateTime(DateTime.Now);
             _declaredHoursService.Update(item);
 
@@ -79,7 +80,7 @@ namespace Hourregistration.App.ViewModels
 
             if (!confirmed) return;
 
-            item.State = DeclaredState.Denied;
+            item.State = DeclaredState.Geweigerd;
             item.ReviewedOn = DateOnly.FromDateTime(DateTime.Now);
             _declaredHoursService.Update(item);
 

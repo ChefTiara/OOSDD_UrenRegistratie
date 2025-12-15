@@ -53,7 +53,7 @@ namespace Hourregistration.App
             Page nextPage = parsedRole switch
             {
                 Role.Werknemer => ServiceHelper.GetService<DeclarationHomeView>(),
-                Role.Opdrachtgever => CreateEmployeeOverviewPage(),
+                Role.Opdrachtgever => CreateUrenbeoordelingPage(),
                 Role.Administratiemedewerker => CreateEmployeeHoursOverviewPage(),
                 Role.Beheer => CreateAccountManagementPage(),
                 _ => null
@@ -94,6 +94,15 @@ namespace Hourregistration.App
                 throw new InvalidOperationException("AccountManagementPage is not registered in the service container.");
 
             return page;
+        }
+        private Page CreateUrenbeoordelingPage()
+        {
+            var vm = ServiceHelper.GetService<UrenbeoordelingViewModel>();
+
+            if (vm == null)
+                throw new InvalidOperationException("UrenbeoordelingViewModel is not registered in the service container.");
+
+            return new UrenbeoordelingPage(vm);
         }
 
     }

@@ -22,17 +22,17 @@ namespace Hourregistration.Core.Data.Repositories
             );
         }
 
-        public Task<LocalUser?> Get(long userId)
+        public Task<LocalUser?> Get(long userId, CancellationToken ct = default)
         {             
             return Task.FromResult(_users.FirstOrDefault(u => u.Id == userId)); 
         }
 
-        public Task<List<LocalUser>> GetAll()
+        public Task<List<LocalUser>> GetAll(CancellationToken ct = default)
         {
             return Task.FromResult(_users);
         }
 
-        public Task<List<LocalUser>> GetAllFromRole(Role role)
+        public Task<List<LocalUser>> GetAllFromRole(Role role, CancellationToken ct = default)
         {
             var usersFromRole = _users.Where(u => u.Role == role).ToList();
             return Task.FromResult(usersFromRole);

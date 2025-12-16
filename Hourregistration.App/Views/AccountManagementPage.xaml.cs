@@ -1,11 +1,8 @@
-﻿// csharp
-using System;
+﻿using System.Collections.ObjectModel;
 using Hourregistration.App.Services;
 using Hourregistration.Core.Interfaces.Repositories;
 using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
-using Hourregistration.Core.Services;
-using Microsoft.Maui.Controls;
 
 namespace Hourregistration.App.Views
 {
@@ -13,12 +10,13 @@ namespace Hourregistration.App.Views
     {
         private readonly IAccountService _accountService;
         private readonly ILocalUserRepository _userRepository;
+        private readonly ObservableCollection<LocalUser> _accounts = new();
 
         public AccountManagementPage()
         {
             InitializeComponent();
 
-            _accountService = ServiceHelper.GetService<IAccountService>() 
+            _accountService = ServiceHelper.GetService<IAccountService>()
                 ?? throw new InvalidOperationException("IAccountService is not registered in the service provider.");
 
             _userRepository = ServiceHelper.GetService<ILocalUserRepository>()
@@ -29,8 +27,8 @@ namespace Hourregistration.App.Views
             if (RolePicker.SelectedIndex < 0)
                 RolePicker.SelectedIndex = 0;
 
-            // Bind list to in-memory store
-            AccountsList.ItemsSource = _userRepository.GetAll().Result;
+            // Bind list to observable collection so UI updates automatically
+            AccountsList.ItemsSource = _accounts;
         }
 
         protected override async void OnAppearing()
@@ -42,7 +40,18 @@ namespace Hourregistration.App.Views
             {
                 await DisplayAlert("Geen toegang", "Alleen beheerders mogen accountbeheer gebruiken.", "OK");
                 await Navigation.PopAsync();
+                return;
             }
+
+            await RefreshAccountsAsync();
+        }
+
+        private async Task RefreshAccountsAsync()
+        {
+            _accounts.Clear();
+            var users = await _userRepository.GetAll();
+            foreach (var u in users)
+                _accounts.Add(u);
         }
 
         private async void OnCreateClicked(object sender, EventArgs e)
@@ -70,6 +79,8 @@ namespace Hourregistration.App.Views
                 UsernameEntry.Text = string.Empty;
                 PasswordEntry.Text = string.Empty;
                 RolePicker.SelectedIndex = 0;
+
+                await RefreshAccountsAsync();
             }
             catch (Exception ex)
             {
@@ -102,6 +113,7 @@ namespace Hourregistration.App.Views
                 }
 
                 await _accountService.UpdateAsync(acc);
+                await RefreshAccountsAsync();
             }
             catch (Exception ex)
             {
@@ -117,6 +129,7 @@ namespace Hourregistration.App.Views
             try
             {
                 await _accountService.DeactivateAsync(acc.Id);
+                await RefreshAccountsAsync();
             }
             catch (Exception ex)
             {

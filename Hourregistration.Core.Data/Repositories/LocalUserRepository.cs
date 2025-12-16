@@ -14,6 +14,14 @@ namespace Hourregistration.Core.Data.Repositories
             new LocalUser(4, "Buser", "1234", Role.Beheer)
         ];
 
+        // last assigned id (not next). Initialized from existing data.
+        private long _lastId;
+
+        public LocalUserRepository()
+        {
+            _lastId = _users.Any() ? _users.Max(u => u.Id) : 0;
+        }
+
         public LocalUser? Authenticate(string username, string password)
         {
             return _users.FirstOrDefault(
@@ -23,8 +31,8 @@ namespace Hourregistration.Core.Data.Repositories
         }
 
         public Task<LocalUser?> Get(long userId, CancellationToken ct = default)
-        {             
-            return Task.FromResult(_users.FirstOrDefault(u => u.Id == userId)); 
+        {
+            return Task.FromResult(_users.FirstOrDefault(u => u.Id == userId));
         }
 
         public Task<List<LocalUser>> GetAll(CancellationToken ct = default)
@@ -36,6 +44,14 @@ namespace Hourregistration.Core.Data.Repositories
         {
             var usersFromRole = _users.Where(u => u.Role == role).ToList();
             return Task.FromResult(usersFromRole);
+        }
+
+        public Task<LocalUser> AddAsync(string username, string password, Role role, CancellationToken ct = default)
+        {
+            var id = Interlocked.Increment(ref _lastId); // first id will be max(existing)+1
+            var user = new LocalUser(id, username, password, role);
+            _users.Add(user);
+            return Task.FromResult(user);
         }
     }
 }

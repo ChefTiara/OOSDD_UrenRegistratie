@@ -55,11 +55,11 @@ namespace Hourregistration.Core.Services
         public async Task UpdateAsync(LocalUser updated)
         {
             if (updated == null) throw new ArgumentNullException(nameof(updated));
-            var accounts = await _userRepository.GetAll();
             Validate(updated.Username, updated.Password, updated.Role.ToString());
             await _mutex.WaitAsync();
             try
             {
+                var accounts = await _userRepository.GetAll();
                 var existing = accounts.FirstOrDefault(a => a.Id == updated.Id) ?? throw new InvalidOperationException("Not found");
                 existing.Username = updated.Username;
                 existing.Password = updated.Password;

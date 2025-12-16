@@ -66,5 +66,17 @@ namespace Hourregistration.Core.Data.Repositories
             _users.Add(user);
             return Task.FromResult(user);
         }
+
+        public Task UpdateAsync(LocalUser updated, CancellationToken ct = default)
+        {
+            var existing = _users.FirstOrDefault(u => u.Id == updated.Id)
+                ?? throw new InvalidOperationException("User not found");
+            existing.Username = updated.Username;
+            existing.Password = updated.Password;
+            existing.Role = updated.Role;
+            existing.IsActive = updated.IsActive;
+            existing.LatestDeclaration = updated.LatestDeclaration;
+            return Task.CompletedTask;
+        }
     }
 }

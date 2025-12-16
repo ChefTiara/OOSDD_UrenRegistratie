@@ -3,6 +3,7 @@ using Hourregistration.App.Services;
 using Hourregistration.Core.Interfaces.Repositories;
 using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
+using Hourregistration.Core.Services;
 
 namespace Hourregistration.App.Views
 {

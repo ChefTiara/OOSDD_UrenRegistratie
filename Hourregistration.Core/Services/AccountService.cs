@@ -55,16 +55,17 @@ namespace Hourregistration.Core.Services
         public async Task UpdateAsync(LocalUser updated)
         {
             if (updated == null) throw new ArgumentNullException(nameof(updated));
-            var accounts = await _userRepository.GetAll();
             Validate(updated.Username, updated.Password, updated.Role.ToString());
             await _mutex.WaitAsync();
             try
             {
+                var accounts = await _userRepository.GetAll();
                 var existing = accounts.FirstOrDefault(a => a.Id == updated.Id) ?? throw new InvalidOperationException("Not found");
                 existing.Username = updated.Username;
                 existing.Password = updated.Password;
-                existing.Role = Enum.Parse<Role>(updated.Role.ToString());
+                existing.Role = updated.Role;
                 existing.IsActive = updated.IsActive;
+                await _userRepository.UpdateAsync(existing);
                 await Task.Delay(150);
             }
             finally { _mutex.Release(); }
@@ -78,6 +79,7 @@ namespace Hourregistration.Core.Services
                 var accounts = await _userRepository.GetAll();
                 var existing = accounts.FirstOrDefault(a => a.Id == id) ?? throw new InvalidOperationException("Not found");
                 existing.IsActive = false;
+                await _userRepository.UpdateAsync(existing);
                 await Task.Delay(100);
             }
             finally { _mutex.Release(); }

@@ -63,7 +63,7 @@ namespace Hourregistration.Core.Services
                 var existing = accounts.FirstOrDefault(a => a.Id == updated.Id) ?? throw new InvalidOperationException("Not found");
                 existing.Username = updated.Username;
                 existing.Password = updated.Password;
-                existing.Role = Enum.Parse<Role>(updated.Role.ToString());
+                existing.Role = updated.Role;
                 existing.IsActive = updated.IsActive;
                 await _userRepository.UpdateAsync(existing);
                 await Task.Delay(150);

@@ -2,7 +2,6 @@ using Hourregistration.App.Services;
 using Hourregistration.Core.Data.Repositories;
 using Hourregistration.Core.Interfaces.Repositories;
 using Hourregistration.Core.Models;
-using Microsoft.Maui.Controls; // for BindableLayout
 
 namespace Hourregistration.App.Views;
 

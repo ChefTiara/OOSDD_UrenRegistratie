@@ -65,6 +65,7 @@ namespace Hourregistration.Core.Services
                 existing.Password = updated.Password;
                 existing.Role = Enum.Parse<Role>(updated.Role.ToString());
                 existing.IsActive = updated.IsActive;
+                await _userRepository.UpdateAsync(existing);
                 await Task.Delay(150);
             }
             finally { _mutex.Release(); }

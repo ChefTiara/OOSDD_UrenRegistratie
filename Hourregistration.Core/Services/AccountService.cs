@@ -79,6 +79,7 @@ namespace Hourregistration.Core.Services
                 var accounts = await _userRepository.GetAll();
                 var existing = accounts.FirstOrDefault(a => a.Id == id) ?? throw new InvalidOperationException("Not found");
                 existing.IsActive = false;
+                await _userRepository.UpdateAsync(existing);
                 await Task.Delay(100);
             }
             finally { _mutex.Release(); }

@@ -3,7 +3,6 @@ using System;
 using Hourregistration.App.Services;
 using Hourregistration.Core.Models;
 using Hourregistration.Core.Services;
-using Microsoft.Maui.Controls;
 
 namespace Hourregistration.App.Views
 {

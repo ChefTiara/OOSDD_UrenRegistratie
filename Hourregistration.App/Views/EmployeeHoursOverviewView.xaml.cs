@@ -47,7 +47,7 @@ public partial class EmployeeHoursOverviewView : ContentPage
         // Set the client/user filter and optional title on the viewmodel before navigation
         if (page.BindingContext is EmployeeOverviewViewModel vm)
         {
-            vm.SetUserFilter(localuser.Id, string.IsNullOrWhiteSpace(localuser.Username) ? localuser.Username : localuser.Username);
+            vm.SetUserFilter(localuser.Id, localuser.Username);
         }
 
         await Navigation.PushAsync(page);

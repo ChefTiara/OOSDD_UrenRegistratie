@@ -25,6 +25,7 @@ namespace Hourregistration.App
 
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
+            builder.Services.AddSingleton<IAccountService, AccountService>();
 
             builder.Services.AddSingleton<ILocalUserRepository, LocalUserRepository>();
 

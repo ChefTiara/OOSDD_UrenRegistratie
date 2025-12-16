@@ -107,7 +107,9 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHours">
-                    <Frame Margin="4" Padding="8,8,12,8" HasShadow="True" CornerRadius="6">
+                    <!-- Constrain item height so rows are consistent and avoid clipping.
+                         If you want max performance, keep a fixed HeightRequest and remove MeasureAll. -->
+                    <Frame Margin="4" Padding="8,8,12,8" HasShadow="True" CornerRadius="6" HeightRequest="46">
                         <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,140,*,Auto">
                             <Label Grid.Column="0" Text="{Binding Day}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start" />
                             <Label Grid.Column="1" Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>

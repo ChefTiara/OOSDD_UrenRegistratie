@@ -85,35 +85,35 @@ namespace Hourregistration.Core.Data.Repositories
             return existingDeclaredHour;
         }
 
-        public Task<DeclaredHours?> GetAsync(long id)
+        public Task<DeclaredHours?> GetAsync(long id, CancellationToken ct = default)
         {
             return Task.FromResult(Get(id));
         }
-        public Task<List<DeclaredHours>> GetByUserIdAsync(long userId)
+        public Task<List<DeclaredHours>> GetByUserIdAsync(long userId, CancellationToken ct = default)
         {
             return Task.FromResult(GetByUserId(userId));
         }
-        public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
+        public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state, CancellationToken ct = default)
         {
             return Task.FromResult(GetByState(state));
         }
-        public Task<List<DeclaredHours>> GetAllAsync()
+        public Task<List<DeclaredHours>> GetAllAsync(CancellationToken ct = default)
         {
             return Task.FromResult(GetAll());
         }
-        public Task<DeclaredHours> GetLatestDeclarationFromUserIdAsync(long userId)
+        public Task<DeclaredHours> GetLatestDeclarationFromUserIdAsync(long userId, CancellationToken ct = default)
         {
             return Task.FromResult(GetLatestDeclarationFromUserId(userId));
         }
-        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
+        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour, CancellationToken ct = default)
         {
             return Task.FromResult(Add(declaredHour));
         }
-        public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour)
+        public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour, CancellationToken ct = default)
         {
             return Task.FromResult(Update(declaredHour));
         }
-        public Task<DeclaredHours> DeleteAsync(long id)
+        public Task<DeclaredHours> DeleteAsync(long id, CancellationToken ct = default)
         {
             return Task.FromResult(Delete(id));
         }

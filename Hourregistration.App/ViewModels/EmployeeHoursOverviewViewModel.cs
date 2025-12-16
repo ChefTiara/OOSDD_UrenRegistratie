@@ -4,11 +4,6 @@ using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Collections.Generic;
-using System.Windows.Input;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 
 namespace Hourregistration.App.ViewModels
 {

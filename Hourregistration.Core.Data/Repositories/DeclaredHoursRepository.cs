@@ -6,7 +6,6 @@ namespace Hourregistration.Core.Data.Repositories
     public class DeclaredHoursRepository : IDeclaredHoursRepository
     {
         private readonly List<DeclaredHours> declaredHoursList;
-        private readonly List<DeclaredHoursEmployee> declaredHoursList4;
         private readonly ILocalUserRepository _localUserRepository;
 
         private long _lastId;
@@ -23,24 +22,6 @@ namespace Hourregistration.Core.Data.Repositories
                 new DeclaredHours(6, new DateOnly(2025, 11, 10), 4, "Urenregistratie", "", 3) { State = DeclaredState.Akkoord, User = _localUserRepository.Get(3).Result! },
                 new DeclaredHours(7, new DateOnly(2025, 11, 11), 6, "Boodschappenapp", "", 0) { User = _localUserRepository.Get(0).Result! },
                 new DeclaredHours(8, new DateOnly(2025, 11, 12), 3, "Urenregistratie", "", 2) { State = DeclaredState.Geweigerd, User = _localUserRepository.Get(2).Result! },
-            ];
-
-            declaredHoursList4 =
-            [
-                new DeclaredHoursEmployee(9, "Kees", "Janssen", "Medewerker", 0, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(10, "Jeroen", "de Boom", "Medewerker", 1, new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(18, 20)),
-                new DeclaredHoursEmployee(11, "Teun", "van Kampen", "Teamleider", 2, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(12, "Bilal", "Hout", "Medewerker", 3, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(13, "Karsten", "de Lange", "Medewerker", 4, new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(14, "Bas", "de Graaf", "Medewerker", 5, new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(15, "Rodi", "Verschoor", "Teamleider", 6, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(16, "Tyrone", "van Blokken", "Medewerker", 7, new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(17, "Daan", "de Vries", "Medewerker", 8, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(18, "Luuk", "Jansen", "Medewerker", 9, new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(15, 20)),
-                new DeclaredHoursEmployee(19, "Sven", "Klaassen", "Medewerker", 10, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(20, "Milan", "de Wit", "Teamleider", 11, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(21, "Jesse", "van den Berg", "Medewerker", 12, new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(22, "Finn", "Smits", "Medewerker", 13, new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
             ];
 
             _lastId = declaredHoursList.Any() ? declaredHoursList.Max(u => u.Id) : 0;
@@ -132,19 +113,6 @@ namespace Hourregistration.Core.Data.Repositories
         public Task<DeclaredHours> DeleteAsync(long id, CancellationToken ct = default)
         {
             return Task.FromResult(Delete(id));
-        }
-        public List<DeclaredHoursEmployee> GetAllEmployeeHours()
-        {
-            return declaredHoursList4;
-        }
-        public DeclaredHoursEmployee? GetEmployeeHour(long id)
-        {
-            return declaredHoursList4.FirstOrDefault(d => d.Id == id);
-        }
-        public DeclaredHoursEmployee AddEmployeeHour(DeclaredHoursEmployee hour)
-        {
-            declaredHoursList4.Add(hour);
-            return hour;
         }
     }
 }

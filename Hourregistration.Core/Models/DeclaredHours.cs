@@ -11,6 +11,7 @@ namespace Hourregistration.Core.Models
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public double WorkedHours { get; set; } = 0.0;
+        public string Reason { get; set; } = string.Empty;
         public string ProjectName { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public long UserId { get; set; } = 0;
@@ -34,28 +35,18 @@ namespace Hourregistration.Core.Models
             }
         }
 
-        public DeclaredHours(
-            long id,
-            DateOnly date,
-            TimeOnly startTime,
-            TimeOnly endTime,
-            string projectName,
-            string description,
-            string employeeName = "Onbekend",
-            DateOnly? submittedOn = null,
-            DateOnly? reviewedOn = null,
-            DeclaredState state = DeclaredState.Verzonden) : base(id)
+        public DeclaredHours(long id, DateOnly date, int workedHours, string reason, string description, long userId) : base(id)
         {
             Date = date;
-            StartTime = startTime;
-            EndTime = endTime;
-            ProjectName = projectName;
-            EmployeeName = employeeName;
-            State = state;
-            SubmittedOn = submittedOn ?? date;
-            ReviewedOn = reviewedOn;
+            // StartTime = startTime;
+            // EndTime = endTime;
+            // ProjectName = projectName;
+            Reason = reason;
+            Description = description;
+            UserId = userId;
 
             // Calculate worked hours inbetween endTime and startTime and apply to WorkedHours
+            /*
             TimeSpan startSpan = StartTime.ToTimeSpan();
             TimeSpan endSpan = EndTime.ToTimeSpan();
             TimeSpan difference = endSpan - startSpan;
@@ -63,8 +54,11 @@ namespace Hourregistration.Core.Models
             {
                 difference += TimeSpan.FromDays(1);
             }
-            
+
             WorkedHours = (double)difference.TotalHours;
+            */
+            WorkedHours = (double)workedHours;
+
             CreatedAt = DateTime.Now;
         }
     }

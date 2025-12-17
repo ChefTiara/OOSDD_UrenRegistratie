@@ -4,11 +4,6 @@ using Hourregistration.Core.Interfaces.Services;
 using Hourregistration.Core.Models;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Collections.Generic;
-using System.Windows.Input;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 
 namespace Hourregistration.App.ViewModels
 {
@@ -84,7 +79,7 @@ namespace Hourregistration.App.ViewModels
         private void LoadUsers()
         {
             var allUsers = _repository.GetAll().Result
-                                 ?.OrderBy(x => x.FullName)
+                                 ?.OrderBy(x => x.Username)
                                  .ToList() ?? new List<LocalUser>();
 
             // Populate LatestDeclaration for each user using DeclaredHoursService
@@ -130,8 +125,7 @@ namespace Hourregistration.App.ViewModels
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
                 filtered = filtered.Where(x =>
-                    (!string.IsNullOrWhiteSpace(x.User.FullName) && x.User.FullName.Contains(SearchText, System.StringComparison.OrdinalIgnoreCase))
-                    || (!string.IsNullOrWhiteSpace(x.User.Username) && x.User.Username.Contains(SearchText, System.StringComparison.OrdinalIgnoreCase)));
+                    (!string.IsNullOrWhiteSpace(x.User.Username) && x.User.Username.Contains(SearchText, System.StringComparison.OrdinalIgnoreCase)));
             }
 
             Users.Clear();

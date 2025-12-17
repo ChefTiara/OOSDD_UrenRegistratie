@@ -8,7 +8,6 @@ namespace Hourregistration.Core.Models
 {
     public partial class LocalUser : Model
     {
-        public string FullName { get; set; }
         public string Username { get; set; }
         public string Password { get; set; } // plain text for demo
         public Role Role { get; set; } = Role.Werknemer;     // store as string, parse later

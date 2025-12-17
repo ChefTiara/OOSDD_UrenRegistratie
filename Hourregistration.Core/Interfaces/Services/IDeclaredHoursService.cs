@@ -18,7 +18,9 @@ namespace Hourregistration.Core.Interfaces.Services
         public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state);
         public Task<List<DeclaredHours>> GetAllAsync();
         public Task<DeclaredHours> GetLatestDeclarationFromUserIdAsync(long userId);
+        public Task<DeclaredHours> AddAsync(DateOnly date, int workedHours, string projectName, string description, long userId);
         public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour);
+        public Task<DeclaredHours> ReserveIdAsync();
         public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour);
         public Task<DeclaredHours> DeleteAsync(long id);
     }

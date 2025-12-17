@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hourregistration.App.Views.MainPage"
              xmlns:ContentView="clr-namespace:Hourregistration.App.Views"
-             Title="MainPage">
+             Title="MainPage"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource PrimaryDark}}">
     <VerticalStackLayout>
         <ContentView:Header/>
         <ContentView x:Name="Subpage"/>

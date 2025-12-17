@@ -159,7 +159,6 @@ public partial class EmployeeOverviewView : ContentPage
                     new Paragraph($" {medewerker.TotalWorkedHours} ")
                         .SetFontFamily("Helvetica-Bold") // <-- Use a bold font family
                         .SetFontSize(14)
-                        .SetFontColor(purple)
                         .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
                 );
             }

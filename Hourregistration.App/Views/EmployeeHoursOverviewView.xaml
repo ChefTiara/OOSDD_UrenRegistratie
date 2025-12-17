@@ -5,7 +5,8 @@
              xmlns:m="clr-namespace:Hourregistration.Core.Models;assembly=Hourregistration.Core"
              x:Class="Hourregistration.App.Views.EmployeeHoursOverviewView"
              x:DataType="vm:EmployeeHoursOverviewViewModel"
-             Title="Urenoverzicht medewerkers">
+             Title="Urenoverzicht medewerkers"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource PrimaryDark}}">           
 
     <VerticalStackLayout Padding="12"
                          Spacing="14"

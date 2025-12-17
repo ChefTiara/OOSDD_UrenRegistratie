@@ -18,7 +18,7 @@ public partial class App : Application
 
         // Voeg een gebruiker toe aan de database
         //DatabaseHelper.AddUser("testuser3", hashedPassword, "Beheer");
-
+        Application.Current.UserAppTheme = AppTheme.Dark;
         // Start met de loginpagina
         MainPage = new NavigationPage(new LoginPage());
     }

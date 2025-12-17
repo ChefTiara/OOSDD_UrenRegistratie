@@ -23,38 +23,29 @@ namespace Hourregistration.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // Core services / repositories
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
             builder.Services.AddSingleton<IAccountService, AccountService>();
-
             builder.Services.AddSingleton<ILocalUserRepository, LocalUserRepository>();
-
-            builder.Services.AddSingleton<IDeclarationRepository, DeclarationRepository>();
             builder.Services.AddSingleton<IDraftDeclarationRepository, DraftDeclarationRepository>();
             builder.Services.AddSingleton<DeclarationService>();
 
-            builder.Services.AddSingleton<DeclarationHomeView>();
-            builder.Services.AddSingleton<DeclarationPage>();
-            builder.Services.AddSingleton<IDraftDeclarationRepository, DraftDeclarationRepository>();
-            builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
-
-            builder.Services.AddTransient<EmployeeHoursOverviewViewModel>().AddTransient<EmployeeHoursOverviewView>(); ;
-            builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
-            builder.Services.AddTransient<AccountManagementPage>();
+            // Pages and viewmodels should be transient so a fresh instance is created for navigation
             builder.Services.AddTransient<DeclarationHomeView>();
+            builder.Services.AddTransient<DeclarationPage>();
+            builder.Services.AddTransient<EmployeeHoursOverviewViewModel>();
             builder.Services.AddTransient<EmployeeHoursOverviewView>();
             builder.Services.AddTransient<EmployeeOverviewView>();
+            builder.Services.AddTransient<EmployeeOverviewViewModel>();
+            builder.Services.AddTransient<AccountManagementPage>();
             builder.Services.AddTransient<LoginPage>();
-            builder.Services.AddTransient<AccountManagementPage>();
-            builder.Services.AddTransient<DeclarationHomeView>();
-            builder.Services.AddTransient<EmployeeOverviewView>();
-            builder.Services.AddTransient<EmployeeHoursOverviewView>();
 
 #if DEBUG
             builder.Logging.AddDebug();
-            #endif
+#endif
 
-            var app = builder.Build();            
+            var app = builder.Build();
 
             ServiceHelper.Initialize(app.Services);
 

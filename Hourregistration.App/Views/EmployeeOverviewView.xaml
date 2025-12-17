@@ -91,7 +91,7 @@
             -->
             
             <Label Grid.Column="2" Text="Uren" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
-            <Label Grid.Column="3" Text="Project" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
+            <Label Grid.Column="3" Text="Reden" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
             <Label Grid.Column="4" Text="Beschrijving" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
             <Label Grid.Column="5" Text="Status" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="End" />
         </Grid>
@@ -124,7 +124,7 @@
                             -->
                             
                             <Label Grid.Column="2" Text="{Binding WorkedHours, StringFormat='{}{0}u'}" VerticalOptions="Center" FontAttributes="Bold" FontSize="14" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
-                            <Label Grid.Column="3" Text="{Binding ProjectName}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="3" Text="{Binding Reason}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
                             <Label Grid.Column="4" Text="{Binding Description}" VerticalOptions="Center" FontSize="12" Opacity="0.75" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Fill"/>
 
                             <!-- State + Segoe MDL2 icon in the last column -->

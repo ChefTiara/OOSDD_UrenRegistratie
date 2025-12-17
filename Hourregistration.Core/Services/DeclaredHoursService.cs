@@ -70,6 +70,14 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.AddAsync(date, workedHours, projectName, description, userId);
         }
+        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
+        {
+            return _declaredHoursRepository.AddAsync(declaredHour);
+        }
+        public Task<DeclaredHours> ReserveIdAsync()
+        {
+            return _declaredHoursRepository.ReserveIdAsync();
+        }
         public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour)
         {
             return _declaredHoursRepository.UpdateAsync(declaredHour);

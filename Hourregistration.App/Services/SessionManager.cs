@@ -7,15 +7,26 @@ namespace Hourregistration.App.Services
 {
     public static class SessionManager
     {
-        
-        public static Role? CurrentRole { get; set; }
+        // Current authenticated user and role
+        public static LocalUser? CurrentUser { get; private set; }
+        public static long? CurrentUserId => CurrentUser?.Id;
+        public static Role? CurrentRole => CurrentUser?.Role;
 
         // Map pages to their page numbers
         private static readonly Dictionary<Type, int> PageNumbers = new()
         {
             { typeof(DeclarationPage), 4 }
         };
-        
+
+        public static void SetCurrentUser(LocalUser? user)
+        {
+            CurrentUser = user;
+        }
+
+        public static void Clear()
+        {
+            CurrentUser = null;
+        }
 
         // Overload: check access by page type (e.g., typeof(DeclarationPage))
         public static bool CanAccessPage(Type pageType)
@@ -44,17 +55,14 @@ namespace Hourregistration.App.Services
                     return pageNumber == 2;
 
                 case Role.Administratiemedewerker:
-                    
                     return pageNumber >= 1 && pageNumber <= 3;
 
                 case Role.Beheer:
-                   
                     return pageNumber <= 4;
 
                 default:
                     return false;
             }
-   
         }
     }
 }

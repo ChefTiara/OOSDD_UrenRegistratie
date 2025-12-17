@@ -19,6 +19,8 @@ namespace Hourregistration.Core.Interfaces.Repositories
         public Task<List<DeclaredHours>> GetAllAsync(CancellationToken ct = default);
         public Task<DeclaredHours> GetLatestDeclarationFromUserIdAsync(long userId, CancellationToken ct = default);
         public Task<DeclaredHours> AddAsync(DateOnly date, int workedHours, string projectName, string description, long userId, CancellationToken ct = default);
+        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour, CancellationToken ct = default);
+        public Task<DeclaredHours> ReserveIdAsync(CancellationToken ct = default);
         public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour, CancellationToken ct = default);
         public Task<DeclaredHours> DeleteAsync(long id, CancellationToken ct = default);
         public List<DeclaredHoursEmployee> GetAllEmployeeHours();

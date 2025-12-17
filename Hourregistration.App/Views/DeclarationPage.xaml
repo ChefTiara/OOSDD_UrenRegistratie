@@ -38,7 +38,7 @@
                                     <!-- Date -->
                                     <VerticalStackLayout Grid.Column="0">
                                         <Label Text="Datum" FontSize="12"/>
-                                        <DatePicker Date="{Binding Datum}"
+                                        <DatePicker Date="{Binding Date}"
                                                     Format="dd-MM-yyyy"
                                                     BackgroundColor="#F2F2F2"
                                                     TextColor="Black"
@@ -48,7 +48,7 @@
                                     <!-- Hours -->
                                     <VerticalStackLayout Grid.Column="1">
                                         <Label Text="Aantal uren" FontSize="12"/>
-                                        <Entry Text="{Binding AantalUren}"
+                                        <Entry Text="{Binding WorkedHours}"
                                                Keyboard="Numeric"
                                                BackgroundColor="#F2F2F2"
                                                TextColor="Black"
@@ -59,7 +59,7 @@
                                     <!-- Reason -->
                                     <VerticalStackLayout Grid.Column="2">
                                         <Label Text="Reden" FontSize="12"/>
-                                        <Picker SelectedItem="{Binding Reden}"
+                                        <Picker SelectedItem="{Binding Reason}"
                                                 BackgroundColor="#F2F2F2"
                                                 TextColor="Black"
                                                 HeightRequest="40">
@@ -74,7 +74,7 @@
                                     <!-- Description -->
                                     <VerticalStackLayout Grid.Column="3">
                                         <Label Text="Beschrijving" FontSize="12"/>
-                                        <Entry Text="{Binding Beschrijving}"
+                                        <Entry Text="{Binding Description}"
                                                BackgroundColor="#F2F2F2"
                                                TextColor="Black"
                                                Placeholder="Omschrijving..."

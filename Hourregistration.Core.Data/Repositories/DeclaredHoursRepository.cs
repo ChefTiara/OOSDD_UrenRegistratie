@@ -115,6 +115,16 @@ namespace Hourregistration.Core.Data.Repositories
             var declaredHour = new DeclaredHours(id, date, workedHours, projectName, description, userId);
             return Task.FromResult(Add(declaredHour));
         }
+        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour, CancellationToken ct = default)
+        {
+            return Task.FromResult(Add(declaredHour));
+        }
+        public Task<DeclaredHours> ReserveIdAsync(CancellationToken ct = default)
+        {
+            var id = Interlocked.Increment(ref _lastId);
+            var declaredHour = new DeclaredHours(id, DateOnly.FromDateTime(DateTime.Now), 0, string.Empty, string.Empty, 0);
+            return Task.FromResult(declaredHour);
+        }
         public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour, CancellationToken ct = default)
         {
             return Task.FromResult(Update(declaredHour));

@@ -29,11 +29,32 @@
                 end_time TIME,
     
                 worked_hours REAL NOT NULL,
-    
-                project_name TEXT NOT NULL,
                 reason TEXT NOT NULL,
+    
+                project_name TEXT,
                 description TEXT,
                 state INTEGER NOT NULL,
+    
+                user_id INTEGER NOT NULL,
+
+                created_at DATETIME NOT NULL,
+                updated_at DATETIME,
+    
+                FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE NO ACTION
+            );
+
+            CREATE TABLE IF NOT EXISTS DraftDeclarations (
+                draft_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    
+                declaration_date DATE NOT NULL,
+                start_time TIME,
+                end_time TIME,
+    
+                worked_hours REAL NOT NULL,
+                reason TEXT NOT NULL,
+    
+                project_name TEXT,
+                description TEXT,
     
                 user_id INTEGER NOT NULL,
 

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Hourregistration.App.ViewModels;
 using Hourregistration.App.Views;
 using Hourregistration.App.Services;
+using Hourregistration.Core.Data.Database;
 
 namespace Hourregistration.App
 {
@@ -15,6 +16,8 @@ namespace Hourregistration.App
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "app.db");
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -46,6 +49,13 @@ namespace Hourregistration.App
 #endif
 
             var app = builder.Build();
+
+            // Schema migreren
+            using var scope = app.Services.CreateScope();
+            var migrator = scope.ServiceProvider.GetRequiredService<SqliteSchemaMigrator>();
+
+            var task = migrator.MigrateAsync();
+            task.GetAwaiter().GetResult();
 
             ServiceHelper.Initialize(app.Services);
 

@@ -25,8 +25,8 @@
                 declaration_id INTEGER PRIMARY KEY AUTOINCREMENT,
     
                 declaration_date DATE NOT NULL,
-                start_time TIME NOT NULL,
-                end_time TIME NOT NULL,
+                start_time TIME,
+                end_time TIME,
     
                 worked_hours REAL NOT NULL,
     

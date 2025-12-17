@@ -33,6 +33,11 @@ namespace Hourregistration.Core.Data.Repositories
 
             var stored = user.Password ?? string.Empty;
 
+            if (!user.IsActive)
+            {
+                return null;
+            }
+
             // If stored password looks like a bcrypt hash, verify; otherwise fall back to plain compare
             if (stored.StartsWith("$2a$") || stored.StartsWith("$2b$") || stored.StartsWith("$2y$"))
             {

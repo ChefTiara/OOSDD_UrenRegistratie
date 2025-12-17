@@ -13,14 +13,13 @@ namespace Hourregistration.App.Services
     {
         private readonly ILocalUserRepository _localUserRepository = ServiceHelper.GetService<ILocalUserRepository>()!;
 
-        public (bool ok, string? role) Authenticate(string username, string password)
+        // Returns the authenticated LocalUser or null
+        public LocalUser? Authenticate(string username, string password)
         {
             LocalUser? user = _localUserRepository.Authenticate(username, password);
 
-            if (user == null)
-                return (false, null);
-
-            return (true, user.Role.ToString());
+            // repository already verifies hash/plaintext; just return user
+            return user;
         }
     }
 }

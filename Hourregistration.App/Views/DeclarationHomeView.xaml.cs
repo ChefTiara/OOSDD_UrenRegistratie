@@ -9,7 +9,7 @@ public partial class DeclarationHomeView : ContentPage
 {
     private readonly IDraftDeclarationRepository _draftRepo;
 
-    public List<Declaration> Drafts { get; set; } = new();
+    public List<DeclaredHours> Drafts { get; set; } = new();
 
     public DeclarationHomeView(IDraftDeclarationRepository draftRepo)
     {
@@ -44,7 +44,7 @@ public partial class DeclarationHomeView : ContentPage
 
     private async void OnConceptOpenClicked(object sender, EventArgs e)
     {
-        if (sender is Button button && button.CommandParameter is Declaration concept)
+        if (sender is Button button && button.CommandParameter is DeclaredHours concept)
         {
             var page = ServiceHelper.GetService<DeclarationPage>();
 
@@ -59,7 +59,7 @@ public partial class DeclarationHomeView : ContentPage
     }
     private void OnConceptDeleteClicked(object sender, EventArgs e)
     {
-        if (sender is Button button && button.CommandParameter is Declaration concept)
+        if (sender is Button button && button.CommandParameter is DeclaredHours concept)
         {
             _draftRepo.DeleteDraft(concept);
 

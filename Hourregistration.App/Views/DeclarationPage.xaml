@@ -40,7 +40,7 @@
                                     <!-- Date -->
                                     <VerticalStackLayout Grid.Column="0">
                                         <Label Text="Datum" FontSize="12"/>
-                                        <DatePicker Date="{Binding Datum}"
+                                        <DatePicker Date="{Binding Date}"
                                                     Format="dd-MM-yyyy"
                                                     HeightRequest="40"/>
                                     </VerticalStackLayout>
@@ -48,7 +48,7 @@
                                     <!-- Hours -->
                                     <VerticalStackLayout Grid.Column="1">
                                         <Label Text="Aantal uren" FontSize="12"/>
-                                        <Entry Text="{Binding AantalUren}"
+                                        <Entry Text="{Binding WorkedHours}"
                                                Keyboard="Numeric"
                                                Placeholder="0"
                                                HeightRequest="40"/>
@@ -57,7 +57,9 @@
                                     <!-- Reason -->
                                     <VerticalStackLayout Grid.Column="2">
                                         <Label Text="Reden" FontSize="12"/>
-                                        <Picker SelectedItem="{Binding Reden}"
+                                        <Picker SelectedItem="{Binding Reason}"
+                                                BackgroundColor="#F2F2F2"
+                                                TextColor="Black"
                                                 HeightRequest="40">
                                             <Picker.Items>
                                                 <x:String>Werk</x:String>
@@ -70,7 +72,9 @@
                                     <!-- Description -->
                                     <VerticalStackLayout Grid.Column="3">
                                         <Label Text="Beschrijving" FontSize="12"/>
-                                        <Entry Text="{Binding Beschrijving}"
+                                        <Entry Text="{Binding Description}"
+                                               BackgroundColor="#F2F2F2"
+                                               TextColor="Black"
                                                Placeholder="Omschrijving..."
                                                HeightRequest="40"/>
                                     </VerticalStackLayout>

@@ -4,7 +4,9 @@
              x:Class="Hourregistration.App.Views.DeclarationHomeView"
              Title="Urenregistratie">
 
-    <Grid Padding="20" RowDefinitions="Auto, Auto, *" ColumnDefinitions="3*, 1*">
+    <Grid Padding="20"
+          RowDefinitions="Auto, Auto, *"
+          ColumnDefinitions="3*, 1*">
 
         <!-- Title -->
         <Label Grid.Row="0" Grid.Column="0"
@@ -12,13 +14,9 @@
                FontSize="22"
                FontAttributes="Bold" />
 
-        <!-- New declaration button top right -->
+        <!-- New declaration button -->
         <Button Grid.Row="0" Grid.Column="1"
                 Text="Nieuwe declaratie aanmaken"
-                BackgroundColor="#9BD4A6"
-                TextColor="Black"
-                CornerRadius="6"
-                Padding="14,10"
                 HorizontalOptions="End"
                 VerticalOptions="Center"
                 Clicked="OnNieuweDeclaratieClicked" />
@@ -26,20 +24,19 @@
         <!-- Subtitle -->
         <Label Grid.Row="1" Grid.Column="0"
                Text="Wat wilt u doen?"
-               FontSize="14"
-               TextColor="Gray"
                Margin="0,5,0,15" />
 
         <!-- Draft box -->
-        <Border 
-            Grid.Row="2" Grid.Column="0"
-            Stroke="Black"
-            StrokeThickness="1"
-            BackgroundColor="White"
-            Padding="15"
-            HeightRequest="350">
+        <Border Grid.Row="2"
+                Grid.Column="0"
+                Padding="15"
+                HeightRequest="350"
+                BackgroundColor="{AppThemeBinding 
+                    Light={StaticResource Outline}, 
+                    Dark={StaticResource OutlineDark}}">
 
-            <VerticalStackLayout>
+            <VerticalStackLayout Spacing="12">
+
                 <Label Text="Concepten"
                        FontAttributes="Bold"
                        FontSize="16" />
@@ -52,43 +49,38 @@
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
 
-                            <Frame Padding="10"
-                                   BorderColor="#CCCCCC"
-                                   CornerRadius="6"
-                                   BackgroundColor="#F8F8F8">
+                            <Frame Padding="10">
 
-                                <Grid Padding="20" RowDefinitions="Auto, Auto, *" ColumnDefinitions="1*, 1*">
+                                <Grid Padding="20"
+                                      RowDefinitions="Auto, Auto, *"
+                                      ColumnDefinitions="1*, 1*">
+
                                     <Label Grid.Row="0" Grid.Column="0"
-                                               Text="{Binding Datum, StringFormat='Datum: {0:dd-MM-yyyy}'}"
-                                               FontSize="13" TextColor="Black"/>
+                                           Text="{Binding Datum, StringFormat='Datum: {0:dd-MM-yyyy}'}"
+                                           FontSize="13" />
 
                                     <Label Grid.Row="0" Grid.Column="1"
-                                               Text="{Binding AantalUren, StringFormat='Uren: {0}'}"
-                                               FontSize="13" TextColor="Black"/>
+                                           Text="{Binding AantalUren, StringFormat='Uren: {0}'}"
+                                           FontSize="13" />
 
                                     <Label Grid.Row="1" Grid.Column="0"
-                                               Text="{Binding Reden, StringFormat='Reden: {0}'}"
-                                               FontSize="13" TextColor="Black"/>
+                                           Text="{Binding Reden, StringFormat='Reden: {0}'}"
+                                           FontSize="13" />
 
                                     <Label Grid.Row="1" Grid.Column="1"
-                                               Text="{Binding Beschrijving, StringFormat='Omschrijving: {0}'}"
-                                               FontSize="13" TextColor="Black"/>
+                                           Text="{Binding Beschrijving, StringFormat='Omschrijving: {0}'}"
+                                           FontSize="13" />
 
                                     <Button Grid.Row="2" Grid.Column="0"
                                             Text="Open concept"
-                                            Padding="5"
-                                            CornerRadius="4"
-                                            BackgroundColor="#A7C6E6"
                                             CommandParameter="{Binding}"
-                                            Clicked="OnConceptOpenClicked"/>
+                                            Clicked="OnConceptOpenClicked" />
 
                                     <Button Grid.Row="2" Grid.Column="1"
                                             Text="Verwijder"
-                                            Padding="5"
-                                            CornerRadius="4"
-                                            BackgroundColor="#E6A8A8"
                                             CommandParameter="{Binding}"
-                                            Clicked="OnConceptDeleteClicked"/>
+                                            Clicked="OnConceptDeleteClicked" />
+
                                 </Grid>
                             </Frame>
 

@@ -69,13 +69,20 @@
                 Value="{StaticResource OnSurfaceBrush}" />
     </Style>
 
-    <!-- Destructive / critical -->
-    <Style x:Key="ButtonDanger"
-           TargetType="Button">
+    <Style x:Key="ButtonMid"
+       TargetType="Button">
         <Setter Property="BackgroundColor"
-                Value="{StaticResource SecondaryBrush}" />
+            Value="{StaticResource PrimaryBrush}" />
         <Setter Property="TextColor"
-                Value="{StaticResource OnSurfaceDark}" />
+            Value="{StaticResource OnSurfaceDark}" />
+    </Style>
+
+    <Style x:Key="ButtonDark"
+       TargetType="Button">
+        <Setter Property="BackgroundColor"
+            Value="{StaticResource SecondaryBrush}" />
+        <Setter Property="TextColor"
+            Value="{StaticResource OnSurfaceDark}" />
     </Style>
 
     <!-- ========================================================= -->

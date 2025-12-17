@@ -31,16 +31,17 @@ namespace Hourregistration.Core.Models
             }
         }
 
-        public DeclaredHours(long id, DateOnly date, TimeOnly startTime, TimeOnly endTime, string projectName, string description, long userId) : base(id)
+        public DeclaredHours(long id, DateOnly date, int workedHours, string projectName, string description, long userId) : base(id)
         {
             Date = date;
-            StartTime = startTime;
-            EndTime = endTime;
+            // StartTime = startTime;
+            // EndTime = endTime;
             ProjectName = projectName;
             Description = description;
             UserId = userId;
 
             // Calculate worked hours inbetween endTime and startTime and apply to WorkedHours
+            /*
             TimeSpan startSpan = StartTime.ToTimeSpan();
             TimeSpan endSpan = EndTime.ToTimeSpan();
             TimeSpan difference = endSpan - startSpan;
@@ -48,8 +49,11 @@ namespace Hourregistration.Core.Models
             {
                 difference += TimeSpan.FromDays(1);
             }
-            
+
             WorkedHours = (double)difference.TotalHours;
+            */
+            WorkedHours = (double)workedHours;
+
             CreatedAt = DateTime.Now;
         }
     }

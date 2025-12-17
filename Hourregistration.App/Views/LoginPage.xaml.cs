@@ -27,29 +27,18 @@ namespace Hourregistration.App
                 return;
             }
 
-            var (ok, roleString) = _authService.Authenticate(username, password);
-
-            if (!ok)
+            var user = _authService.Authenticate(username, password);
+            if (user == null)
             {
                 ErrorMessageLabel.Text = "Ongeldige inloggegevens.";
                 ErrorMessageLabel.IsVisible = true;
                 return;
             }
 
-            if (!Enum.TryParse<Role>(roleString, out var parsedRole))
-            {
-                ErrorMessageLabel.Text = "Onbekende rol.";
-                ErrorMessageLabel.IsVisible = true;
-                return;
-            }
+            // set session (role and id become available via SessionManager)
+            SessionManager.SetCurrentUser(user);
 
-            SessionManager.CurrentRole = parsedRole;
-
-            // -------------------------------
-            // ROLE-BASED REDIRECTION
-            // -------------------------------
-
-            Page nextPage = parsedRole switch
+            Page nextPage = SessionManager.CurrentRole switch
             {
                 Role.Werknemer => ServiceHelper.GetService<DeclarationHomeView>(),
                 Role.Opdrachtgever => CreateEmployeeOverviewPage(),

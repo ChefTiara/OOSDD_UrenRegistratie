@@ -27,6 +27,9 @@ namespace Hourregistration.App
                 });
 
             // Core services / repositories
+            builder.Services.AddSingleton<ISqliteConnectionFactory>(_ => new SqliteConnectionFactory(dbPath));
+            builder.Services.AddSingleton<SqliteSchemaMigrator>();
+
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
             builder.Services.AddSingleton<IAccountService, AccountService>();

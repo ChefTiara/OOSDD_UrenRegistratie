@@ -1,37 +1,95 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
-<ResourceDictionary 
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- ==== LIGHT MODE ==== -->
+    <!-- ===================================================== -->
+    <!--                     LIGHT MODE                       -->
+    <!-- ===================================================== -->
+
+    <!-- Brand -->
     <Color x:Key="Primary">#0B1E3F</Color>
     <!-- Prussian Blue -->
     <Color x:Key="Secondary">#3A5A7A</Color>
     <!-- Baltic Blue -->
-    <Color x:Key="Tertiary">#F0F4FA</Color>
-    <!-- Alice Blue -->
+    <Color x:Key="Tertiary">#E8EEF6</Color>
+    <!-- Soft Alice Blue -->
 
-    <!-- Semantic surfaces -->
+    <!-- Surfaces -->
+    <Color x:Key="Background">#F6F8FB</Color>
+    <!-- App background -->
     <Color x:Key="Surface">#FFFFFF</Color>
-    <Color x:Key="OnSurface">#000000</Color>
+    <!-- Cards, inputs -->
+    <Color x:Key="OnSurface">#0B1E3F</Color>
+    <!-- Text/icons -->
 
-    <!-- ==== DARK MODE ==== -->
-    <Color x:Key="PrimaryDark">#415D8E</Color>
-    <!-- Dusk Blue -->
-    <Color x:Key="SecondaryDark">#9AB1C8</Color>
-    <!-- Powder Blue -->
-    <Color x:Key="TertiaryDark">#F0F4FA</Color>
+    <!-- Utility -->
+    <Color x:Key="Outline">#CBD6E2</Color>
+    <!-- Borders -->
+    <Color x:Key="Disabled">#AEB9C6</Color>
+    <!-- Disabled elements -->
 
-    <!-- Dark surfaces -->
-    <Color x:Key="SurfaceDark">#0B1E3F</Color>
-    <Color x:Key="OnSurfaceDark">#FFFFFF</Color>
 
-    <!-- BRUSHES -->
-    <SolidColorBrush x:Key="PrimaryBrush" Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
-    <SolidColorBrush x:Key="SecondaryBrush" Color="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}" />
-    <SolidColorBrush x:Key="TertiaryBrush" Color="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource TertiaryDark}}" />
-    <SolidColorBrush x:Key="SurfaceBrush" Color="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}" />
-    <SolidColorBrush x:Key="OnSurfaceBrush" Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
+    <!-- ===================================================== -->
+    <!--                     DARK MODE                        -->
+    <!-- ===================================================== -->
+
+    <!-- Brand -->
+    <Color x:Key="PrimaryDark">#1E2F4F</Color>
+    <!-- Deep Navy -->
+    <Color x:Key="SecondaryDark">#5F7FA3</Color>
+    <!-- Muted Steel Blue -->
+    <Color x:Key="TertiaryDark">#1A2436</Color>
+    <!-- Neutral panel -->
+
+    <!-- Surfaces -->
+    <Color x:Key="BackgroundDark">#0F1624</Color>
+    <!-- App background -->
+    <Color x:Key="SurfaceDark">#161F30</Color>
+    <!-- Cards -->
+    <Color x:Key="OnSurfaceDark">#E6EBF2</Color>
+    <!-- Text/icons -->
+
+    <!-- Utility -->
+    <Color x:Key="OutlineDark">#2C3A52</Color>
+    <Color x:Key="DisabledDark">#556070</Color>
+
+
+    <!-- ===================================================== -->
+    <!--                      BRUSHES                         -->
+    <!-- ===================================================== -->
+
+    <SolidColorBrush x:Key="PrimaryBrush"
+                     Color="{AppThemeBinding Light={StaticResource Primary},
+                                              Dark={StaticResource PrimaryDark}}" />
+
+    <SolidColorBrush x:Key="SecondaryBrush"
+                     Color="{AppThemeBinding Light={StaticResource Secondary},
+                                              Dark={StaticResource SecondaryDark}}" />
+
+    <SolidColorBrush x:Key="TertiaryBrush"
+                     Color="{AppThemeBinding Light={StaticResource Tertiary},
+                                              Dark={StaticResource TertiaryDark}}" />
+
+    <SolidColorBrush x:Key="BackgroundBrush"
+                     Color="{AppThemeBinding Light={StaticResource Background},
+                                              Dark={StaticResource BackgroundDark}}" />
+
+    <SolidColorBrush x:Key="SurfaceBrush"
+                     Color="{AppThemeBinding Light={StaticResource Surface},
+                                              Dark={StaticResource SurfaceDark}}" />
+
+    <SolidColorBrush x:Key="OnSurfaceBrush"
+                     Color="{AppThemeBinding Light={StaticResource OnSurface},
+                                              Dark={StaticResource OnSurfaceDark}}" />
+
+    <SolidColorBrush x:Key="OutlineBrush"
+                     Color="{AppThemeBinding Light={StaticResource Outline},
+                                              Dark={StaticResource OutlineDark}}" />
+
+    <SolidColorBrush x:Key="DisabledBrush"
+                     Color="{AppThemeBinding Light={StaticResource Disabled},
+                                              Dark={StaticResource DisabledDark}}" />
 
 </ResourceDictionary>

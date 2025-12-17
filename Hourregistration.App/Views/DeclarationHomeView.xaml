@@ -17,6 +17,7 @@
         <!-- New declaration button -->
         <Button Grid.Row="0" Grid.Column="1"
                 Text="Nieuwe declaratie aanmaken"
+                Style="{StaticResource ButtonMid}"
                 HorizontalOptions="End"
                 VerticalOptions="Center"
                 Clicked="OnNieuweDeclaratieClicked" />

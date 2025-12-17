@@ -17,11 +17,11 @@
     <!-- Soft Alice Blue -->
 
     <!-- Surfaces -->
-    <Color x:Key="Background">#F6F8FB</Color>
+    <Color x:Key="Background">#F0F4FA</Color>
     <!-- App background -->
-    <Color x:Key="Surface">#FFFFFF</Color>
+    <Color x:Key="Surface">#9AB1C8</Color>
     <!-- Cards, inputs -->
-    <Color x:Key="OnSurface">#0B1E3F</Color>
+    <Color x:Key="OnSurface">#415D8E</Color>
     <!-- Text/icons -->
 
     <!-- Utility -->
@@ -44,11 +44,11 @@
     <!-- Neutral panel -->
 
     <!-- Surfaces -->
-    <Color x:Key="BackgroundDark">#0F1624</Color>
+    <Color x:Key="BackgroundDark">#0B1E3F</Color>
     <!-- App background -->
-    <Color x:Key="SurfaceDark">#161F30</Color>
+    <Color x:Key="SurfaceDark">#3A5A7A</Color>
     <!-- Cards -->
-    <Color x:Key="OnSurfaceDark">#E6EBF2</Color>
+    <Color x:Key="OnSurfaceDark">#F0F4FA</Color>
     <!-- Text/icons -->
 
     <!-- Utility -->

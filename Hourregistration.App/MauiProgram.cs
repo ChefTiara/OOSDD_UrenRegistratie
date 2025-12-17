@@ -23,17 +23,29 @@ namespace Hourregistration.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // Core services / repositories
             builder.Services.AddSingleton<IDeclaredHoursRepository, DeclaredHoursRepository>();
             builder.Services.AddSingleton<IDeclaredHoursService, DeclaredHoursService>();
+            builder.Services.AddSingleton<IAccountService, AccountService>();
+            builder.Services.AddSingleton<ILocalUserRepository, LocalUserRepository>();
+            builder.Services.AddSingleton<IDraftDeclarationRepository, DraftDeclarationRepository>();
+            builder.Services.AddSingleton<DeclarationService>();
 
-            builder.Services.AddTransient<EmployeeHoursOverviewViewModel>().AddTransient<EmployeeHoursOverviewView>(); ;
-            builder.Services.AddTransient<EmployeeOverviewView>().AddTransient<EmployeeOverviewViewModel>();
+            // Pages and viewmodels should be transient so a fresh instance is created for navigation
+            builder.Services.AddTransient<DeclarationHomeView>();
+            builder.Services.AddTransient<DeclarationPage>();
+            builder.Services.AddTransient<EmployeeHoursOverviewViewModel>();
+            builder.Services.AddTransient<EmployeeHoursOverviewView>();
+            builder.Services.AddTransient<EmployeeOverviewView>();
+            builder.Services.AddTransient<EmployeeOverviewViewModel>();
+            builder.Services.AddTransient<AccountManagementPage>();
+            builder.Services.AddTransient<LoginPage>();
 
-            #if DEBUG
+#if DEBUG
             builder.Logging.AddDebug();
-            #endif
+#endif
 
-            var app = builder.Build();            
+            var app = builder.Build();
 
             ServiceHelper.Initialize(app.Services);
 

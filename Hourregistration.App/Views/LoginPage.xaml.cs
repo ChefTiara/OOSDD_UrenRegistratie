@@ -27,34 +27,23 @@ namespace Hourregistration.App
                 return;
             }
 
-            var (ok, roleString) = _authService.Authenticate(username, password);
-
-            if (!ok)
+            var user = _authService.Authenticate(username, password);
+            if (user == null)
             {
                 ErrorMessageLabel.Text = "Ongeldige inloggegevens.";
                 ErrorMessageLabel.IsVisible = true;
                 return;
             }
 
-            if (!Enum.TryParse<Role>(roleString, out var parsedRole))
+            // set session (role and id become available via SessionManager)
+            SessionManager.SetCurrentUser(user);
+
+            Page nextPage = SessionManager.CurrentRole switch
             {
-                ErrorMessageLabel.Text = "Onbekende rol.";
-                ErrorMessageLabel.IsVisible = true;
-                return;
-            }
-
-            SessionManager.CurrentRole = parsedRole;
-
-            // -------------------------------
-            // ROLE-BASED REDIRECTION
-            // -------------------------------
-
-            Page nextPage = parsedRole switch
-            {
-                Role.Werknemer => new DeclaratieHomeView(),
+                Role.Werknemer => ServiceHelper.GetService<DeclarationHomeView>(),
                 Role.Opdrachtgever => CreateEmployeeOverviewPage(),
-                Role.AdministratieMedewerker => CreateEmployeeHoursOverviewPage(),
-                Role.Beheer => CreateEmployeeHoursOverviewPage(),
+                Role.Administratiemedewerker => CreateEmployeeHoursOverviewPage(),
+                Role.Beheer => CreateAccountManagementPage(),
                 _ => null
             };
 
@@ -86,5 +75,14 @@ namespace Hourregistration.App
 
             return new EmployeeHoursOverviewView(vm);
         }
+        private Page CreateAccountManagementPage()
+        {
+            var page = ServiceHelper.GetService<AccountManagementPage>();
+            if (page == null)
+                throw new InvalidOperationException("AccountManagementPage is not registered in the service container.");
+
+            return page;
+        }
+
     }
 }

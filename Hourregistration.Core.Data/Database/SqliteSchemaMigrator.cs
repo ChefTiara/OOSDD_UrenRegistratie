@@ -31,6 +31,7 @@
                 worked_hours REAL NOT NULL,
     
                 project_name TEXT NOT NULL,
+                reason TEXT NOT NULL,
                 description TEXT,
                 state INTEGER NOT NULL,
     

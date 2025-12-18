@@ -14,14 +14,14 @@ namespace Hourregistration.Core.Data.Repositories
         {
             _localUserRepository = localUserRepository;
             declaredHoursList = [
-                new DeclaredHours(1, new DateOnly(2025, 11, 3), 7, "Boodschappenapp", "Boodschappen", 0) { User = _localUserRepository.Get(0).Result! },
+                new DeclaredHours(1, new DateOnly(2025, 11, 3), 7, "Boodschappenapp", "Boodschappen", 0) { User = _localUserRepository.Get(1).Result! },
                 new DeclaredHours(2, new DateOnly(2025, 11, 4), 3, "Boodschappenapp", "Het is etenstijd waar ben je >:(", 1) { User = _localUserRepository.Get(1).Result! },
-                new DeclaredHours(3, new DateOnly(2025, 11, 5), 6, "Boodschappenapp", "", 0) { User = _localUserRepository.Get(0).Result! },
+                new DeclaredHours(3, new DateOnly(2025, 11, 5), 6, "Boodschappenapp", "", 0) { User = _localUserRepository.Get(1).Result! },
                 new DeclaredHours(4, new DateOnly(2025, 11, 6), 2, "Boodschappenapp", "", 2) { User = _localUserRepository.Get(2).Result! },
                 new DeclaredHours(5, new DateOnly(2025, 11, 7), 3, "Boodschappenapp", "Werk jij op vrijdag??", 1) { User = _localUserRepository.Get(1).Result! },
 
                 new DeclaredHours(6, new DateOnly(2025, 11, 10), 4, "Urenregistratie", "", 3) { State = DeclaredState.Akkoord, User = _localUserRepository.Get(3).Result! },
-                new DeclaredHours(7, new DateOnly(2025, 11, 11), 6, "Boodschappenapp", "", 0) { User = _localUserRepository.Get(0).Result! },
+                new DeclaredHours(7, new DateOnly(2025, 11, 11), 6, "Boodschappenapp", "", 0) { User = _localUserRepository.Get(1).Result! },
                 new DeclaredHours(8, new DateOnly(2025, 11, 12), 3, "Urenregistratie", "", 2) { State = DeclaredState.Geweigerd, User = _localUserRepository.Get(2).Result! },
             ];
 

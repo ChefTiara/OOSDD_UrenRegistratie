@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Hourregistration.App.ViewModels"
+             xmlns:m="clr-namespace:Hourregistration.Core.Models;assembly=Hourregistration.Core"
              x:Class="Hourregistration.App.Views.UrenbeoordelingPage"
              x:Name="PageRoot"
+             x:DataType="vm:UrenbeoordelingViewModel"
              Title="Urenbeoordeling">
 
     <ContentPage.Content>
@@ -20,7 +23,7 @@
                       Margin="0,0,0,4">
                     <Label Text="Medewerker" FontAttributes="Bold" />
                     <Label Text="Periode" Grid.Column="1" FontAttributes="Bold" />
-                    <Label Text="Project" Grid.Column="2" FontAttributes="Bold" />
+                    <Label Text="Reason" Grid.Column="2" FontAttributes="Bold" />
                     <Label Text="Totaal uren" Grid.Column="3" FontAttributes="Bold" />
                     <Label Text="Ingediend op" Grid.Column="4" FontAttributes="Bold" />
                     <Label Text="Actie" Grid.Column="5" FontAttributes="Bold" HorizontalTextAlignment="Center" />
@@ -29,25 +32,25 @@
                 <CollectionView ItemsSource="{Binding PendingDeclarations}"
                                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="m:DeclaredHours">
                             <Frame Padding="10" BorderColor="#222" Margin="0,4" CornerRadius="6">
                                 <Grid ColumnDefinitions="2*,2*,2*,1.2*,1.2*,0.9*"
                                       RowDefinitions="Auto"
                                       ColumnSpacing="8">
-                                    <Label Text="{Binding EmployeeName}"
+                                    <Label Text="{Binding User.Username}"
                                            FontAttributes="Bold"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="1"
                                            Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="2"
-                                           Text="{Binding ProjectName}"
+                                           Text="{Binding Reason}"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="3"
                                            Text="{Binding WorkedHours, StringFormat='{0:0.#} uur'}"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="4"
-                                           Text="{Binding SubmittedOn, StringFormat='{0:dd/MM/yyyy}'}"
+                                           Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy}'}"
                                            VerticalOptions="Center" />
                                     <Grid Grid.Column="5"
                                           ColumnDefinitions="Auto,Auto"
@@ -88,7 +91,7 @@
                               Margin="0,0,0,4">
                             <Label Text="Medewerker" FontAttributes="Bold" />
                             <Label Text="Periode" Grid.Column="1" FontAttributes="Bold" />
-                            <Label Text="Project" Grid.Column="2" FontAttributes="Bold" />
+                            <Label Text="Reden" Grid.Column="2" FontAttributes="Bold" />
                             <Label Text="Totaal uren" Grid.Column="3" FontAttributes="Bold" />
                             <Label Text="Ingediend op" Grid.Column="4" FontAttributes="Bold" />
                             <Label Text="Gekeurd op" Grid.Column="5" FontAttributes="Bold" />
@@ -96,25 +99,25 @@
                         </Grid>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="m:DeclaredHours">
                             <Frame Padding="10" BorderColor="#222" Margin="0,4" CornerRadius="6">
                                 <Grid ColumnDefinitions="2*,2*,2*,1.2*,1.2*,1.2*,1*"
                                       RowDefinitions="Auto"
                                       ColumnSpacing="8">
-                                    <Label Text="{Binding EmployeeName}"
+                                    <Label Text="{Binding User.Username}"
                                            FontAttributes="Bold"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="1"
                                            Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="2"
-                                           Text="{Binding ProjectName}"
+                                           Text="{Binding Reason}"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="3"
                                            Text="{Binding WorkedHours, StringFormat='{0:0.#} uur'}"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="4"
-                                           Text="{Binding SubmittedOn, StringFormat='{0:dd/MM/yyyy}'}"
+                                           Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy}'}"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="5"
                                            Text="{Binding ReviewedOn, StringFormat='{0:dd/MM/yyyy}'}"

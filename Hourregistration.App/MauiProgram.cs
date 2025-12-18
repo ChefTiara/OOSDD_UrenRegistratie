@@ -62,7 +62,7 @@ namespace Hourregistration.App
             using var scope = app.Services.CreateScope();
             var migrator = scope.ServiceProvider.GetRequiredService<SqliteSchemaMigrator>();
 
-            /*
+            
             // Temporary developer command: if this flag file exists in the app data folder,
             // drop all DB tables to get a clean database. Remove the flag after handling.
             try
@@ -83,7 +83,7 @@ namespace Hourregistration.App
             {
                 Debug.WriteLine("[DEV] Error while clearing DB: " + ex.Message);
             }
-            */
+            
 
             var task = migrator.MigrateAsync();
             task.GetAwaiter().GetResult();

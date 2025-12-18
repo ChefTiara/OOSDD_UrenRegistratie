@@ -59,7 +59,7 @@ namespace Hourregistration.App.ViewModels
             if (!confirmed) return;
 
             item.State = DeclaredState.Akkoord;
-            item.ReviewedOn = DateOnly.FromDateTime(DateTime.Now);
+            item.ReviewedOn = DateTime.Now;
             _declaredHoursService.Update(item);
 
             PendingDeclarations.Remove(item);
@@ -81,7 +81,7 @@ namespace Hourregistration.App.ViewModels
             if (!confirmed) return;
 
             item.State = DeclaredState.Geweigerd;
-            item.ReviewedOn = DateOnly.FromDateTime(DateTime.Now);
+            item.ReviewedOn = DateTime.Now;
             _declaredHoursService.Update(item);
 
             PendingDeclarations.Remove(item);
@@ -100,11 +100,11 @@ namespace Hourregistration.App.ViewModels
             ReviewedDeclarations.Insert(0, item);
         }
 
-        private static DateOnly ReviewedSortKey(DeclaredHours d)
+        private static DateTime ReviewedSortKey(DeclaredHours d)
         {
-            if (d.ReviewedOn is DateOnly reviewed)
+            if (d.ReviewedOn is DateTime reviewed)
                 return reviewed;
-            return d.SubmittedOn;
+            return d.CreatedAt;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Hourregistration.Core.Data.Repositories
         {
             // columns in DraftDeclarations table:
             // draft_id, declaration_date, start_time, end_time,
-            // worked_hours, reason, project_name, description, user_id, created_at, updated_at
+            // worked_hours, reason, project_name, description, user_id, created_at, updated_at, reviewed_on (optional)
             var id = reader.GetInt64(0);
 
             DateOnly date = DateOnly.MinValue;
@@ -73,10 +73,14 @@ namespace Hourregistration.Core.Data.Repositories
             DateTime? updatedAt = null;
             if (!reader.IsDBNull(10)) updatedAt = reader.GetDateTime(10);
 
+            DateTime? reviewedOn = null;
+            if (reader.FieldCount > 11 && !reader.IsDBNull(11)) reviewedOn = reader.GetDateTime(11);
+
             var dh = new DeclaredHours(id, date, (int)workedHours, reason ?? string.Empty, description ?? string.Empty, userId)
             {
                 CreatedAt = createdAt,
-                UpdatedAt = updatedAt
+                UpdatedAt = updatedAt,
+                ReviewedOn = reviewedOn
             };
             return dh;
         }
@@ -84,13 +88,29 @@ namespace Hourregistration.Core.Data.Repositories
         public async Task<List<DeclaredHours>> GetAllDraftsAsync(CancellationToken ct = default)
         {
             using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "DraftDeclarations", "reviewed_on");
+
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = @"
-                SELECT draft_id, declaration_date, start_time, end_time,
-                       worked_hours, reason, project_name, description, user_id,
-                       created_at, updated_at
-                FROM DraftDeclarations
-                ORDER BY created_at;";
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                    SELECT draft_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, user_id,
+                           created_at, updated_at, reviewed_on
+                    FROM DraftDeclarations
+                    ORDER BY created_at;";
+            }
+            else
+            {
+                // older schema: no reviewed_on column
+                cmd.CommandText = @"
+                    SELECT draft_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, user_id,
+                           created_at, updated_at
+                    FROM DraftDeclarations
+                    ORDER BY created_at;";
+            }
+
             using var reader = await cmd.ExecuteReaderAsync(ct);
             var list = new List<DeclaredHours>();
             while (await reader.ReadAsync(ct))
@@ -105,23 +125,50 @@ namespace Hourregistration.Core.Data.Repositories
             if (declaration == null) throw new ArgumentNullException(nameof(declaration));
 
             using var conn = await _factory.CreateOpenConnectionAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = @"
-                INSERT INTO DraftDeclarations
-                (declaration_date, start_time, end_time, worked_hours, reason, project_name, description, user_id, created_at, updated_at)
-                VALUES ($date, $startTime, $endTime, $workedHours, $reason, $projectName, $description, $userId, $createdAt, $updatedAt);
-                SELECT last_insert_rowid();";
+            bool hasReviewedOn = ColumnExists(conn, "DraftDeclarations", "reviewed_on");
 
-            cmd.Parameters.AddWithValue("$date", declaration.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-            cmd.Parameters.AddWithValue("$startTime", declaration.StartTime == default ? (object)DBNull.Value : declaration.StartTime.ToString("HH:mm:ss"));
-            cmd.Parameters.AddWithValue("$endTime", declaration.EndTime == default ? (object)DBNull.Value : declaration.EndTime.ToString("HH:mm:ss"));
-            cmd.Parameters.AddWithValue("$workedHours", declaration.WorkedHours);
-            cmd.Parameters.AddWithValue("$reason", declaration.Reason ?? string.Empty);
-            cmd.Parameters.AddWithValue("$projectName", declaration.ProjectName ?? string.Empty);
-            cmd.Parameters.AddWithValue("$description", declaration.Description ?? string.Empty);
-            cmd.Parameters.AddWithValue("$userId", declaration.UserId);
-            cmd.Parameters.AddWithValue("$createdAt", declaration.CreatedAt == default ? DateTime.UtcNow : declaration.CreatedAt);
-            cmd.Parameters.AddWithValue("$updatedAt", declaration.UpdatedAt.HasValue ? (object)declaration.UpdatedAt.Value : DBNull.Value);
+            using var cmd = conn.CreateCommand();
+
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                    INSERT INTO DraftDeclarations
+                    (declaration_date, start_time, end_time, worked_hours, reason, project_name, description, user_id, created_at, updated_at, reviewed_on)
+                    VALUES ($date, $startTime, $endTime, $workedHours, $reason, $projectName, $description, $userId, $createdAt, $updatedAt, $reviewedOn);
+                    SELECT last_insert_rowid();";
+
+                cmd.Parameters.AddWithValue("$date", declaration.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                cmd.Parameters.AddWithValue("$startTime", declaration.StartTime == default ? (object)DBNull.Value : declaration.StartTime.ToString("HH:mm:ss"));
+                cmd.Parameters.AddWithValue("$endTime", declaration.EndTime == default ? (object)DBNull.Value : declaration.EndTime.ToString("HH:mm:ss"));
+                cmd.Parameters.AddWithValue("$workedHours", declaration.WorkedHours);
+                cmd.Parameters.AddWithValue("$reason", declaration.Reason ?? string.Empty);
+                cmd.Parameters.AddWithValue("$projectName", declaration.ProjectName ?? string.Empty);
+                cmd.Parameters.AddWithValue("$description", declaration.Description ?? string.Empty);
+                cmd.Parameters.AddWithValue("$userId", declaration.UserId);
+                cmd.Parameters.AddWithValue("$createdAt", declaration.CreatedAt == default ? DateTime.UtcNow : declaration.CreatedAt);
+                cmd.Parameters.AddWithValue("$updatedAt", declaration.UpdatedAt.HasValue ? (object)declaration.UpdatedAt.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("$reviewedOn", declaration.ReviewedOn.HasValue ? (object)declaration.ReviewedOn.Value : DBNull.Value);
+            }
+            else
+            {
+                // older schema: no reviewed_on column
+                cmd.CommandText = @"
+                    INSERT INTO DraftDeclarations
+                    (declaration_date, start_time, end_time, worked_hours, reason, project_name, description, user_id, created_at, updated_at)
+                    VALUES ($date, $startTime, $endTime, $workedHours, $reason, $projectName, $description, $userId, $createdAt, $updatedAt);
+                    SELECT last_insert_rowid();";
+
+                cmd.Parameters.AddWithValue("$date", declaration.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                cmd.Parameters.AddWithValue("$startTime", declaration.StartTime == default ? (object)DBNull.Value : declaration.StartTime.ToString("HH:mm:ss"));
+                cmd.Parameters.AddWithValue("$endTime", declaration.EndTime == default ? (object)DBNull.Value : declaration.EndTime.ToString("HH:mm:ss"));
+                cmd.Parameters.AddWithValue("$workedHours", declaration.WorkedHours);
+                cmd.Parameters.AddWithValue("$reason", declaration.Reason ?? string.Empty);
+                cmd.Parameters.AddWithValue("$projectName", declaration.ProjectName ?? string.Empty);
+                cmd.Parameters.AddWithValue("$description", declaration.Description ?? string.Empty);
+                cmd.Parameters.AddWithValue("$userId", declaration.UserId);
+                cmd.Parameters.AddWithValue("$createdAt", declaration.CreatedAt == default ? DateTime.UtcNow : declaration.CreatedAt);
+                cmd.Parameters.AddWithValue("$updatedAt", declaration.UpdatedAt.HasValue ? (object)declaration.UpdatedAt.Value : DBNull.Value);
+            }
 
             var scalar = await cmd.ExecuteScalarAsync(ct);
             long newId = scalar is long l ? l : Convert.ToInt64(scalar);
@@ -129,7 +176,8 @@ namespace Hourregistration.Core.Data.Repositories
             var copy = new DeclaredHours(newId, declaration.Date, (int)declaration.WorkedHours, declaration.Reason ?? string.Empty, declaration.Description ?? string.Empty, declaration.UserId)
             {
                 CreatedAt = declaration.CreatedAt == default ? DateTime.UtcNow : declaration.CreatedAt,
-                UpdatedAt = declaration.UpdatedAt
+                UpdatedAt = declaration.UpdatedAt,
+                ReviewedOn = declaration.ReviewedOn
             };
 
             return copy;
@@ -140,15 +188,30 @@ namespace Hourregistration.Core.Data.Repositories
             if (declaration == null) throw new ArgumentNullException(nameof(declaration));
 
             using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "DraftDeclarations", "reviewed_on");
+
             using var selectCmd = conn.CreateCommand();
 
-            selectCmd.CommandText = @"
-                SELECT draft_id, declaration_date, start_time, end_time,
-                       worked_hours, reason, project_name, description, user_id,
-                       created_at, updated_at
-                FROM DraftDeclarations
-                WHERE draft_id = $id
-                LIMIT 1;";
+            if (hasReviewedOn)
+            {
+                selectCmd.CommandText = @"
+                    SELECT draft_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, user_id,
+                           created_at, updated_at, reviewed_on
+                    FROM DraftDeclarations
+                    WHERE draft_id = $id
+                    LIMIT 1;";
+            }
+            else
+            {
+                selectCmd.CommandText = @"
+                    SELECT draft_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, user_id,
+                           created_at, updated_at
+                    FROM DraftDeclarations
+                    WHERE draft_id = $id
+                    LIMIT 1;";
+            }
             selectCmd.Parameters.AddWithValue("$id", declaration.Id);
 
             using var reader = await selectCmd.ExecuteReaderAsync(ct);
@@ -163,17 +226,35 @@ namespace Hourregistration.Core.Data.Repositories
             {
                 // fallback: try to find by content match (date+hours+reason+description+user)
                 using var fallbackCmd = conn.CreateCommand();
-                fallbackCmd.CommandText = @"
-                    SELECT draft_id, declaration_date, start_time, end_time,
-                           worked_hours, reason, project_name, description, user_id,
-                           created_at, updated_at
-                    FROM DraftDeclarations
-                    WHERE declaration_date = $date
-                      AND ABS(worked_hours - $workedHours) < 0.0001
-                      AND reason = $reason
-                      AND description = $description
-                      AND user_id = $userId
-                    LIMIT 1;";
+                if (hasReviewedOn)
+                {
+                    fallbackCmd.CommandText = @"
+                        SELECT draft_id, declaration_date, start_time, end_time,
+                               worked_hours, reason, project_name, description, user_id,
+                               created_at, updated_at, reviewed_on
+                        FROM DraftDeclarations
+                        WHERE declaration_date = $date
+                          AND ABS(worked_hours - $workedHours) < 0.0001
+                          AND reason = $reason
+                          AND description = $description
+                          AND user_id = $userId
+                        LIMIT 1;";
+                }
+                else
+                {
+                    fallbackCmd.CommandText = @"
+                        SELECT draft_id, declaration_date, start_time, end_time,
+                               worked_hours, reason, project_name, description, user_id,
+                               created_at, updated_at
+                        FROM DraftDeclarations
+                        WHERE declaration_date = $date
+                          AND ABS(worked_hours - $workedHours) < 0.0001
+                          AND reason = $reason
+                          AND description = $description
+                          AND user_id = $userId
+                        LIMIT 1;";
+                }
+
                 fallbackCmd.Parameters.AddWithValue("$date", declaration.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
                 fallbackCmd.Parameters.AddWithValue("$workedHours", declaration.WorkedHours);
                 fallbackCmd.Parameters.AddWithValue("$reason", declaration.Reason ?? string.Empty);
@@ -200,6 +281,22 @@ namespace Hourregistration.Core.Data.Repositories
             await deleteCmd.ExecuteNonQueryAsync(ct);
 
             return existing;
+        }
+
+        // Helper to detect whether a given column exists in a table (uses PRAGMA table_info)
+        private static bool ColumnExists(SqliteConnection conn, string tableName, string columnName)
+        {
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = $"PRAGMA table_info('{tableName}');";
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                // PRAGMA table_info returns: cid, name, type, notnull, dflt_value, pk
+                var name = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
+                if (string.Equals(name, columnName, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+            return false;
         }
     }
 }

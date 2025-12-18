@@ -52,7 +52,7 @@ namespace Hourregistration.App.ViewModels
             // Confirm approval with the user
             var confirmed = await (Application.Current?.MainPage?.DisplayAlert(
                 "Uren bevestigen",
-                $"Weet u zeker dat u deze uren wilt goedkeuren voor {item.EmployeeName} ({item.ProjectName})?",
+                $"Weet u zeker dat u deze uren wilt goedkeuren voor {item.User.Username} ({item.Reason})?",
                 "Bevestigen",
                 "Annuleren") ?? Task.FromResult(false));
 
@@ -74,7 +74,7 @@ namespace Hourregistration.App.ViewModels
             // Confirm rejection with the user
             var confirmed = await (Application.Current?.MainPage?.DisplayAlert(
                 "Uren afwijzen",
-                $"Weet u zeker dat u deze uren wilt afwijzen voor {item.EmployeeName} ({item.ProjectName})?",
+                $"Weet u zeker dat u deze uren wilt afwijzen voor {item.User.Username} ({item.Reason})?",
                 "Afwijzen",
                 "Annuleren") ?? Task.FromResult(false));
 

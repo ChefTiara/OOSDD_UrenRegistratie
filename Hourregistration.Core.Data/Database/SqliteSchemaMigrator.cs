@@ -69,6 +69,23 @@
             ";
             await cmd.ExecuteNonQueryAsync();
         }
+
+        // Temporary developer helper: drop the core tables (useful for resetting DB during development)
+        public async Task DropAllAsync()
+        {
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            using var cmd = conn.CreateCommand();
+
+            // drop dependent objects first
+            cmd.CommandText = @"
+                DROP INDEX IF EXISTS IX_Declarations_UserID;
+                DROP TABLE IF EXISTS DraftDeclarations;
+                DROP TABLE IF EXISTS Declarations;
+                DROP TABLE IF EXISTS Users;
+                VACUUM;
+            ";
+            await cmd.ExecuteNonQueryAsync();
+        }
     }
 
 }

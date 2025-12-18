@@ -1,4 +1,5 @@
-﻿using Hourregistration.App.Services;
+﻿using System.Diagnostics;
+using Hourregistration.App.Services;
 using Hourregistration.App.ViewModels;
 using Hourregistration.App.Views;
 using Hourregistration.Core.Data.Database;
@@ -58,6 +59,29 @@ namespace Hourregistration.App
             // Schema migreren en seeden
             using var scope = app.Services.CreateScope();
             var migrator = scope.ServiceProvider.GetRequiredService<SqliteSchemaMigrator>();
+
+            /*
+            // Temporary developer command: if this flag file exists in the app data folder,
+            // drop all DB tables to get a clean database. Remove the flag after handling.
+            try
+            {
+                var clearFlag = Path.Combine(FileSystem.AppDataDirectory, "clear_db.flag");
+                if (File.Exists(clearFlag))
+                {
+                    Debug.WriteLine("[DEV] clear_db.flag found - dropping database tables.");
+                    migrator.DropAllAsync().GetAwaiter().GetResult();
+                    // remove DB file if present (optional)
+                    var dbFile = Path.Combine(FileSystem.AppDataDirectory, "app.db");
+                    try { if (File.Exists(dbFile)) File.Delete(dbFile); } catch { }
+                    // remove flag
+                    try { File.Delete(clearFlag); } catch { }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("[DEV] Error while clearing DB: " + ex.Message);
+            }
+            */
 
             var task = migrator.MigrateAsync();
             task.GetAwaiter().GetResult();

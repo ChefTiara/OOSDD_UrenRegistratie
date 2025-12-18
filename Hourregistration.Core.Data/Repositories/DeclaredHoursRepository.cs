@@ -50,9 +50,9 @@ namespace Hourregistration.Core.Data.Repositories
         {
             return declaredHoursList.FirstOrDefault(dh => dh.Id == id);
         }
-        public List<DeclaredHours> GetAll()
+        public List<DeclaredHours> GetByUserId(long userId)
         {
-            return declaredHoursList;
+            return declaredHoursList.Where(dh => dh.UserId == userId).ToList();
         }
         public List<DeclaredHours> GetByState(DeclaredState state)
         {

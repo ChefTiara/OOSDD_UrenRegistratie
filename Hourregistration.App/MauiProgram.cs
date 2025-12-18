@@ -43,6 +43,8 @@ namespace Hourregistration.App
             // Pages and viewmodels should be transient so a fresh instance is created for navigation
             builder.Services.AddTransient<DeclarationHomeView>();
             builder.Services.AddTransient<DeclarationPage>();
+            builder.Services.AddTransient<UrenbeoordelingPage>();
+            builder.Services.AddTransient<UrenbeoordelingViewModel>();
             builder.Services.AddTransient<EmployeeHoursOverviewViewModel>();
             builder.Services.AddTransient<EmployeeHoursOverviewView>();
             builder.Services.AddTransient<EmployeeOverviewView>();

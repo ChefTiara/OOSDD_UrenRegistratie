@@ -16,7 +16,10 @@ namespace Hourregistration.Core.Models
         public string? Description { get; set; } = string.Empty;
         public long UserId { get; set; } = 0;
         public LocalUser User { get; set; } = null!;
+        public string EmployeeName { get; set; }
         public DeclaredState State { get; set; } = DeclaredState.Verzonden;
+        public DateOnly SubmittedOn { get; set; }
+        public DateOnly? ReviewedOn { get; set; }
 
         public string PlannedHours => $"{StartTime.ToString("HH:mm")}-{EndTime.ToString("HH:mm")}";
 

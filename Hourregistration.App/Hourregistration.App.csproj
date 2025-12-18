@@ -68,11 +68,14 @@
 	  <Compile Update="Views\DeclarationHomeView.xaml.cs">
 	    <DependentUpon>DeclarationHomeView.xaml</DependentUpon>
 	  </Compile>
+		<Compile Update="Views\UrenbeoordelingPage.xaml.cs">
+			<DependentUpon>UrenbeoordelingPage.xaml</DependentUpon>
+		</Compile>
 	  <Compile Update="Views\DeclarationPage.xaml.cs">
 	    <DependentUpon>DeclarationPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
-
+	
 	<ItemGroup>
 	  <MauiXaml Update="Views\DeclarationHomeView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
@@ -92,9 +95,12 @@
 	  <MauiXaml Update="Views\MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\DeclarationPage.xaml">
+	  <MauiXaml Update="Views\UrenbeoordelingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\DeclarationPage.xaml">
+		<Generator>MSBuild:Compile</Generator>
+	</MauiXaml>
 	</ItemGroup>
 
 </Project>

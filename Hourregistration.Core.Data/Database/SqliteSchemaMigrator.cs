@@ -1,4 +1,6 @@
-﻿namespace Hourregistration.Core.Data.Database
+﻿using System.Threading.Tasks;
+
+namespace Hourregistration.Core.Data.Database
 {
     public class SqliteSchemaMigrator
     {
@@ -10,10 +12,11 @@
             using var conn = await _factory.CreateOpenConnectionAsync();
             using var cmd = conn.CreateCommand();
 
+            // Ensure schema includes the nullable reviewed_on column so later one-off updates won't fail.
             cmd.CommandText = @"
             CREATE TABLE IF NOT EXISTS Users (
                 user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    
+
                 username TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL,
                 role INTEGER NOT NULL,
@@ -23,44 +26,46 @@
 
             CREATE TABLE IF NOT EXISTS Declarations (
                 declaration_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    
+
                 declaration_date DATE NOT NULL,
                 start_time TIME,
                 end_time TIME,
-    
+
                 worked_hours REAL NOT NULL,
                 reason TEXT NOT NULL,
-    
+
                 project_name TEXT,
                 description TEXT,
                 state INTEGER NOT NULL,
-    
+
                 user_id INTEGER NOT NULL,
 
                 created_at DATETIME NOT NULL,
                 updated_at DATETIME,
-    
+                reviewed_on DATETIME,
+
                 FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE NO ACTION
             );
 
             CREATE TABLE IF NOT EXISTS DraftDeclarations (
                 draft_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    
+
                 declaration_date DATE NOT NULL,
                 start_time TIME,
                 end_time TIME,
-    
+
                 worked_hours REAL NOT NULL,
                 reason TEXT NOT NULL,
-    
+
                 project_name TEXT,
                 description TEXT,
-    
+
                 user_id INTEGER NOT NULL,
 
                 created_at DATETIME NOT NULL,
                 updated_at DATETIME,
-    
+                reviewed_on DATETIME,
+
                 FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE NO ACTION
             );
 

@@ -1,13 +1,15 @@
-﻿using Hourregistration.Core.Interfaces;
-using Hourregistration.Core.Interfaces.Repositories;
-using Hourregistration.Core.Interfaces.Services;
-using Hourregistration.Core.Data.Repositories;
-using Hourregistration.Core.Services;
-using Microsoft.Extensions.Logging;
+﻿using Hourregistration.App.Services;
 using Hourregistration.App.ViewModels;
 using Hourregistration.App.Views;
-using Hourregistration.App.Services;
 using Hourregistration.Core.Data.Database;
+using Hourregistration.Core.Data.Repositories;
+using Hourregistration.Core.Interfaces;
+using Hourregistration.Core.Interfaces.Repositories;
+using Hourregistration.Core.Interfaces.Services;
+using Hourregistration.Core.Models;
+using Hourregistration.Core.Services;
+using Microsoft.Extensions.Logging;
+using Windows.System;
 
 namespace Hourregistration.App
 {
@@ -53,16 +55,40 @@ namespace Hourregistration.App
 
             var app = builder.Build();
 
-            // Schema migreren
+            // Schema migreren en seeden
             using var scope = app.Services.CreateScope();
             var migrator = scope.ServiceProvider.GetRequiredService<SqliteSchemaMigrator>();
 
             var task = migrator.MigrateAsync();
             task.GetAwaiter().GetResult();
+            task = SeedAsync(scope.ServiceProvider);
+            task.GetAwaiter().GetResult();
 
             ServiceHelper.Initialize(app.Services);
 
             return app;
+        }
+
+        private static async Task SeedAsync(IServiceProvider sp)
+        {
+            var localUsers = sp.GetRequiredService<ILocalUserRepository>();
+
+            var existing = await localUsers.GetAll();
+            if (existing.Count == 0)
+            {
+                var seedUsers = new (string Username, string PasswordHash, Role Role)[]
+                {
+                    ("Wuser", BCrypt.Net.BCrypt.HashPassword("1234"), Role.Werknemer),
+                    ("OGuser", BCrypt.Net.BCrypt.HashPassword("1234"), Role.Opdrachtgever),
+                    ("AMuser", BCrypt.Net.BCrypt.HashPassword("1234"), Role.Administratiemedewerker),
+                    ("Buser", BCrypt.Net.BCrypt.HashPassword("1234"), Role.Beheer)
+                };
+
+                foreach (var u in seedUsers)
+                {
+                    await localUsers.AddAsync(u.Username, u.PasswordHash, u.Role);
+                }
+            }
         }
     }
 }

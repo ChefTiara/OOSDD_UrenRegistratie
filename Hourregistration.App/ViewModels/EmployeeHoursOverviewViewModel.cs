@@ -55,8 +55,8 @@ namespace Hourregistration.App.ViewModels
         }
 
         // SEARCH
-        private string searchText;
-        public string SearchText
+        private string? searchText;
+        public string? SearchText
         {
             get => searchText;
             set

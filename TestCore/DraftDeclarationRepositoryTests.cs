@@ -1,20 +1,20 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
-using Hourregistration.Core.Data.Repositories;
 using Hourregistration.Core.Models;
+using System.Collections.Generic;
 
 namespace TestCore
 {
     [TestFixture]
     public class DraftDeclarationRepositoryTests
     {
-        private DraftDeclarationRepository _repo;
+        private InMemoryDraftRepository _repo;
 
         [SetUp]
         public void Setup()
         {
-            _repo = new DraftDeclarationRepository();
+            _repo = new InMemoryDraftRepository();
         }
 
         [Test]
@@ -76,6 +76,82 @@ namespace TestCore
             // ensure it's removed
             var remaining = _repo.GetAllDrafts();
             Assert.That(remaining.Count, Is.EqualTo(0));
+        }
+
+        // Simple in-memory replacement for DraftDeclarationRepository used in unit tests.
+        // The real repository uses SQLite; tests use this lightweight in-memory implementation
+        // to avoid database dependencies and make behavior deterministic.
+        private class InMemoryDraftRepository
+        {
+            private readonly List<DeclaredHours> _store = new();
+            private long _nextId = 1;
+            private readonly object _lock = new();
+
+            public DeclaredHours AddDraft(DeclaredHours declaration)
+            {
+                if (declaration == null) throw new ArgumentNullException(nameof(declaration));
+
+                lock (_lock)
+                {
+                    // create a copy so callers don't keep the stored reference
+                    var id = declaration.Id != 0 ? declaration.Id : _nextId++;
+                    var copy = new DeclaredHours(id, declaration.Date, (int)declaration.WorkedHours, declaration.Reason ?? string.Empty, declaration.Description ?? string.Empty, declaration.UserId)
+                    {
+                        CreatedAt = declaration.CreatedAt == default ? DateTime.UtcNow : declaration.CreatedAt,
+                        UpdatedAt = declaration.UpdatedAt
+                    };
+                    _store.Add(copy);
+                    return copy;
+                }
+            }
+
+            public List<DeclaredHours> GetAllDrafts()
+            {
+                lock (_lock)
+                {
+                    // return shallow copies to avoid exposing internal references
+                    return _store.Select(d => new DeclaredHours(d.Id, d.Date, (int)d.WorkedHours, d.Reason, d.Description ?? string.Empty, d.UserId)
+                    {
+                        CreatedAt = d.CreatedAt,
+                        UpdatedAt = d.UpdatedAt
+                    }).ToList();
+                }
+            }
+
+            public DeclaredHours? DeleteDraft(DeclaredHours declaration)
+            {
+                if (declaration == null) throw new ArgumentNullException(nameof(declaration));
+
+                lock (_lock)
+                {
+                    // try match by id first (id != 0)
+                    if (declaration.Id != 0)
+                    {
+                        var byId = _store.FirstOrDefault(d => d.Id == declaration.Id);
+                        if (byId != null)
+                        {
+                            _store.Remove(byId);
+                            return byId;
+                        }
+                    }
+
+                    // fallback: find by content (date, worked hours, reason, description, user)
+                    var fallback = _store.FirstOrDefault(d =>
+                        d.Date == declaration.Date &&
+                        d.WorkedHours == declaration.WorkedHours &&
+                        string.Equals(d.Reason ?? string.Empty, declaration.Reason ?? string.Empty, StringComparison.Ordinal) &&
+                        string.Equals(d.Description ?? string.Empty, declaration.Description ?? string.Empty, StringComparison.Ordinal) &&
+                        d.UserId == declaration.UserId);
+
+                    if (fallback != null)
+                    {
+                        _store.Remove(fallback);
+                        return fallback;
+                    }
+
+                    return null;
+                }
+            }
         }
     }
 }

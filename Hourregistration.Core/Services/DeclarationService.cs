@@ -38,10 +38,10 @@ namespace Hourregistration.Core.Services
                 .Where(d => d.Date == declaratie.Date)
                 .Sum(d => d.WorkedHours);
 
-            // If adding this declaration would exceed 8 hours, reject it.
+            // If adding this declaration would exceed 12 hours, reject it.
             if (sameDayTotal + declaratie.WorkedHours > 12.0)
             {
-                return (false, "Totaal aantal uren voor deze datum mag niet meer dan 8 uur bedragen (inclusief reeds ingediende uren).");
+                return (false, "Totaal aantal uren voor deze datum mag niet meer dan 12 uur bedragen (inclusief reeds ingediende uren).");
             }
 
             await _declaredHoursService.AddAsync(declaratie);

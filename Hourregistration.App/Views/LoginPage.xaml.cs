@@ -39,7 +39,7 @@ namespace Hourregistration.App
             // set session (role and id become available via SessionManager)
             SessionManager.SetCurrentUser(user);
 
-            Page nextPage = SessionManager.CurrentRole switch
+            Page? nextPage = SessionManager.CurrentRole switch
             {
                 Role.Werknemer => ServiceHelper.GetService<DeclarationHomeView>(),
                 Role.Opdrachtgever => CreateUrenbeoordelingPage(),
@@ -55,7 +55,7 @@ namespace Hourregistration.App
                 return;
             }
 
-            await Navigation.PushAsync(nextPage);
+            await Navigation.PushAsync(nextPage!);
         }
 
         private Page CreateEmployeeOverviewPage()

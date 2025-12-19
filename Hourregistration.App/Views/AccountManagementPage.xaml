@@ -22,7 +22,7 @@
             </Picker>
             <Button Text="Aanmaken" Clicked="OnCreateClicked" />
 
-            <BoxView HeightRequest="1" Color="#444" />
+            <BoxView HeightRequest="1" />
 
             <!-- Existing accounts -->
             <Label Text="Bestaande accounts" FontAttributes="Bold" />

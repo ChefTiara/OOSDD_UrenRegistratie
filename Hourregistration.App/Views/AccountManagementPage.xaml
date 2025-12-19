@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Hourregistration.App.Views.AccountManagementPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Accountbeheer">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+
+            <!-- Create form -->
+            <Label Text="Nieuw account" FontAttributes="Bold" />
+            <Entry x:Name="UsernameEntry" Placeholder="Gebruikersnaam" />
+            <Entry x:Name="PasswordEntry" Placeholder="Wachtwoord" IsPassword="True" />
+            <Picker x:Name="RolePicker" Title="Rol kiezen">
+                <Picker.Items>
+                    <x:String>Werknemer</x:String>
+                    <x:String>Opdrachtgever</x:String>
+                    <x:String>Administratiemedewerker</x:String>
+                    <x:String>Beheer</x:String>
+                </Picker.Items>
+            </Picker>
+            <Button Text="Aanmaken" Clicked="OnCreateClicked" />
+
+            <BoxView HeightRequest="1" />
+
+            <!-- Existing accounts -->
+            <Label Text="Bestaande accounts" FontAttributes="Bold" />
+            <CollectionView x:Name="AccountsList">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*,Auto,Auto" Padding="8">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="{Binding Username}" FontAttributes="Bold" />
+                                <Label Text="{Binding Role}" />
+                                <Label Text="{Binding IsActive, StringFormat='Actief: {0}'}" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="Wijzig"
+                                    CommandParameter="{Binding}"
+                                    Clicked="OnEditClicked" />
+
+                            <Button Grid.Column="2"
+                                    Text="Deactiveer"
+                                    CommandParameter="{Binding}"
+                                    Clicked="OnDeactivateClicked" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

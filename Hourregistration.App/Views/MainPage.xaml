@@ -4,6 +4,7 @@
              x:Class="Hourregistration.App.Views.MainPage"
              xmlns:ContentView="clr-namespace:Hourregistration.App.Views"
              Title="MainPage">
+
     <VerticalStackLayout>
         <ContentView:Header/>
         <ContentView x:Name="Subpage"/>

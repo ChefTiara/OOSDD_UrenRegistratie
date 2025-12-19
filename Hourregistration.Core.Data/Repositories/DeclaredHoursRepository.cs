@@ -1,120 +1,516 @@
-﻿using Hourregistration.Core.Interfaces.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Hourregistration.Core.Data.Database;
+using Hourregistration.Core.Interfaces.Repositories;
 using Hourregistration.Core.Models;
+using Microsoft.Data.Sqlite;
+using System.Globalization;
 
 namespace Hourregistration.Core.Data.Repositories
 {
     public class DeclaredHoursRepository : IDeclaredHoursRepository
     {
-        private readonly List<DeclaredHours> declaredHoursList;
-        private readonly List<DeclaredHoursEmployee> declaredHoursList4;
-        public DeclaredHoursRepository()
+        private readonly ISqliteConnectionFactory _factory;
+        private readonly ILocalUserRepository _localUserRepository;
+
+        public DeclaredHoursRepository(ILocalUserRepository localUserRepository, ISqliteConnectionFactory factory)
         {
-            declaredHoursList = [
-                new DeclaredHours(1, new DateOnly(2025, 11, 3), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "Boodschappen", 0),
-                new DeclaredHours(2, new DateOnly(2025, 11, 4), new TimeOnly(7, 20), new TimeOnly(18, 20), "Boodschappenapp", "Het is etenstijd waar ben je >:(", 0),
-                new DeclaredHours(3, new DateOnly(2025, 11, 5), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0),
-                new DeclaredHours(4, new DateOnly(2025, 11, 6), new TimeOnly(8, 20), new TimeOnly(16, 20), "Boodschappenapp", "", 0),
-                new DeclaredHours(5, new DateOnly(2025, 11, 7), new TimeOnly(9, 20), new TimeOnly(17, 20), "Boodschappenapp", "Werk jij op vrijdag??", 0),
-
-                new DeclaredHours(6, new DateOnly(2025, 11, 10), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 0) { State = DeclaredState.Akkoord },
-                new DeclaredHours(7, new DateOnly(2025, 11, 11), new TimeOnly(8, 20), new TimeOnly(17, 20), "Boodschappenapp", "", 0),
-                new DeclaredHours(8, new DateOnly(2025, 11, 12), new TimeOnly(9, 20), new TimeOnly(17, 20), "Urenregistratie", "", 0) { State = DeclaredState.Geweigerd },
-            ];
-
-            declaredHoursList4 =
-            [
-                new DeclaredHoursEmployee(9, "Kees", "Janssen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(10, "Jeroen", "de Boom", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(18, 20)),
-                new DeclaredHoursEmployee(11, "Teun", "van Kampen", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(12, "Bilal", "Hout", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(13, "Karsten", "de Lange", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(14, "Bas", "de Graaf", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(15, "Rodi", "Verschoor", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(16, "Tyrone", "van Blokken", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(17, "Daan", "de Vries", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(18, "Luuk", "Jansen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(7, 20), new TimeOnly(15, 20)),
-                new DeclaredHoursEmployee(19, "Sven", "Klaassen", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-                new DeclaredHoursEmployee(20, "Milan", "de Wit", "Teamleider", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(21, "Jesse", "van den Berg", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(9, 20), new TimeOnly(17, 20)),
-                new DeclaredHoursEmployee(22, "Finn", "Smits", "Medewerker", new DateOnly(2025, 11, 17), new TimeOnly(8, 20), new TimeOnly(16, 20)),
-            ];
+            _factory = factory;
+            _localUserRepository = localUserRepository;
         }
 
-        public DeclaredHours? Get(int id)
+        // ---------- synchronous wrappers (delegate to async DB methods) ----------
+        public DeclaredHours? Get(long id)
         {
-            return declaredHoursList.FirstOrDefault(dh => dh.Id == id);
+            return GetAsync(id).GetAwaiter().GetResult();
         }
-        public List<DeclaredHours> GetByClientId(long clientId)
+
+        public List<DeclaredHours> GetByUserId(long userId)
         {
-            return declaredHoursList.Where(dh => dh.ClientId == clientId).ToList();
+            return GetByUserIdAsync(userId).GetAwaiter().GetResult();
         }
+
         public List<DeclaredHours> GetByState(DeclaredState state)
         {
-            return declaredHoursList.Where(dh => dh.State == state).ToList();
-        }
-        public List<DeclaredHours> GetAll()
-        {
-            return declaredHoursList;
-        }
-        public DeclaredHours Add(DeclaredHours declaredHour)
-        {
-            declaredHoursList.Add(declaredHour);
-            return declaredHour;
-        }
-        public DeclaredHours Update(DeclaredHours declaredHour)
-        {
-            DeclaredHours? existingDeclaredHour = Get(declaredHour.Id) ?? throw new ArgumentException("Declared hour not found");
-            declaredHoursList.Remove(existingDeclaredHour);
-            declaredHoursList.Add(declaredHour);
-            return declaredHour;
-        }
-        public DeclaredHours Delete(int id)
-        {
-            DeclaredHours? existingDeclaredHour = Get(id) ?? throw new ArgumentException("Declared hour not found");
-            declaredHoursList.Remove(existingDeclaredHour);
-            return existingDeclaredHour;
+            return GetByStateAsync(state).GetAwaiter().GetResult();
         }
 
-        public Task<DeclaredHours?> GetAsync(int id)
+        public List<DeclaredHours> GetAll()
         {
-            return Task.FromResult(Get(id));
+            return GetAllAsync().GetAwaiter().GetResult();
         }
-        public Task<List<DeclaredHours>> GetByClientIdAsync(long clientId)
+
+        public DeclaredHours GetLatestDeclarationFromUserId(long userId)
         {
-            return Task.FromResult(GetByClientId(clientId));
+            return GetLatestDeclarationFromUserIdAsync(userId).GetAwaiter().GetResult();
         }
-        public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
+
+        public DeclaredHours Add(DeclaredHours declaredHour)
         {
-            return Task.FromResult(GetByState(state));
+            return AddAsync(declaredHour).GetAwaiter().GetResult();
         }
-        public Task<List<DeclaredHours>> GetAllAsync()
+
+        public DeclaredHours Update(DeclaredHours declaredHour)
         {
-            return Task.FromResult(GetAll());
+            return UpdateAsync(declaredHour).GetAwaiter().GetResult();
         }
-        public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
+
+        public DeclaredHours Delete(long id)
         {
-            return Task.FromResult(Add(declaredHour));
+            return DeleteAsync(id).GetAwaiter().GetResult();
         }
-        public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour)
+
+        // ----------------------------
+        // Async database-backed methods
+        // ----------------------------
+
+        private static DeclaredHours MapReaderToDeclaredHours(SqliteDataReader reader)
         {
-            return Task.FromResult(Update(declaredHour));
+            // columns in Declarations table (see migrator)
+            // declaration_id, declaration_date, start_time, end_time, worked_hours, reason,
+            // project_name, description, state, user_id, created_at, updated_at[, reviewed_on]
+            var id = reader.GetInt64(0);
+            DateOnly date = DateOnly.MinValue;
+            if (!reader.IsDBNull(1))
+            {
+                // SQLite may store date as text; try DateTime then convert
+                try
+                {
+                    var dt = reader.GetDateTime(1);
+                    date = DateOnly.FromDateTime(dt);
+                }
+                catch
+                {
+                    var s = reader.GetString(1);
+                    if (DateOnly.TryParse(s, out var d)) date = d;
+                    else if (DateTime.TryParse(s, out var dt2)) date = DateOnly.FromDateTime(dt2);
+                }
+            }
+
+            double workedHours = !reader.IsDBNull(4) ? reader.GetDouble(4) : 0.0;
+            string reason = !reader.IsDBNull(5) ? reader.GetString(5) : string.Empty;
+            string projectName = !reader.IsDBNull(6) ? reader.GetString(6) : string.Empty;
+            string description = !reader.IsDBNull(7) ? reader.GetString(7) : string.Empty;
+            var state = !reader.IsDBNull(8) ? (DeclaredState)reader.GetInt32(8) : DeclaredState.Verzonden;
+            var userId = !reader.IsDBNull(9) ? reader.GetInt64(9) : 0L;
+
+            var createdAt = !reader.IsDBNull(10) ? reader.GetDateTime(10) : DateTime.Now;
+            DateTime? updatedAt = null;
+            if (!reader.IsDBNull(11)) updatedAt = reader.GetDateTime(11);
+
+            DateTime? reviewedOn = null;
+            // reviewed_on is optional in older schemas; index 12 when present
+            if (reader.FieldCount > 12 && !reader.IsDBNull(12)) reviewedOn = reader.GetDateTime(12);
+
+            var dh = new DeclaredHours(id, date, (int)workedHours, reason, description, userId)
+            {
+                State = state,
+                CreatedAt = createdAt,
+                UpdatedAt = updatedAt,
+                ReviewedOn = reviewedOn
+            };
+            return dh;
         }
-        public Task<DeclaredHours> DeleteAsync(int id)
+
+        public async Task<DeclaredHours?> GetAsync(long id, CancellationToken ct = default)
         {
-            return Task.FromResult(Delete(id));
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "Declarations", "reviewed_on");
+
+            using var cmd = conn.CreateCommand();
+
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at, reviewed_on
+                    FROM Declarations
+                    WHERE declaration_id = $id;";
+            }
+            else
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at
+                    FROM Declarations
+                    WHERE declaration_id = $id;";
+            }
+
+            cmd.Parameters.AddWithValue("$id", id);
+
+            using var reader = await cmd.ExecuteReaderAsync(ct);
+            if (await reader.ReadAsync(ct))
+            {
+                var dh = MapReaderToDeclaredHours(reader);
+                // populate referenced user if available
+                try
+                {
+                    dh.User = (await _localUserRepository.Get(dh.UserId, ct)) ?? dh.User;
+                }
+                catch { }
+                return dh;
+            }
+            return null;
         }
-        public List<DeclaredHoursEmployee> GetAllEmployeeHours()
+
+        public async Task<List<DeclaredHours>> GetByUserIdAsync(long userId, CancellationToken ct = default)
         {
-            return declaredHoursList4;
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "Declarations", "reviewed_on");
+
+            using var cmd = conn.CreateCommand();
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at, reviewed_on
+                    FROM Declarations
+                    WHERE user_id = $userId
+                    ORDER BY declaration_date, created_at;";
+            }
+            else
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at
+                    FROM Declarations
+                    WHERE user_id = $userId
+                    ORDER BY declaration_date, created_at;";
+            }
+            cmd.Parameters.AddWithValue("$userId", userId);
+
+            using var reader = await cmd.ExecuteReaderAsync(ct);
+            var list = new List<DeclaredHours>();
+            while (await reader.ReadAsync(ct))
+            {
+                var dh = MapReaderToDeclaredHours(reader);
+                try { dh.User = (await _localUserRepository.Get(dh.UserId, ct)) ?? dh.User; } catch { }
+                list.Add(dh);
+            }
+            return list;
         }
-        public DeclaredHoursEmployee? GetEmployeeHour(int id)
+
+        public async Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state, CancellationToken ct = default)
         {
-            return declaredHoursList4.FirstOrDefault(d => d.Id == id);
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "Declarations", "reviewed_on");
+
+            using var cmd = conn.CreateCommand();
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at, reviewed_on
+                    FROM Declarations
+                    WHERE state = $state
+                    ORDER BY declaration_date, created_at;";
+            }
+            else
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at
+                    FROM Declarations
+                    WHERE state = $state
+                    ORDER BY declaration_date, created_at;";
+            }
+            cmd.Parameters.AddWithValue("$state", (int)state);
+
+            using var reader = await cmd.ExecuteReaderAsync(ct);
+            var list = new List<DeclaredHours>();
+            while (await reader.ReadAsync(ct))
+            {
+                var dh = MapReaderToDeclaredHours(reader);
+                try { dh.User = (await _localUserRepository.Get(dh.UserId, ct)) ?? dh.User; } catch { }
+                list.Add(dh);
+            }
+            return list;
         }
-        public DeclaredHoursEmployee AddEmployeeHour(DeclaredHoursEmployee hour)
+
+        public async Task<List<DeclaredHours>> GetAllAsync(CancellationToken ct = default)
         {
-            declaredHoursList4.Add(hour);
-            return hour;
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "Declarations", "reviewed_on");
+
+            using var cmd = conn.CreateCommand();
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at, reviewed_on
+                    FROM Declarations
+                    ORDER BY declaration_date, created_at;";
+            }
+            else
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at
+                    FROM Declarations
+                    ORDER BY declaration_date, created_at;";
+            }
+
+            using var reader = await cmd.ExecuteReaderAsync(ct);
+            var list = new List<DeclaredHours>();
+            while (await reader.ReadAsync(ct))
+            {
+                var dh = MapReaderToDeclaredHours(reader);
+                try { dh.User = (await _localUserRepository.Get(dh.UserId, ct)) ?? dh.User; } catch { }
+                list.Add(dh);
+            }
+            return list;
+        }
+
+        public async Task<DeclaredHours> GetLatestDeclarationFromUserIdAsync(long userId, CancellationToken ct = default)
+        {
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "Declarations", "reviewed_on");
+
+            using var cmd = conn.CreateCommand();
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at, reviewed_on
+                    FROM Declarations
+                    WHERE user_id = $userId
+                    ORDER BY declaration_date DESC, created_at DESC
+                    LIMIT 1;";
+            }
+            else
+            {
+                cmd.CommandText = @"
+                    SELECT declaration_id, declaration_date, start_time, end_time,
+                           worked_hours, reason, project_name, description, state, user_id,
+                           created_at, updated_at
+                    FROM Declarations
+                    WHERE user_id = $userId
+                    ORDER BY declaration_date DESC, created_at DESC
+                    LIMIT 1;";
+            }
+            cmd.Parameters.AddWithValue("$userId", userId);
+
+            using var reader = await cmd.ExecuteReaderAsync(ct);
+            if (await reader.ReadAsync(ct))
+            {
+                var dh = MapReaderToDeclaredHours(reader);
+                try { dh.User = (await _localUserRepository.Get(dh.UserId, ct)) ?? dh.User; } catch { }
+                return dh;
+            }
+            throw new InvalidOperationException("No declarations found for user.");
+        }
+
+        public async Task<DeclaredHours> AddAsync(DateOnly date, int workedHours, string projectName, string description, long userId, CancellationToken ct = default)
+        {
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "Declarations", "reviewed_on");
+
+            using var cmd = conn.CreateCommand();
+
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                INSERT INTO Declarations (declaration_date, worked_hours, reason, project_name, description, state, user_id, created_at, updated_at, reviewed_on)
+                VALUES ($date, $workedHours, $reason, $projectName, $description, $state, $userId, $createdAt, $updatedAt, $reviewedOn);
+                SELECT last_insert_rowid();";
+                cmd.Parameters.AddWithValue("$date", date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                cmd.Parameters.AddWithValue("$workedHours", workedHours);
+                cmd.Parameters.AddWithValue("$reason", projectName ?? string.Empty); // historical mapping: projectName used as reason in some seeds
+                cmd.Parameters.AddWithValue("$projectName", projectName ?? string.Empty);
+                cmd.Parameters.AddWithValue("$description", description ?? string.Empty);
+                cmd.Parameters.AddWithValue("$state", (int)DeclaredState.Verzonden);
+                cmd.Parameters.AddWithValue("$userId", userId);
+                cmd.Parameters.AddWithValue("$createdAt", DateTime.UtcNow);
+                cmd.Parameters.AddWithValue("$updatedAt", DBNull.Value);
+                cmd.Parameters.AddWithValue("$reviewedOn", DBNull.Value);
+            }
+            else
+            {
+                cmd.CommandText = @"
+                INSERT INTO Declarations (declaration_date, worked_hours, reason, project_name, description, state, user_id, created_at, updated_at)
+                VALUES ($date, $workedHours, $reason, $projectName, $description, $state, $userId, $createdAt, $updatedAt);
+                SELECT last_insert_rowid();";
+                cmd.Parameters.AddWithValue("$date", date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                cmd.Parameters.AddWithValue("$workedHours", workedHours);
+                cmd.Parameters.AddWithValue("$reason", projectName ?? string.Empty); // historical mapping: projectName used as reason in some seeds
+                cmd.Parameters.AddWithValue("$projectName", projectName ?? string.Empty);
+                cmd.Parameters.AddWithValue("$description", description ?? string.Empty);
+                cmd.Parameters.AddWithValue("$state", (int)DeclaredState.Verzonden);
+                cmd.Parameters.AddWithValue("$userId", userId);
+                cmd.Parameters.AddWithValue("$createdAt", DateTime.UtcNow);
+                cmd.Parameters.AddWithValue("$updatedAt", DBNull.Value);
+            }
+
+            var scalar = await cmd.ExecuteScalarAsync(ct);
+            long newId = scalar is long l ? l : Convert.ToInt64(scalar);
+            var declaredHour = new DeclaredHours(newId, date, workedHours, projectName ?? string.Empty, description ?? string.Empty, userId)
+            {
+                CreatedAt = DateTime.UtcNow
+            };
+            return declaredHour;
+        }
+
+        public async Task<DeclaredHours> AddAsync(DeclaredHours declaredHour, CancellationToken ct = default)
+        {
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "Declarations", "reviewed_on");
+
+            using var cmd = conn.CreateCommand();
+
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                INSERT INTO Declarations (declaration_date, start_time, end_time, worked_hours, reason, project_name, description, state, user_id, created_at, updated_at, reviewed_on)
+                VALUES ($date, $startTime, $endTime, $workedHours, $reason, $projectName, $description, $state, $userId, $createdAt, $updatedAt, $reviewedOn);
+                SELECT last_insert_rowid();";
+
+                cmd.Parameters.AddWithValue("$date", declaredHour.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                cmd.Parameters.AddWithValue("$startTime", declaredHour.StartTime == default ? (object)DBNull.Value : declaredHour.StartTime.ToString("HH:mm:ss"));
+                cmd.Parameters.AddWithValue("$endTime", declaredHour.EndTime == default ? (object)DBNull.Value : declaredHour.EndTime.ToString("HH:mm:ss"));
+                cmd.Parameters.AddWithValue("$workedHours", declaredHour.WorkedHours);
+                cmd.Parameters.AddWithValue("$reason", declaredHour.Reason ?? string.Empty);
+                cmd.Parameters.AddWithValue("$projectName", declaredHour.ProjectName ?? string.Empty);
+                cmd.Parameters.AddWithValue("$description", declaredHour.Description ?? string.Empty);
+                cmd.Parameters.AddWithValue("$state", (int)declaredHour.State);
+                cmd.Parameters.AddWithValue("$userId", declaredHour.UserId);
+                cmd.Parameters.AddWithValue("$createdAt", declaredHour.CreatedAt == default ? DateTime.UtcNow : declaredHour.CreatedAt);
+                cmd.Parameters.AddWithValue("$updatedAt", declaredHour.UpdatedAt.HasValue ? (object)declaredHour.UpdatedAt.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("$reviewedOn", declaredHour.ReviewedOn.HasValue ? (object)declaredHour.ReviewedOn.Value : DBNull.Value);
+            }
+            else
+            {
+                cmd.CommandText = @"
+                INSERT INTO Declarations (declaration_date, start_time, end_time, worked_hours, reason, project_name, description, state, user_id, created_at, updated_at)
+                VALUES ($date, $startTime, $endTime, $workedHours, $reason, $projectName, $description, $state, $userId, $createdAt, $updatedAt);
+                SELECT last_insert_rowid();";
+
+                cmd.Parameters.AddWithValue("$date", declaredHour.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                cmd.Parameters.AddWithValue("$startTime", declaredHour.StartTime == default ? (object)DBNull.Value : declaredHour.StartTime.ToString("HH:mm:ss"));
+                cmd.Parameters.AddWithValue("$endTime", declaredHour.EndTime == default ? (object)DBNull.Value : declaredHour.EndTime.ToString("HH:mm:ss"));
+                cmd.Parameters.AddWithValue("$workedHours", declaredHour.WorkedHours);
+                cmd.Parameters.AddWithValue("$reason", declaredHour.Reason ?? string.Empty);
+                cmd.Parameters.AddWithValue("$projectName", declaredHour.ProjectName ?? string.Empty);
+                cmd.Parameters.AddWithValue("$description", declaredHour.Description ?? string.Empty);
+                cmd.Parameters.AddWithValue("$state", (int)declaredHour.State);
+                cmd.Parameters.AddWithValue("$userId", declaredHour.UserId);
+                cmd.Parameters.AddWithValue("$createdAt", declaredHour.CreatedAt == default ? DateTime.UtcNow : declaredHour.CreatedAt);
+                cmd.Parameters.AddWithValue("$updatedAt", declaredHour.UpdatedAt.HasValue ? (object)declaredHour.UpdatedAt.Value : DBNull.Value);
+            }
+
+            var scalar = await cmd.ExecuteScalarAsync(ct);
+            long newId = scalar is long l ? l : Convert.ToInt64(scalar);
+            // set returned id on object
+            declaredHour.GetType().GetProperty("Id")?.SetValue(declaredHour, newId);
+            return declaredHour;
+        }
+
+        public async Task<DeclaredHours> ReserveIdAsync(CancellationToken ct = default)
+        {
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"SELECT IFNULL(MAX(declaration_id), 0) + 1 FROM Declarations;";
+            var scalar = await cmd.ExecuteScalarAsync(ct);
+            var nextId = scalar is long l ? l : Convert.ToInt64(scalar);
+            var dh = new DeclaredHours(nextId, DateOnly.FromDateTime(DateTime.UtcNow), 0, string.Empty, string.Empty, 0);
+            return dh;
+        }
+
+        public async Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour, CancellationToken ct = default)
+        {
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            bool hasReviewedOn = ColumnExists(conn, "Declarations", "reviewed_on");
+
+            using var cmd = conn.CreateCommand();
+            if (hasReviewedOn)
+            {
+                cmd.CommandText = @"
+                UPDATE Declarations
+                SET declaration_date = $date,
+                    start_time = $startTime,
+                    end_time = $endTime,
+                    worked_hours = $workedHours,
+                    reason = $reason,
+                    project_name = $projectName,
+                    description = $description,
+                    state = $state,
+                    user_id = $userId,
+                    updated_at = $updatedAt,
+                    reviewed_on = $reviewedOn
+                WHERE declaration_id = $id;";
+            }
+            else
+            {
+                cmd.CommandText = @"
+                UPDATE Declarations
+                SET declaration_date = $date,
+                    start_time = $startTime,
+                    end_time = $endTime,
+                    worked_hours = $workedHours,
+                    reason = $reason,
+                    project_name = $projectName,
+                    description = $description,
+                    state = $state,
+                    user_id = $userId,
+                    updated_at = $updatedAt
+                WHERE declaration_id = $id;";
+            }
+
+            cmd.Parameters.AddWithValue("$id", declaredHour.Id);
+            cmd.Parameters.AddWithValue("$date", declaredHour.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            cmd.Parameters.AddWithValue("$startTime", declaredHour.StartTime == default ? (object)DBNull.Value : declaredHour.StartTime.ToString("HH:mm:ss"));
+            cmd.Parameters.AddWithValue("$endTime", declaredHour.EndTime == default ? (object)DBNull.Value : declaredHour.EndTime.ToString("HH:mm:ss"));
+            cmd.Parameters.AddWithValue("$workedHours", declaredHour.WorkedHours);
+            cmd.Parameters.AddWithValue("$reason", declaredHour.Reason ?? string.Empty);
+            cmd.Parameters.AddWithValue("$projectName", declaredHour.ProjectName ?? string.Empty);
+            cmd.Parameters.AddWithValue("$description", declaredHour.Description ?? string.Empty);
+            cmd.Parameters.AddWithValue("$state", (int)declaredHour.State);
+            cmd.Parameters.AddWithValue("$userId", declaredHour.UserId);
+            cmd.Parameters.AddWithValue("$updatedAt", DateTime.UtcNow);
+            if (ColumnExists(conn, "Declarations", "reviewed_on"))
+                cmd.Parameters.AddWithValue("$reviewedOn", declaredHour.ReviewedOn.HasValue ? (object)declaredHour.ReviewedOn.Value : DBNull.Value);
+
+            await cmd.ExecuteNonQueryAsync(ct);
+            return declaredHour;
+        }
+
+        public async Task<DeclaredHours> DeleteAsync(long id, CancellationToken ct = default)
+        {
+            // read existing first
+            var existing = await GetAsync(id, ct) ?? throw new ArgumentException("Declared hour not found");
+            using var conn = await _factory.CreateOpenConnectionAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "DELETE FROM Declarations WHERE declaration_id = $id;";
+            cmd.Parameters.AddWithValue("$id", id);
+            await cmd.ExecuteNonQueryAsync(ct);
+            return existing;
+        }
+
+        // Helper to detect whether a given column exists in a table (uses PRAGMA table_info)
+        private static bool ColumnExists(SqliteConnection conn, string tableName, string columnName)
+        {
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = $"PRAGMA table_info('{tableName}');";
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                // PRAGMA table_info returns: cid, name, type, notnull, dflt_value, pk
+                var name = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
+                if (string.Equals(name, columnName, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+            return false;
         }
     }
 }

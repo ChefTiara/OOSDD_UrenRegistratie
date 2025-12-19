@@ -13,13 +13,13 @@ namespace Hourregistration.Core.Services
             _declaredHoursRepository = declaredHoursRepository;
         }
 
-        public DeclaredHours? Get(int id)
+        public DeclaredHours? Get(long id)
         {
             return _declaredHoursRepository.Get(id);
         }
-        public List<DeclaredHours> GetByClientId(long clientId)
+        public List<DeclaredHours> GetByUserId(long userId)
         {
-            return _declaredHoursRepository.GetByClientId(clientId);
+            return _declaredHoursRepository.GetByUserId(userId);
         }
         public List<DeclaredHours> GetByState(DeclaredState state)
         {
@@ -29,6 +29,10 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.GetAll();
         }
+        public DeclaredHours GetLatestDeclarationFromUserId(long userId)
+        {
+            return _declaredHoursRepository.GetLatestDeclarationFromUserId(userId);
+        }
         public DeclaredHours Add(DeclaredHours declaredHour)
         {
             return _declaredHoursRepository.Add(declaredHour);
@@ -37,18 +41,18 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.Update(declaredHour);
         }
-        public DeclaredHours Delete(int id)
+        public DeclaredHours Delete(long id)
         {
             return _declaredHoursRepository.Delete(id);
         }
 
-        public Task<DeclaredHours?> GetAsync(int id)
+        public Task<DeclaredHours?> GetAsync(long id)
         {
             return _declaredHoursRepository.GetAsync(id);
         }
-        public Task<List<DeclaredHours>> GetByClientIdAsync(long clientId)
+        public Task<List<DeclaredHours>> GetByUserIdAsync(long userId)
         {
-            return _declaredHoursRepository.GetByClientIdAsync(clientId);
+            return _declaredHoursRepository.GetByUserIdAsync(userId);
         }
         public Task<List<DeclaredHours>> GetByStateAsync(DeclaredState state)
         {
@@ -58,15 +62,27 @@ namespace Hourregistration.Core.Services
         {
             return _declaredHoursRepository.GetAllAsync();
         }
+        public Task<DeclaredHours> GetLatestDeclarationFromUserIdAsync(long userId)
+        {
+            return _declaredHoursRepository.GetLatestDeclarationFromUserIdAsync(userId);
+        }
+        public Task<DeclaredHours> AddAsync(DateOnly date, int workedHours, string projectName, string description, long userId)
+        {
+            return _declaredHoursRepository.AddAsync(date, workedHours, projectName, description, userId);
+        }
         public Task<DeclaredHours> AddAsync(DeclaredHours declaredHour)
         {
             return _declaredHoursRepository.AddAsync(declaredHour);
+        }
+        public Task<DeclaredHours> ReserveIdAsync()
+        {
+            return _declaredHoursRepository.ReserveIdAsync();
         }
         public Task<DeclaredHours> UpdateAsync(DeclaredHours declaredHour)
         {
             return _declaredHoursRepository.UpdateAsync(declaredHour);
         }
-        public Task<DeclaredHours> DeleteAsync(int id)
+        public Task<DeclaredHours> DeleteAsync(long id)
         {
             return _declaredHoursRepository.DeleteAsync(id);
         }

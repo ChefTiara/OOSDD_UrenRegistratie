@@ -1,9 +1,10 @@
-﻿namespace Hourregistration.Core.Models;
-
-public enum Role
+﻿namespace Hourregistration.Core.Models
 {
-    Werknemer,
-    Opdrachtgever,
-    AdministratieMedewerker,
-    Beheer
+    public enum Role : ushort
+    {
+        Werknemer = 0,
+        Opdrachtgever = 1,
+        Administratiemedewerker = 2,
+        Beheer = 3
+    }
 }

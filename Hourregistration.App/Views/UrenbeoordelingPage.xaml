@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Hourregistration.App.ViewModels"
+             xmlns:m="clr-namespace:Hourregistration.Core.Models;assembly=Hourregistration.Core"
+             x:Class="Hourregistration.App.Views.UrenbeoordelingPage"
+             x:Name="PageRoot"
+             x:DataType="vm:UrenbeoordelingViewModel"
+             Title="Urenbeoordeling">
+
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout Padding="12,16" Spacing="12">
+
+                <Label Text="Te beoordelen uren"
+                       FontSize="18"
+                       FontAttributes="Bold" />
+
+                <!-- Pending header -->
+                <Grid ColumnDefinitions="2*,2*,2*,1.2*,1.2*,0.9*"
+                      Padding="10,6"
+                      BackgroundColor="#1f1f1f"
+                      Margin="0,0,0,4">
+                    <Label Text="Medewerker" FontAttributes="Bold" />
+                    <Label Text="Periode" Grid.Column="1" FontAttributes="Bold" />
+                    <Label Text="Reason" Grid.Column="2" FontAttributes="Bold" />
+                    <Label Text="Totaal uren" Grid.Column="3" FontAttributes="Bold" />
+                    <Label Text="Ingediend op" Grid.Column="4" FontAttributes="Bold" />
+                    <Label Text="Actie" Grid.Column="5" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                </Grid>
+
+                <CollectionView ItemsSource="{Binding PendingDeclarations}"
+                                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="m:DeclaredHours">
+                            <Frame Padding="10" BorderColor="#222" Margin="0,4" CornerRadius="6">
+                                <Grid ColumnDefinitions="2*,2*,2*,1.2*,1.2*,0.9*"
+                                      RowDefinitions="Auto"
+                                      ColumnSpacing="8">
+                                    <Label Text="{Binding User.Username}"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="2"
+                                           Text="{Binding Reason}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="3"
+                                           Text="{Binding WorkedHours, StringFormat='{0:0.#} uur'}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="4"
+                                           Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy}'}"
+                                           VerticalOptions="Center" />
+                                    <Grid Grid.Column="5"
+                                          ColumnDefinitions="Auto,Auto"
+                                          ColumnSpacing="6"
+                                          HorizontalOptions="End"
+                                          VerticalOptions="Center">
+                                        <Button Text="✕"
+                                                WidthRequest="38"
+                                                HeightRequest="38"
+                                                Command="{Binding BindingContext.RejectCommand, Source={x:Reference PageRoot}}"
+                                                CommandParameter="{Binding .}" />
+                                        <Button Text="✓"
+                                                Grid.Column="1"
+                                                WidthRequest="38"
+                                                HeightRequest="38"
+                                                Command="{Binding BindingContext.ApproveCommand, Source={x:Reference PageRoot}}"
+                                                CommandParameter="{Binding .}" />
+                                    </Grid>
+
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label Text="Reeds beoordeelde registraties"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       Margin="0,16,0,0" />
+
+                <CollectionView ItemsSource="{Binding ReviewedDeclarations}"
+                                SelectionMode="None"
+                                ItemsUpdatingScrollMode="KeepScrollOffset">
+                    <CollectionView.Header>
+                        <Grid ColumnDefinitions="2*,2*,2*,1.2*,1.2*,1.2*,1*"
+                              Padding="10,6"
+                              BackgroundColor="#1f1f1f"
+                              Margin="0,0,0,4">
+                            <Label Text="Medewerker" FontAttributes="Bold" />
+                            <Label Text="Periode" Grid.Column="1" FontAttributes="Bold" />
+                            <Label Text="Reden" Grid.Column="2" FontAttributes="Bold" />
+                            <Label Text="Totaal uren" Grid.Column="3" FontAttributes="Bold" />
+                            <Label Text="Ingediend op" Grid.Column="4" FontAttributes="Bold" />
+                            <Label Text="Gekeurd op" Grid.Column="5" FontAttributes="Bold" />
+                            <Label Text="Status" Grid.Column="6" FontAttributes="Bold" HorizontalTextAlignment="End" />
+                        </Grid>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="m:DeclaredHours">
+                            <Frame Padding="10" BorderColor="#222" Margin="0,4" CornerRadius="6">
+                                <Grid ColumnDefinitions="2*,2*,2*,1.2*,1.2*,1.2*,1*"
+                                      RowDefinitions="Auto"
+                                      ColumnSpacing="8">
+                                    <Label Text="{Binding User.Username}"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="2"
+                                           Text="{Binding Reason}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="3"
+                                           Text="{Binding WorkedHours, StringFormat='{0:0.#} uur'}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="4"
+                                           Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy}'}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="5"
+                                           Text="{Binding ReviewedOn, StringFormat='{0:dd/MM/yyyy}'}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="6"
+                                           Text="{Binding State}"
+                                           HorizontalTextAlignment="End"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

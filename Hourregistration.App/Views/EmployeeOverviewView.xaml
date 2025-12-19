@@ -5,18 +5,10 @@
              xmlns:m="clr-namespace:Hourregistration.Core.Models;assembly=Hourregistration.Core"
              x:Class="Hourregistration.App.Views.EmployeeOverviewView"
              x:DataType="vm:EmployeeOverviewViewModel"
-             Title="Urenoverzicht">
+             Title="{Binding PageTitle}">
 
     <!-- Grid with an extra Auto row for the sort button -->
     <Grid Padding="12" RowDefinitions="Auto,Auto,Auto,*,Auto" ColumnDefinitions="*" RowSpacing="8">
-        <!-- Title -->
-        <Label Grid.Row="0"
-               Text="Urenoverzicht"
-               FontAttributes="Bold"
-               FontSize="18"
-               VerticalOptions="Center"
-               HorizontalOptions="Center" />
-
         <!-- Button bar replaced with a 3-column Grid:
              Column 0: left buttons (Auto)
              Column 1: flexible spacer (*)
@@ -90,14 +82,18 @@
 
         <!-- Header row matching the item Grid columns (moved to Row 2 so it sits below buttons)
              NOTE: left margin increased so header columns align with Frame content inside items -->
-        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,140,*,Auto" Margin="12,0">
+        <Grid Grid.Row="2" ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,70,140,*,Auto" Margin="12,0">
             <Label Grid.Column="0" Text="Dag" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
             <Label Grid.Column="1" Text="Datum" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
+            
+            <!--
             <Label Grid.Column="2" Text="Ingepland" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
-            <Label Grid.Column="3" Text="Uren" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
-            <Label Grid.Column="4" Text="Project" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
-            <Label Grid.Column="5" Text="Beschrijving" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
-            <Label Grid.Column="6" Text="Status" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="End" />
+            -->
+            
+            <Label Grid.Column="2" Text="Uren" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Label Grid.Column="3" Text="Reden" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
+            <Label Grid.Column="4" Text="Beschrijving" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="TailTruncation" />
+            <Label Grid.Column="5" Text="Status" FontAttributes="Bold" FontSize="12" VerticalOptions="Center" HorizontalOptions="End" />
         </Grid>
 
         <!-- CollectionView occupies the star row so its height is stable -->
@@ -107,7 +103,8 @@
             ItemsSource="{Binding DeclaredHoursList}"
             SelectionMode="None"
             VerticalOptions="Fill"
-            HorizontalOptions="Fill">
+            HorizontalOptions="Fill"
+            ItemSizingStrategy="MeasureAllItems">
 
             <CollectionView.EmptyView>
                 <Label Text="Geen gewerkte uren gevonden." HorizontalOptions="Center" VerticalOptions="Center" Opacity="0.7"/>
@@ -115,17 +112,23 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="m:DeclaredHours">
-                    <Frame Margin="4" Padding="8,8,12,8" HasShadow="True" CornerRadius="6">
-                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,120,70,140,*,Auto">
+                    <!-- Constrain item height so rows are consistent and avoid clipping.
+                         If you want max performance, keep a fixed HeightRequest and remove MeasureAll. -->
+                    <Frame Margin="4" Padding="8,8,12,8" HasShadow="True" CornerRadius="6" MinimumHeightRequest="46">
+                        <Grid ColumnSpacing="24" RowDefinitions="Auto" ColumnDefinitions="70,90,70,140,*,Auto">
                             <Label Grid.Column="0" Text="{Binding Day}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start" />
                             <Label Grid.Column="1" Text="{Binding Date, StringFormat='{0:dd-MM-yyyy}'}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
+                            
+                            <!--
                             <Label Grid.Column="2" Text="{Binding PlannedHours}" VerticalOptions="Center" FontSize="12" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
-                            <Label Grid.Column="3" Text="{Binding WorkedHours, StringFormat='{}{0}u'}" VerticalOptions="Center" FontAttributes="Bold" FontSize="14" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
-                            <Label Grid.Column="4" Text="{Binding ProjectName}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
-                            <Label Grid.Column="5" Text="{Binding Description}" VerticalOptions="Center" FontSize="12" Opacity="0.75" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start"/>
+                            -->
+                            
+                            <Label Grid.Column="2" Text="{Binding WorkedHours, StringFormat='{}{0}u'}" VerticalOptions="Center" FontAttributes="Bold" FontSize="14" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="Start"/>
+                            <Label Grid.Column="3" Text="{Binding Reason}" VerticalOptions="Center" FontSize="14" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="4" Text="{Binding Description}" VerticalOptions="Center" FontSize="12" Opacity="0.75" LineBreakMode="TailTruncation" MaxLines="1" HorizontalOptions="Fill"/>
 
                             <!-- State + Segoe MDL2 icon in the last column -->
-                            <HorizontalStackLayout Grid.Column="6" HorizontalOptions="End" VerticalOptions="Center" Spacing="6">
+                            <HorizontalStackLayout Grid.Column="5" HorizontalOptions="End" VerticalOptions="Center" Spacing="6">
                                 <Label Text="{Binding State}" VerticalOptions="Center" FontSize="12" Opacity="0.9" LineBreakMode="NoWrap" MaxLines="1" HorizontalOptions="End">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding State}" Value="Akkoord">

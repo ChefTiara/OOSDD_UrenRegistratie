@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Hourregistration.App.Views.DeclarationHomeView"
+             Title="Urenregistratie">
+
+    <Grid Padding="20"
+          RowDefinitions="Auto, Auto, *"
+          ColumnDefinitions="3*, 1*">
+
+        <!-- Title -->
+        <Label Grid.Row="0" Grid.Column="0"
+               Text="Welkom bij de urenregistratie"
+               FontSize="22"
+               FontAttributes="Bold" />
+
+        <!-- New declaration button -->
+        <Button Grid.Row="0" Grid.Column="1"
+                Text="Nieuwe declaratie aanmaken"
+                Style="{StaticResource ButtonMid}"
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                Clicked="OnNieuweDeclaratieClicked" />
+
+        <!-- Subtitle -->
+        <Label Grid.Row="1" Grid.Column="0"
+               Text="Wat wilt u doen?"
+               Margin="0,5,0,15" />
+
+        <!-- Draft box -->
+        <Border Grid.Row="2"
+                Grid.Column="0"
+                Padding="15"
+                HeightRequest="350"
+                BackgroundColor="{AppThemeBinding 
+                    Light={StaticResource Outline}, 
+                    Dark={StaticResource OutlineDark}}">
+
+            <VerticalStackLayout Spacing="12">
+
+                <Label Text="Concepten"
+                       FontAttributes="Bold"
+                       FontSize="16" />
+
+                <!-- List of drafts -->
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Drafts}"
+                                     x:Name="DraftsList"
+                                     Spacing="10">
+
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+
+                            <Frame Padding="10">
+
+                                <Grid Padding="20"
+                                      RowDefinitions="Auto, Auto, *"
+                                      ColumnDefinitions="1*, 1*">
+
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                               Text="{Binding Date, StringFormat='Datum: {0:dd-MM-yyyy}'}"
+                                               FontSize="13" TextColor="Black"/>
+
+                                    <Label Grid.Row="0" Grid.Column="1"
+                                               Text="{Binding WorkedHours, StringFormat='Uren: {0}'}"
+                                               FontSize="13" TextColor="Black"/>
+
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                               Text="{Binding Reason, StringFormat='Reden: {0}'}"
+                                               FontSize="13" TextColor="Black"/>
+
+                                    <Label Grid.Row="1" Grid.Column="1"
+                                               Text="{Binding Description, StringFormat='Omschrijving: {0}'}"
+                                               FontSize="13" TextColor="Black"/>
+
+                                    <Button Grid.Row="2" Grid.Column="0"
+                                            Text="Open concept"
+                                            CommandParameter="{Binding}"
+                                            Clicked="OnConceptOpenClicked" />
+
+                                    <Button Grid.Row="2" Grid.Column="1"
+                                            Text="Verwijder"
+                                            CommandParameter="{Binding}"
+                                            Clicked="OnConceptDeleteClicked" />
+
+                                </Grid>
+                            </Frame>
+
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Empty right column -->
+        <StackLayout Grid.Row="2" Grid.Column="1" />
+
+    </Grid>
+</ContentPage>

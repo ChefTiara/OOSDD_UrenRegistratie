@@ -1,4 +1,5 @@
 ﻿using Hourregistration.App.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Hourregistration.Core.Models;
 using Hourregistration.App.Views;
 using Hourregistration.App.ViewModels;
@@ -27,34 +28,23 @@ namespace Hourregistration.App
                 return;
             }
 
-            var (ok, roleString) = _authService.Authenticate(username, password);
-
-            if (!ok)
+            var user = _authService.Authenticate(username, password);
+            if (user == null)
             {
                 ErrorMessageLabel.Text = "Ongeldige inloggegevens.";
                 ErrorMessageLabel.IsVisible = true;
                 return;
             }
 
-            if (!Enum.TryParse<Role>(roleString, out var parsedRole))
+            // set session (role and id become available via SessionManager)
+            SessionManager.SetCurrentUser(user);
+
+            Page? nextPage = SessionManager.CurrentRole switch
             {
-                ErrorMessageLabel.Text = "Onbekende rol.";
-                ErrorMessageLabel.IsVisible = true;
-                return;
-            }
-
-            SessionManager.CurrentRole = parsedRole;
-
-            // -------------------------------
-            // ROLE-BASED REDIRECTION
-            // -------------------------------
-
-            Page nextPage = parsedRole switch
-            {
-                Role.Werknemer => new DeclaratieHomeView(),
-                Role.Opdrachtgever => CreateEmployeeOverviewPage(),
-                Role.AdministratieMedewerker => CreateEmployeeHoursOverviewPage(),
-                Role.Beheer => CreateEmployeeHoursOverviewPage(),
+                Role.Werknemer => ServiceHelper.GetService<DeclarationHomeView>(),
+                Role.Opdrachtgever => CreateUrenbeoordelingPage(),
+                Role.Administratiemedewerker => CreateEmployeeHoursOverviewPage(),
+                Role.Beheer => CreateAccountManagementPage(),
                 _ => null
             };
 
@@ -65,7 +55,7 @@ namespace Hourregistration.App
                 return;
             }
 
-            await Navigation.PushAsync(nextPage);
+            await Navigation.PushAsync(nextPage!);
         }
 
         private Page CreateEmployeeOverviewPage()
@@ -86,5 +76,23 @@ namespace Hourregistration.App
 
             return new EmployeeHoursOverviewView(vm);
         }
+        private Page CreateAccountManagementPage()
+        {
+            var page = ServiceHelper.GetService<AccountManagementPage>();
+            if (page == null)
+                throw new InvalidOperationException("AccountManagementPage is not registered in the service container.");
+
+            return page;
+        }
+        private Page CreateUrenbeoordelingPage()
+        {
+            var vm = ServiceHelper.GetService<UrenbeoordelingViewModel>();
+
+            if (vm == null)
+                throw new InvalidOperationException("UrenbeoordelingViewModel is not registered in the service container.");
+
+            return new UrenbeoordelingPage(vm);
+        }
+
     }
 }
